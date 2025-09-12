@@ -45,7 +45,7 @@ function handleFormSubmit(e) {
     
     // Show loading state
     submitButton.disabled = true;
-    submitText.textContent = 'Sending...';
+    submitText.textContent = 'Enviando...';
     submitIcon.textContent = '⏳';
     submitButton.style.background = 'linear-gradient(135deg, #a0a0a0, #808080)';
     
@@ -56,7 +56,7 @@ function handleFormSubmit(e) {
         
         // Reset button state
         submitButton.disabled = false;
-        submitText.textContent = 'Notify Me';
+        submitText.textContent = 'Enviar';
         submitIcon.textContent = '→';
         submitButton.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
     }, 2000);
@@ -89,7 +89,7 @@ function validateInput(e) {
     // Required field validation
     if (input.hasAttribute('required') && !value) {
         isValid = false;
-        errorMessage = 'This field is required';
+        errorMessage = 'Por favor, complete este campo';
     }
     
     // Email validation
@@ -97,7 +97,7 @@ function validateInput(e) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
             isValid = false;
-            errorMessage = 'Please enter a valid email address';
+            errorMessage = 'Por favor, ingrese una dirección de correo electrónico válida';
         }
     }
     
@@ -105,7 +105,7 @@ function validateInput(e) {
     if (input.name === 'name' && value) {
         if (value.length < 2) {
             isValid = false;
-            errorMessage = 'Name must be at least 2 characters long';
+            errorMessage = 'Por favor, ingrese su nombre';
         }
     }
     
@@ -158,7 +158,7 @@ function showSuccessMessage() {
     notification.innerHTML = `
         <div class="notification-content">
             <span class="notification-icon">✓</span>
-            <span class="notification-text">Thank you! We'll notify you when we launch.</span>
+            <span class="notification-text">¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.</span>
         </div>
     `;
     
