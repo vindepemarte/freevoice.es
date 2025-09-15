@@ -105,7 +105,7 @@ Per favore, inviatemi maggiori informazioni su:
 
 Grazie!`
 
-    const whatsappUrl = `https://wa.me/34123456789?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 

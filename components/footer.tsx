@@ -104,27 +104,27 @@ export function Footer() {
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary flex-shrink-0" />
                 <a
-                  href="mailto:info@freevoiceacademy.com"
+                  href="mailto:info@freevoice.es"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  info@freevoiceacademy.com
+                  info@freevoice.es
                 </a>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-primary flex-shrink-0" />
                 <a
-                  href="tel:+1234567890"
+                  href="tel:+34697798991"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  +1 (234) 567-8900
+                  +34 697 79 89 91
                 </a>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground text-sm">
-                  123 Harmony Lane
+                  Address
                   <br />
-                  Music Valley, CA 90210
+                  Tenerife, Spain
                 </span>
               </li>
             </ul>

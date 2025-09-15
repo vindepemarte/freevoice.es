@@ -13,7 +13,7 @@ export function HeroSection() {
       language === "es"
         ? "Me gustaría más información sobre el taller Free Voice"
         : "Vorrei maggiori informazioni sul workshop Free Voice"
-    const whatsappUrl = `https://wa.me/34123456789?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 

@@ -234,7 +234,7 @@ Priority 1-on-1 coach booking"
                 </div>
                 <div>
                   <Label htmlFor="whatsapp-number">WhatsApp Contact Number</Label>
-                  <Input id="whatsapp-number" defaultValue="+34123456789" />
+                  <Input id="whatsapp-number" defaultValue="+34697798991" />
                 </div>
                 <div>
                   <Label htmlFor="contact-email">Contact Email</Label>

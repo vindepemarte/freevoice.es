@@ -50,12 +50,12 @@ export function FAQSection() {
         <div className="text-center mt-12">
           <p className="text-muted-foreground mb-4">{t.faq.stillQuestions}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="mailto:info@freevoiceacademy.com" className="text-primary hover:underline font-medium">
-              info@freevoiceacademy.com
+            <a href="mailto:info@freevoice.es" className="text-primary hover:underline font-medium">
+              info@freevoice.es
             </a>
-            <span className="hidden sm:inline text-muted-foreground">•</span>
-            <a href="tel:+1234567890" className="text-primary hover:underline font-medium">
-              +1 (234) 567-8900
+            <div className="hidden sm:inline text-muted-foreground">•</div>
+            <a href="tel:+34697798991" className="text-primary hover:underline font-medium">
+              +34 697 79 89 91
             </a>
           </div>
         </div>

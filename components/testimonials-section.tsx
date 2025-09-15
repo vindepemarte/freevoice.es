@@ -103,11 +103,11 @@ export function TestimonialsSection() {
         </div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Video Testimonial */}
-            <Card className="bg-card border-border overflow-hidden">
-              <CardContent className="p-0">
-                <div className="relative aspect-video bg-gradient-to-br from-primary/10 to-accent/10">
+            <Card className="bg-card border-border overflow-hidden lg:h-[400px]">
+              <CardContent className="p-0 h-full">
+                <div className="relative aspect-video lg:h-full bg-gradient-to-br from-primary/10 to-accent/10">
                   <img
                     src={testimonials[currentIndex].videoThumbnail || "/placeholder.svg"}
                     alt={`${testimonials[currentIndex].name} testimonial`}
@@ -136,19 +136,21 @@ export function TestimonialsSection() {
             </Card>
 
             {/* Testimonial Content */}
-            <Card className="bg-card border-border">
-              <CardContent className="p-8">
+            <Card className="bg-card border-border lg:h-[400px]">
+              <CardContent className="p-8 h-full flex flex-col">
                 <div className="flex mb-4">
                   {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
                     <Star key={i} className="h-5 w-5 text-accent fill-current" />
                   ))}
                 </div>
 
-                <p className="text-lg text-card-foreground mb-6 leading-relaxed">
-                  "{testimonials[currentIndex].content[language]}"
-                </p>
+                <div className="flex-1 mb-6">
+                  <p className="text-lg text-card-foreground leading-relaxed line-clamp-6 lg:line-clamp-8">
+                    "{testimonials[currentIndex].content[language]}"
+                  </p>
+                </div>
 
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 mt-auto">
                   <img
                     src={testimonials[currentIndex].image || "/placeholder.svg"}
                     alt={testimonials[currentIndex].name}

@@ -69,7 +69,7 @@ export function BookingForm({ children, journeyType }: BookingFormProps) {
 
 Aspetto la vostra risposta per completare la prenotazione!`
 
-    const whatsappUrl = `https://wa.me/34123456789?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
     setIsOpen(false)
   }
@@ -145,7 +145,7 @@ Aspetto la vostra risposta per completare la prenotazione!`
             <Label htmlFor="language">{language === "es" ? "Idioma Preferido" : "Lingua Preferita"}</Label>
             <Select
               value={formData.language}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, language: value }))}
+              onValueChange={(value: "es" | "it") => setFormData((prev) => ({ ...prev, language: value }))}
             >
               <SelectTrigger>
                 <SelectValue />

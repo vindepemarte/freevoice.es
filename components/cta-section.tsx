@@ -14,7 +14,7 @@ export function CTASection() {
       language === "es"
         ? "Me gustaría más información sobre el taller de Free Voice"
         : "Vorrei maggiori informazioni sul workshop di Free Voice"
-    const whatsappUrl = `https://wa.me/34123456789?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 
