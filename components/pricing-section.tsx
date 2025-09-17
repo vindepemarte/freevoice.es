@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Check, Star, Clock, AlertTriangle } from "lucide-react"
+import { Check, Star, Clock, AlertTriangle, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { BookingForm } from "@/components/booking-form"
 
 export function PricingSection() {
   const { t, language } = useLanguage()
@@ -159,16 +160,28 @@ Grazie!`
                   ))}
                 </ul>
 
-                <Button
-                  className={`w-full py-3 xs:py-4 sm:py-5 font-semibold text-base xs:text-lg sm:text-xl my-2 transition-all duration-300 hover:scale-105 rounded-xl ${
-                    plan.popular
-                      ? "bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse"
-                      : "bg-[#9852A7] hover:bg-[#9852A7]/90 text-white hover:shadow-lg"
-                  }`}
-                  onClick={() => handleWhatsAppBooking(plan.id, plan.name, plan.price)}
-                >
-                  {language === "es" ? `Reservar ${plan.name}` : `Prenota ${plan.name}`}
-                </Button>
+                <div className="flex flex-col gap-3">
+                  <BookingForm workshopType={plan.id as "workshop1day" | "workshop3day"}>
+                    <Button
+                      className={`w-full py-3 xs:py-4 sm:py-5 font-semibold text-base xs:text-lg sm:text-xl transition-all duration-300 hover:scale-105 rounded-xl ${
+                        plan.popular
+                          ? "bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse"
+                          : "bg-[#9852A7] hover:bg-[#9852A7]/90 text-white hover:shadow-lg"
+                      }`}
+                    >
+                      {language === "es" ? `Reservar ${plan.name}` : `Prenota ${plan.name}`}
+                    </Button>
+                  </BookingForm>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full py-2 xs:py-3 sm:py-4 font-medium text-sm xs:text-base sm:text-lg border-[#9852A7] text-[#9852A7] hover:bg-[#9852A7] hover:text-white transition-all duration-300 hover:scale-105 rounded-xl"
+                    onClick={() => handleWhatsAppBooking(plan.id, plan.name, plan.price)}
+                  >
+                    <MessageCircle className="h-4 w-4 xs:h-5 xs:w-5 mr-2" />
+                    {language === "es" ? "Hablar por WhatsApp" : "Parla su WhatsApp"}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
