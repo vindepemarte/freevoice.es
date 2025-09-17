@@ -165,7 +165,7 @@ export function TestimonialsSection() {
         <div className={`text-center mb-12 xs:mb-16 transition-all duration-1000 ease-out ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <div className="flex flex-col xs:flex-row justify-center items-center gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 px-2 xs:px-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 px-2 xs:px-4">
             <div className="flex items-center space-x-2 text-white">
               <Users className="h-4 w-4 xs:h-5 xs:w-5 sm:h-6 sm:w-6" />
               <span className="font-bold text-sm xs:text-base sm:text-lg">200+</span>
@@ -192,8 +192,8 @@ export function TestimonialsSection() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             {language === "es" 
-              ? "Descubre cómo nuestros estudiantes transformaron sus voces y vidas en solo 3 días" 
-              : "Scopri come i nostri studenti hanno trasformato le loro voci e vite in soli 3 giorni"}
+              ? <span>Descubre cómo nuestros estudiantes<br />transformaron sus voces y vidas en solo 3 días</span>
+              : <span>Scopri come i nostri studenti hanno<br />trasformato le loro voci e vite in soli 3 giorni</span>}
           </p>
         </div>
 
