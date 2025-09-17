@@ -4,40 +4,46 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens based on Free Voice logo - purple and red gradient */
-  --background: oklch(1 0 0); /* White background */
-  --foreground: oklch(0.35 0 0); /* Dark gray text */
-  --card: oklch(0.98 0.02 330); /* Light rose card background */
-  --card-foreground: oklch(0.35 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.35 0 0);
-  --primary: oklch(0.55 0.25 300); /* Purple from logo */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.65 0.28 15); /* Red/pink from logo */
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.98 0.02 330);
-  --muted-foreground: oklch(0.35 0 0);
-  --accent: oklch(0.65 0.28 15); /* Red accent from logo */
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.01 330);
-  --input: oklch(0.97 0.01 330);
-  --ring: oklch(0.55 0.25 300 / 0.3);
-  --chart-1: oklch(0.55 0.25 300);
-  --chart-2: oklch(0.65 0.28 15);
-  --chart-3: oklch(0.6 0.15 45);
-  --chart-4: oklch(0.75 0.18 15);
-  --chart-5: oklch(0.95 0.05 60);
+  /* FreeVoice Brand Colors - According to logo branding rules */
+  /* 40% Dark Purple #3C318D - Primary text and main elements */
+  /* 24% Vibrant Red #F02A30 - CTA buttons and accent */
+  /* 20% Purple #9852A7 - Secondary elements and gradients */
+  /* 14% Shadow Purple #2B2363 - Depth and shadow effects */
+  /* 2% White #FFFFFF - Minimal white space */
+  
+  --background: linear-gradient(135deg, #9852A7 0%, #3C318D 70%, #2B2363 100%); /* Purple gradient background */
+  --foreground: #FFFFFF; /* White text on colored background */
+  --card: rgba(255, 255, 255, 0.95); /* Semi-transparent white cards */
+  --card-foreground: #3C318D; /* Dark purple text on cards */
+  --popover: rgba(255, 255, 255, 0.98);
+  --popover-foreground: #3C318D;
+  --primary: #3C318D; /* Dark Purple - 40% */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F02A30; /* Vibrant Red - 24% */
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(152, 82, 167, 0.1); /* Light purple tint */
+  --muted-foreground: #3C318D;
+  --accent: #F02A30; /* Vibrant Red accent */
+  --accent-foreground: #FFFFFF;
+  --destructive: #F02A30; /* Use brand red for destructive actions */
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(60, 49, 141, 0.2); /* Semi-transparent dark purple */
+  --input: rgba(255, 255, 255, 0.9);
+  --ring: rgba(240, 42, 48, 0.3); /* Red focus ring */
+  --chart-1: #3C318D;
+  --chart-2: #F02A30;
+  --chart-3: #9852A7;
+  --chart-4: #2B2363;
+  --chart-5: #FFFFFF;
   --radius: 0.5rem;
-  --sidebar: oklch(0.98 0.02 330);
-  --sidebar-foreground: oklch(0.35 0 0);
-  --sidebar-primary: oklch(0.55 0.25 300);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.65 0.28 15);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.9 0.01 330);
-  --sidebar-ring: oklch(0.55 0.25 300 / 0.3);
+  --sidebar: rgba(152, 82, 167, 0.95);
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #3C318D;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F02A30;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(60, 49, 141, 0.3);
+  --sidebar-ring: rgba(240, 42, 48, 0.3);
 }
 
 .dark {
@@ -121,6 +127,267 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #9852A7 0%, #3C318D 35%, #2B2363 65%, #3C318D 85%, #9852A7 100%);
+    background-attachment: fixed;
+    color: #FFFFFF;
+    min-height: 100vh;
+  }
+}
+
+/* Conversion-Focused Animations - Following Landing Page Rules */
+@layer utilities {
+  /* Rule: Animation Must Serve Strategic Purpose */
+  
+  /* 1. Guide Attention - CTA Button Pulse */
+  @keyframes ctaPulse {
+    0%, 100% { 
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(240, 42, 48, 0.7);
+    }
+    50% { 
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px rgba(240, 42, 48, 0);
+    }
+  }
+  
+  .animate-cta-pulse {
+    animation: ctaPulse 2s infinite;
+  }
+  
+  /* 2. Provide Feedback - Microinteractions */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+  
+  /* 3. Enhance Storytelling - Sequential Reveals */
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .animate-slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+  }
+  
+  /* 4. Improve Usability - Form Focus States */
+  .form-input-focus {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .form-input-focus:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(240, 42, 48, 0.1);
+  }
+  
+  /* Pricing Card Hover - Non-distracting */
+  .pricing-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .pricing-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Urgency Animation - Subtle Movement */
+  @keyframes urgencyGlow {
+    0%, 100% { 
+      box-shadow: 0 0 5px rgba(240, 42, 48, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 20px rgba(240, 42, 48, 0.6);
+    }
+  }
+  
+  .animate-urgency {
+    animation: urgencyGlow 1.5s ease-in-out infinite;
+  }
+  
+  /* Performance Optimizations - Hardware Acceleration */
+  .animate-cta-pulse,
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .pricing-card-hover {
+    will-change: transform, opacity;
+    transform: translateZ(0); /* Force hardware acceleration */
+    backface-visibility: hidden; /* Prevent flickering */
+  }
+  
+  /* Enhanced Performance for Smooth Animations */
+  .performance-optimized {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Optimized Fade In Animation with Hardware Acceleration */
+  @keyframes optimizedFadeInUp {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 30px, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  .animate-optimized-fade-in-up {
+    animation: optimizedFadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+  
+  /* Staggered Animation Delays for Sequential Reveals */
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+  .animate-delay-600 { animation-delay: 600ms; }
+  .animate-delay-700 { animation-delay: 700ms; }
+  .animate-delay-800 { animation-delay: 800ms; }
+  .animate-delay-900 { animation-delay: 900ms; }
+  .animate-delay-1000 { animation-delay: 1000ms; }
+  
+  /* Optimized Scale Animation */
+  @keyframes optimizedScale {
+    0% {
+      opacity: 0;
+      transform: scale3d(0.9, 0.9, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  
+  .animate-optimized-scale {
+    animation: optimizedScale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+  
+  /* Accessibility: Respect User Preferences - Enhanced */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .animate-cta-pulse,
+    .animate-fade-in-up,
+    .animate-slide-in-left,
+    .animate-urgency,
+    .animate-optimized-fade-in-up,
+    .animate-optimized-scale {
+      animation: none !important;
+    }
+    
+    .pricing-card-hover:hover {
+      transform: none;
+      box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .form-input-focus:focus {
+      transform: none;
+    }
+    
+    /* Maintain visual feedback without motion */
+    .btn-primary-cta:hover,
+    .btn-secondary-cta:hover {
+      transform: none;
+      box-shadow: 0 8px 25px -8px rgba(240, 42, 48, 0.3);
+    }
+  }
+  
+  /* Performance: Reduce Layout Thrashing */
+  @media (prefers-reduced-motion: no-preference) {
+    .performance-optimized {
+      contain: layout style paint;
+    }
+    
+    /* Optimize scroll-triggered animations */
+    .scroll-triggered {
+      content-visibility: auto;
+      contain-intrinsic-size: 200px;
+    }
+  }
+  
+  /* Smooth Scrolling for Better UX */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Text truncation utilities */
+  .line-clamp-6 {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Scrollbar utilities */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Brand-Specific Conversion Components */
+@layer components {
+  /* High-contrast text for better conversion */
+  .text-conversion-primary {
+    color: #3C318D;
+    font-weight: 600;
+  }
+  
+  .text-conversion-accent {
+    color: #F02A30;
+    font-weight: 600;
+  }
+  
+  /* Conversion-optimized button styles */
+  .btn-primary-cta {
+    @apply bg-[#F02A30] hover:bg-[#F02A30]/90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200;
+  }
+  
+  .btn-secondary-cta {
+    @apply bg-[#9852A7] hover:bg-[#9852A7]/90 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition-all duration-200;
+  }
+  
+  /* Typography for maximum readability */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-pretty {
+    text-wrap: pretty;
   }
 }

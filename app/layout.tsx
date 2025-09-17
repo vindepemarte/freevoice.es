@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description:
     "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
   generator: "v0.app",
+  icons: {
+    icon: "/favicon.ico",
+  },
 }
 
 export default function RootLayout({

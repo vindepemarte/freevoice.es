@@ -1,14 +1,11 @@
 import { LanguageProvider } from "@/hooks/use-language"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
-import { FeaturesSection } from "@/components/features-section"
-import { CoachesSection } from "@/components/coaches-section"
-import { JennyIntroSection } from "@/components/jenny-intro-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
+import { CoachesSection } from "@/components/coaches-section"
 import { PricingSection } from "@/components/pricing-section"
-import { FAQSection } from "@/components/faq-section"
-import { CTASection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
 
 export default function HomePage() {
   return (
@@ -17,15 +14,12 @@ export default function HomePage() {
         <Header />
         <main>
           <HeroSection />
-          <FeaturesSection />
-          <CoachesSection />
-          <JennyIntroSection />
           <TestimonialsSection />
+          <CoachesSection />
           <PricingSection />
-          <FAQSection />
-          <CTASection />
         </main>
         <Footer />
+        <CookieBanner />
       </div>
     </LanguageProvider>
   )

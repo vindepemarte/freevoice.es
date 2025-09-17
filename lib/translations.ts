@@ -13,15 +13,16 @@ export const translations = {
     // Hero Section
     hero: {
       badge: "Academia de Coaching Vocal #1",
-      title: "Libera Tu Voz, Transforma Tu Vida",
+      title: "Descubre Tu Voz Auténtica en 3 Días",
       subtitle:
-        "Experimenta coaching vocal personalizado, trabajo corporal y orientación nutricional en nuestro retiro inmersivo. Descubre tu voz auténtica y libera todo tu potencial.",
+        "Únete a nuestro workshop inmersivo que combina coaching vocal profesional, trabajo corporeo y orientación nutricional. Solo quedan 3 lugares disponibles para el próximo workshop.",
       bookSpot: "Reserva Tu Lugar Ahora",
-      scheduleCall: "Programar una Llamada",
+      scheduleCall: "Hablar por WhatsApp",
       rating: "4.9/5 de más de 200 estudiantes",
-      nextRetreat: "Próximo retiro: 15-17 de Marzo, 2025",
+      nextRetreat: "Próximo workshop: 15-17 de Marzo, 2025",
       spotsLeft: "¡Solo 3 lugares disponibles!",
       urgentBooking: "RESERVA AHORA - ÚLTIMOS LUGARES",
+      whatsappMessage: "¡Hola! Quiero más información sobre el workshop Free Voice. ¿Quedan lugares disponibles?"
     },
     // Features
     features: {
@@ -61,26 +62,40 @@ export const translations = {
     },
     // Pricing
     pricing: {
-      title: "Elige Tu Viaje de Transformación",
+      title: "Elige Tu Workshop de Transformación",
       subtitle:
-        "Precios transparentes con todo incluido. Todos los viajes incluyen acceso al grupo privado de WhatsApp, llamadas semanales con coaches (2h/semana) y coaching 1-on-1 disponible por €50/hora.",
-      essential: {
-        name: "Retiro Esencial",
-        period: "experiencia de 3 días",
-        description: "Perfecto para principiantes que buscan descubrir su voz",
+        "Solo 2 opciones - máximo enfoque. Ambos workshops incluyen acceso al grupo privato WhatsApp para seguimiento continuo.",
+      workshop1Day: {
+        name: "Workshop de 1 Día",
+        price: "€50",
+        period: "experiencia de 1 día",
+        description: "Perfecto para descubrir los fundamentos del coaching vocal",
+        features: [
+          "Solo lezioni di canto",
+          "Técnicas de respiración básicas",
+          "Introducción al trabajo vocal",
+          "Material de práctica incluido"
+        ]
       },
-      premium: {
-        name: "Viaje Premium",
-        period: "experiencia de 4 días + 3h 1-on-1",
-        description: "Experiencia mejorada con 3 horas de coaching personal incluidas",
+      workshop3Day: {
+        name: "Workshop de 3 Días",
+        price: "€180",
+        period: "experiencia de 3 días completos",
+        description: "La experiencia completa de transformación vocal y personal",
+        popular: true,
+        features: [
+          "Lavoro corporeo completo",
+          "Orientamento nutrizionale personalizado",
+          "Pratica di gruppo intensiva",
+          "Lezioni di canto avanzadas",
+          "Accesso al Gruppo privato WhatsApp",
+          "Seguimiento post-workshop",
+          "Grabación de tu progreso",
+          "Certificado de participación"
+        ]
       },
-      vip: {
-        name: "Intensivo VIP",
-        period: "experiencia de 7 días completos",
-        description: "5 días de coaching + 1 día preparación + 1 día actuación en vivo con DJFaxBeat en Tenerife",
-      },
-      included: "Incluido en Todos los Viajes",
-      nextRetreat: "Próximo retiro: 15-17 de Marzo, 2025",
+      included: "¿Qué Incluye Cada Workshop?",
+      nextRetreat: "Próximo workshop: 15-17 de Marzo, 2025",
       spotsLeft: "¡Solo 3 lugares disponibles!",
     },
     // FAQ
@@ -176,15 +191,16 @@ export const translations = {
     // Hero Section
     hero: {
       badge: "Accademia di Coaching Vocale #1",
-      title: "Libera La Tua Voce, Trasforma La Tua Vita",
+      title: "Scopri la Tua Voce Autentica in 3 Giorni",
       subtitle:
-        "Sperimenta coaching vocale personalizzato, lavoro corporeo e orientamento nutrizionale nel nostro ritiro immersivo. Scopri la tua voce autentica e libera tutto il tuo potenziale.",
+        "Unisciti al nostro workshop immersivo che combina coaching vocale professionale, lavoro corporeo e orientamento nutrizionale. Rimangono solo 3 posti disponibili per il prossimo workshop.",
       bookSpot: "Prenota Il Tuo Posto Ora",
-      scheduleCall: "Programma una Chiamata",
+      scheduleCall: "Parla su WhatsApp",
       rating: "4.9/5 da oltre 200 studenti",
-      nextRetreat: "Prossimo ritiro: 15-17 Marzo, 2025",
+      nextRetreat: "Prossimo workshop: 15-17 Marzo, 2025",
       spotsLeft: "Solo 3 posti disponibili!",
       urgentBooking: "PRENOTA ORA - ULTIMI POSTI",
+      whatsappMessage: "Ciao! Voglio maggiori informazioni sul workshop Free Voice. Ci sono ancora posti disponibili?"
     },
     // Features
     features: {
@@ -224,27 +240,40 @@ export const translations = {
     },
     // Pricing
     pricing: {
-      title: "Scegli Il Tuo Viaggio di Trasformazione",
+      title: "Scegli Il Tuo Workshop di Trasformazione",
       subtitle:
-        "Prezzi trasparenti con tutto incluso. Tutti i viaggi includono accesso al gruppo privato WhatsApp, chiamate settimanali con i coach (2h/settimana) e coaching 1-on-1 disponibile per €50/ora.",
-      essential: {
-        name: "Ritiro Essenziale",
-        period: "esperienza di 3 giorni",
-        description: "Perfetto per principianti che cercano di scoprire la loro voce",
+        "Solo 2 opzioni - massima concentrazione. Entrambi i workshop includono accesso al gruppo privato WhatsApp per supporto continuo.",
+      workshop1Day: {
+        name: "Workshop di 1 Giorno",
+        price: "€50",
+        period: "esperienza di 1 giorno",
+        description: "Perfetto per scoprire i fondamenti del coaching vocale",
+        features: [
+          "Solo lezioni di canto",
+          "Tecniche di respirazione di base",
+          "Introduzione al lavoro vocale",
+          "Materiale di pratica incluso"
+        ]
       },
-      premium: {
-        name: "Viaggio Premium",
-        period: "esperienza di 4 giorni + 3h 1-on-1",
-        description: "Esperienza migliorata con 3 ore di coaching personale incluse",
+      workshop3Day: {
+        name: "Workshop di 3 Giorni",
+        price: "€180",
+        period: "esperienza di 3 giorni completi",
+        description: "L'esperienza completa di trasformazione vocale e personale",
+        popular: true,
+        features: [
+          "Lavoro corporeo completo",
+          "Orientamento nutrizionale personalizzato",
+          "Pratica di gruppo intensiva",
+          "Lezioni di canto avanzate",
+          "Accesso al Gruppo privato WhatsApp",
+          "Follow-up post-workshop",
+          "Registrazione del tuo progresso",
+          "Certificato di partecipazione"
+        ]
       },
-      vip: {
-        name: "Intensivo VIP",
-        period: "esperienza di 7 giorni completi",
-        description:
-          "5 giorni di coaching + 1 giorno preparazione + 1 giorno performance dal vivo con DJFaxBeat a Tenerife",
-      },
-      included: "Incluso in Tutti i Viaggi",
-      nextRetreat: "Prossimo ritiro: 15-17 Marzo, 2025",
+      included: "Cosa Include Ogni Workshop?",
+      nextRetreat: "Prossimo workshop: 15-17 Marzo, 2025",
       spotsLeft: "Solo 3 posti disponibili!",
     },
     // FAQ
