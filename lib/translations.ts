@@ -2,20 +2,25 @@ export const translations = {
   es: {
     // Navigation
     nav: {
-      home: "Inicio",
-      features: "Características",
-      coaches: "Coaches",
-      testimonials: "Testimonios",
-      pricing: "Precios",
-      faq: "FAQ",
-      contact: "Contacto",
+      home: "Home",
+      about: "Chi Siamo",
+      workshops: "Workshop",
+      testimonials: "Testimonianze",
+      contact: "Contatto",
+      bookNow: "Prenota Ora"
     },
     // Hero Section
     hero: {
       badge: "Academia de Coaching Vocal #1",
-      title: "Descubre Tu Voz Auténtica en 3 Días",
-      subtitle:
-        "Únete a nuestro workshop inmersivo que combina coaching vocal profesional, trabajo corporeo y orientación nutricional. Solo quedan 3 lugares disponibles para el próximo workshop.",
+      title: "Transforma Tu Voz, Transforma Tu Vida",
+      subtitle: "Descubre el poder de tu voz auténtica con nuestro enfoque holístico que combina técnicas vocales avanzadas, trabajo corporal y orientación nutricional personalizada.",
+      cta: "Reserva Tu Plaza",
+      secondaryCta: "Más Información",
+      socialProof: {
+        students: "200+ Estudiantes",
+        rating: "4.9/5 Valoración",
+        satisfaction: "98% Satisfacción"
+      },
       bookSpot: "Reserva Tu Lugar Ahora",
       scheduleCall: "Hablar por WhatsApp",
       rating: "4.9/5 de más de 200 estudiantes",
@@ -58,7 +63,22 @@ export const translations = {
     // Testimonials
     testimonials: {
       title: "Lo Que Dicen Nuestros Estudiantes",
-      subtitle: "Historias reales de transformación de nuestra comunidad",
+      subtitle: "Descubre cómo nuestro enfoque holístico ha transformado las voces y vidas de más de 200 estudiantes",
+      testimonial1: {
+        text: "El workshop cambió completamente mi relación con mi voz. No solo mejoré técnicamente, sino que también gané confianza en mí misma.",
+        author: "María González",
+        role: "Cantante"
+      },
+      testimonial2: {
+        text: "La combinación de técnica vocal, trabajo corporal y nutrición fue reveladora. Ahora entiendo mi voz de una manera completamente nueva.",
+        author: "Carlos Ruiz",
+        role: "Actor"
+      },
+      testimonial3: {
+        text: "Los coaches son increíbles. Su enfoque personalizado me ayudó a superar bloqueos que tenía desde hace años.",
+        author: "Ana Martín",
+        role: "Profesora"
+      }
     },
     // Pricing
     pricing: {
@@ -71,7 +91,7 @@ export const translations = {
         period: "experiencia de 1 día",
         description: "Perfecto para descubrir los fundamentos del coaching vocal",
         features: [
-          "Solo lezioni di canto",
+          "Solo lecciones de canto",
           "Técnicas de respiración básicas",
           "Introducción al trabajo vocal",
           "Material de práctica incluido"
@@ -84,11 +104,11 @@ export const translations = {
         description: "La experiencia completa de transformación vocal y personal",
         popular: true,
         features: [
-          "Lavoro corporeo completo",
-          "Orientamento nutrizionale personalizado",
-          "Pratica di gruppo intensiva",
-          "Lezioni di canto avanzadas",
-          "Accesso al Gruppo privato WhatsApp",
+          "Trabajo corporal completo",
+          "Orientación nutricional personalizada",
+          "Práctica de grupo intensiva",
+          "Lecciones de canto avanzadas",
+          "Acceso al Grupo privado WhatsApp",
           "Seguimiento post-workshop",
           "Grabación de tu progreso",
           "Certificado de participación"
@@ -101,41 +121,24 @@ export const translations = {
     // FAQ
     faq: {
       title: "Preguntas Frecuentes",
-      subtitle:
-        "¿Tienes preguntas? Tenemos respuestas. Aquí están las preguntas más comunes sobre nuestra experiencia de retiro de coaching vocal.",
-      questions: [
+      items: [
         {
-          question: "¿Qué nivel de experiencia se requiere?",
-          answer:
-            "¡No es necesaria experiencia previa! Nuestro programa está diseñado para todos los niveles, desde principiantes completos hasta artistas experimentados que buscan perfeccionar sus habilidades. Nuestros coaches adaptan sus métodos de enseñanza para encontrarte donde estés.",
+          question: "¿Qué incluye el workshop?",
+          answer: "Nuestros workshops incluyen técnicas de respiración, ejercicios vocales, trabajo corporal y orientación nutricional personalizada."
         },
         {
-          question: "¿Qué está incluido en el alojamiento?",
-          answer:
-            "Tu estadía incluye una habitación privada o compartida cómoda (dependiendo de tu paquete), todas las comidas preparadas por nuestro experto en nutrición, acceso a salas de práctica, instalaciones de bienestar y todos los materiales del taller. Se proporcionan ropa de cama y amenidades básicas.",
+          question: "¿Necesito experiencia previa?",
+          answer: "No, nuestros workshops están diseñados para todos los niveles, desde principiantes hasta cantantes con experiencia."
         },
         {
-          question: "¿Puedo asistir si tengo restricciones dietéticas?",
-          answer:
-            "Nuestro experto en nutrición trabaja con todas las necesidades dietéticas incluyendo vegetariana, vegana, sin gluten y otras restricciones. Por favor infórmanos de cualquier alergia o requerimiento dietético al hacer la reserva.",
+          question: "¿Qué debo traer?",
+          answer: "Solo necesitas ropa cómoda para el trabajo corporal y ganas de aprender. Nosotros proporcionamos todo el material necesario."
         },
         {
-          question: "¿Qué debo traer al retiro?",
-          answer:
-            "Trae ropa cómoda para las sesiones de movimiento, un cuaderno para tomar notas, cualquier artículo personal que necesites, ¡y una mente abierta! Proporcionamos todos los instrumentos musicales, equipo de grabación y materiales del taller.",
-        },
-        {
-          question: "¿Hay una política de reembolso?",
-          answer:
-            "Sí, ofrecemos un reembolso completo si cancelas 30 días antes del retiro. Las cancelaciones 15-29 días antes reciben un reembolso del 50%. Desafortunadamente, no podemos ofrecer reembolsos para cancelaciones menos de 14 días antes de la fecha del retiro.",
-        },
-        {
-          question: "¿Cómo me preparo para el retiro?",
-          answer:
-            "¡No se necesita preparación especial! Recomendamos descansar mucho antes de llegar y mantenerse hidratado. Te enviaremos un paquete de bienvenida con más detalles una vez que reserves, incluyendo qué esperar y ejercicios opcionales previos al retiro.",
-        },
-      ],
-      stillQuestions: "¿Aún tienes preguntas? ¡Estamos aquí para ayudar!",
+          question: "¿Hay seguimiento después del workshop?",
+          answer: "Sí, incluimos acceso a nuestro grupo privado de WhatsApp y seguimiento personalizado para continuar tu progreso."
+        }
+      ]
     },
     // CTA
     cta: {
@@ -153,19 +156,19 @@ export const translations = {
     footer: {
       brand: "Free Voice",
       description:
-        "Transformando vidas a través del poder de la voz. Únete a nuestra comunidad de cantantes apasionados y descubre tu sonido auténtico.",
-      quickLinks: "Enlaces Rápidos",
-      programs: "Programas",
-      contact: "Contáctanos",
-      retreat3Day: "Retiro de 3 Días",
+        "Trasformando vite attraverso il potere della voce. Unisciti alla nostra comunità di cantanti appassionati e scopri il tuo suono autentico.",
+      quickLinks: "Link Rapidi",
+      programs: "Programmi",
+      contact: "Contattaci",
+      retreat3Day: "Ritiro di 3 Giorni",
       onlineCoaching: "Coaching Online",
-      groupWorkshops: "Talleres Grupales",
-      privateSessions: "Sesiones Privadas",
-      corporateTraining: "Entrenamiento Corporativo",
-      privacyPolicy: "Política de Privacidad",
-      termsOfService: "Términos de Servicio",
-      cookiePolicy: "Política de Cookies",
-      rights: "© 2025 Free Voice Academy. Todos los derechos reservados.",
+      groupWorkshops: "Workshop di Gruppo",
+      privateSessions: "Sessioni Private",
+      corporateTraining: "Formazione Aziendale",
+      privacyPolicy: "Politica sulla Privacy",
+      termsOfService: "Termini di Servizio",
+      cookiePolicy: "Politica sui Cookie",
+      rights: "© 2025 Free Voice Academy. Tutti i diritti riservati.",
     },
     // Common
     common: {
@@ -191,9 +194,15 @@ export const translations = {
     // Hero Section
     hero: {
       badge: "Accademia di Coaching Vocale #1",
-      title: "Scopri la Tua Voce Autentica in 3 Giorni",
-      subtitle:
-        "Unisciti al nostro workshop immersivo che combina coaching vocale professionale, lavoro corporeo e orientamento nutrizionale. Rimangono solo 3 posti disponibili per il prossimo workshop.",
+      title: "Trasforma la Tua Voce, Trasforma la Tua Vita",
+      subtitle: "Scopri il potere della tua voce autentica con il nostro approccio olistico che combina tecniche vocali avanzate, lavoro corporeo e orientamento nutrizionale personalizzato.",
+      cta: "Prenota il Tuo Posto",
+      secondaryCta: "Maggiori Informazioni",
+      socialProof: {
+        students: "200+ Studenti",
+        rating: "4.9/5 Valutazione",
+        satisfaction: "98% Soddisfazione"
+      },
       bookSpot: "Prenota Il Tuo Posto Ora",
       scheduleCall: "Parla su WhatsApp",
       rating: "4.9/5 da oltre 200 studenti",
@@ -236,7 +245,22 @@ export const translations = {
     // Testimonials
     testimonials: {
       title: "Cosa Dicono I Nostri Studenti",
-      subtitle: "Storie reali di trasformazione dalla nostra comunità",
+      subtitle: "Scopri come il nostro approccio olistico ha trasformato le voci e le vite di oltre 200 studenti",
+      testimonial1: {
+        text: "Il workshop ha cambiato completamente il mio rapporto con la mia voce. Non solo sono migliorata tecnicamente, ma ho anche acquisito fiducia in me stessa.",
+        author: "María González",
+        role: "Cantante"
+      },
+      testimonial2: {
+        text: "La combinazione di tecnica vocale, lavoro corporeo e nutrizione è stata rivelante. Ora capisco la mia voce in un modo completamente nuovo.",
+        author: "Carlos Ruiz",
+        role: "Attore"
+      },
+      testimonial3: {
+        text: "I coach sono incredibili. Il loro approccio personalizzato mi ha aiutato a superare blocchi che avevo da anni.",
+        author: "Ana Martín",
+        role: "Insegnante"
+      }
     },
     // Pricing
     pricing: {
@@ -267,8 +291,8 @@ export const translations = {
           "Pratica di gruppo intensiva",
           "Lezioni di canto avanzate",
           "Accesso al Gruppo privato WhatsApp",
-          "Follow-up post-workshop",
-          "Registrazione del tuo progresso",
+          "Monitoraggio post-workshop",
+          "Registrazione dei tuoi progressi",
           "Certificato di partecipazione"
         ]
       },
@@ -279,41 +303,24 @@ export const translations = {
     // FAQ
     faq: {
       title: "Domande Frequenti",
-      subtitle:
-        "Hai domande? Abbiamo le risposte. Ecco le domande più comuni sulla nostra esperienza di ritiro di coaching vocale.",
-      questions: [
+      items: [
         {
-          question: "Che livello di esperienza è richiesto?",
-          answer:
-            "Nessuna esperienza precedente è necessaria! Il nostro programma è progettato per tutti i livelli, dai principianti completi agli artisti esperti che cercano di perfezionare le loro abilità. I nostri coach adattano i loro metodi di insegnamento per incontrarti dove sei.",
+          question: "Cosa include il workshop?",
+          answer: "I nostri workshop includono tecniche di respirazione, esercizi vocali, lavoro corporeo e orientamento nutrizionale personalizzato."
         },
         {
-          question: "Cosa è incluso nell'alloggio?",
-          answer:
-            "Il tuo soggiorno include una camera privata o condivisa confortevole (a seconda del tuo pacchetto), tutti i pasti preparati dal nostro esperto nutrizionale, accesso alle sale prove, strutture benessere e tutti i materiali del workshop. Biancheria e servizi di base sono forniti.",
+          question: "Ho bisogno di esperienza precedente?",
+          answer: "No, i nostri workshop sono progettati per tutti i livelli, dai principianti ai cantanti con esperienza."
         },
         {
-          question: "Posso partecipare se ho restrizioni dietetiche?",
-          answer:
-            "Il nostro esperto nutrizionale lavora con tutte le esigenze dietetiche incluso vegetariano, vegano, senza glutine e altre restrizioni. Per favore informaci di eventuali allergie o requisiti dietetici al momento della prenotazione.",
+          question: "Cosa devo portare?",
+          answer: "Hai bisogno solo di vestiti comodi per il lavoro corporeo e voglia di imparare. Forniamo tutto il materiale necessario."
         },
         {
-          question: "Cosa dovrei portare al ritiro?",
-          answer:
-            "Porta abbigliamento comodo per le sessioni di movimento, un quaderno per prendere appunti, qualsiasi oggetto personale di cui hai bisogno, e una mente aperta! Forniamo tutti gli strumenti musicali, attrezzature di registrazione e materiali del workshop.",
-        },
-        {
-          question: "C'è una politica di rimborso?",
-          answer:
-            "Sì, offriamo un rimborso completo se cancelli 30 giorni prima del ritiro. Le cancellazioni 15-29 giorni prima ricevono un rimborso del 50%. Sfortunatamente, non possiamo offrire rimborsi per cancellazioni meno di 14 giorni prima della data del ritiro.",
-        },
-        {
-          question: "Come mi preparo per il ritiro?",
-          answer:
-            "Nessuna preparazione speciale è necessaria! Raccomandiamo di riposare molto prima dell'arrivo e rimanere idratati. Ti invieremo un pacchetto di benvenuto con più dettagli una volta prenotato, incluso cosa aspettarsi ed esercizi opzionali pre-ritiro.",
-        },
-      ],
-      stillQuestions: "Hai ancora domande? Siamo qui per aiutare!",
+          question: "C'è un follow-up dopo il workshop?",
+          answer: "Sì, includiamo l'accesso al nostro gruppo privato WhatsApp e follow-up personalizzato per continuare i tuoi progressi."
+        }
+      ]
     },
     // CTA
     cta: {
@@ -327,6 +334,7 @@ export const translations = {
       averageRating: "Valutazione Media",
       daysMaxExperience: "Giorni Max Esperienza",
     },
+    // Footer
     // Footer
     footer: {
       brand: "Free Voice",
