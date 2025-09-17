@@ -6,176 +6,164 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { MessageCircle, Shield } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 
 interface BookingFormProps {
   children: React.ReactNode
-  journeyType?: "essential" | "premium" | "vip"
+  workshopType?: "workshop1day" | "workshop3day"
 }
 
-export function BookingForm({ children, journeyType }: BookingFormProps) {
+export function BookingForm({ children, workshopType }: BookingFormProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { t, language } = useLanguage()
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    phone: "",
-    journey: journeyType || "",
-    message: "",
-    language: language,
+    whatsapp: "",
+    workshop: workshopType || "",
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const journeyNames = {
-      essential: language === "es" ? "Retiro Esencial (3 días)" : "Ritiro Essenziale (3 giorni)",
-      premium: language === "es" ? "Viaje Premium (4 días + 3h 1-on-1)" : "Viaggio Premium (4 giorni + 3h 1-on-1)",
-      vip:
-        language === "es"
-          ? "Intensivo VIP (7 días total con actuación en vivo)"
-          : "Intensivo VIP (7 giorni totali con performance dal vivo)",
+    // Minimal friction - directly format WhatsApp message
+    const workshopDetails = {
+      workshop1day: language === "es" ? "Workshop de 1 Día (€50)" : "Workshop di 1 Giorno (€50)",
+      workshop3day: language === "es" ? "Workshop de 3 Días (€180)" : "Workshop di 3 Giorni (€180)",
     }
 
-    const selectedJourney = journeyNames[formData.journey as keyof typeof journeyNames] || formData.journey
+    const selectedWorkshop = workshopDetails[formData.workshop as keyof typeof workshopDetails] || 
+      (language === "es" ? "Información general" : "Informazioni generali")
 
     const message =
       language === "es"
-        ? `¡Hola! Me gustaría reservar mi lugar en Free Voice Academy.
+        ? `¡Hola! Quiero reservar mi lugar:
 
-📋 Mis datos:
-• Nombre: ${formData.name}
-• Email: ${formData.email}
-• Teléfono: ${formData.phone}
-• Journey seleccionado: ${selectedJourney}
-• Idioma preferido: ${formData.language === "es" ? "Español" : "Italiano"}
+👤 Nombre: ${formData.name}
+📞 WhatsApp: ${formData.whatsapp}
+🎤 Workshop: ${selectedWorkshop}
 
-💬 Mensaje adicional: ${formData.message || "Ninguno"}
+¿Quedan lugares disponibles?
+¡Gracias!`
+        : `Ciao! Voglio prenotare il mio posto:
 
-¡Espero su respuesta para completar la reserva!`
-        : `Ciao! Vorrei prenotare il mio posto alla Free Voice Academy.
+👤 Nome: ${formData.name}
+📞 WhatsApp: ${formData.whatsapp}
+🎤 Workshop: ${selectedWorkshop}
 
-📋 I miei dati:
-• Nome: ${formData.name}
-• Email: ${formData.email}
-• Telefono: ${formData.phone}
-• Viaggio selezionato: ${selectedJourney}
-• Lingua preferita: ${formData.language === "es" ? "Spagnolo" : "Italiano"}
-
-💬 Messaggio aggiuntivo: ${formData.message || "Nessuno"}
-
-Aspetto la vostra risposta per completare la prenotazione!`
+Ci sono ancora posti disponibili?
+Grazie!`
 
     const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
     setIsOpen(false)
+    
+    // Reset form
+    setFormData({ name: "", whatsapp: "", workshop: workshopType || "" })
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md w-[95vw] max-w-[95vw] sm:w-full mx-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-primary">
-            {language === "es" ? "Reserva Tu Lugar Ahora" : "Prenota Il Tuo Posto Ora"}
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">{language === "es" ? "Nombre Completo *" : "Nome Completo *"}</Label>
-            <Input
-              id="name"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-              placeholder={language === "es" ? "Tu nombre completo" : "Il tuo nome completo"}
-            />
-          </div>
+      <DialogContent className="sm:max-w-md w-[90vw] max-w-[90vw] sm:w-full mx-auto bg-white border-0 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F02A30]/5 via-[#9852A7]/5 to-[#3C318D]/5 rounded-lg"></div>
+        <div className="relative z-10">
+          <DialogHeader className="text-center space-y-3 pb-6">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#F02A30] to-[#3C318D] bg-clip-text text-transparent">
+              {language === "es" ? "Reserva Tu Lugar" : "Prenota Il Tuo Posto"}
+            </DialogTitle>
+            <p className="text-sm text-[#3C318D]/70 font-medium">
+              {language === "es" ? "Solo 3 campos - ¡Rápido y fácil!" : "Solo 3 campi - Veloce e facile!"}
+            </p>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Field */}
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[#3C318D] font-semibold text-sm">
+                {language === "es" ? "Tu Nombre *" : "Il Tuo Nome *"}
+              </Label>
+              <Input
+                id="name"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                placeholder={language === "es" ? "Ej: María García" : "Es: Maria Rossi"}
+                className="h-12 text-base border-2 border-[#9852A7]/20 focus:border-[#F02A30] focus:ring-2 focus:ring-[#F02A30]/20 rounded-xl transition-all duration-300 bg-white/80 backdrop-blur text-[#3C318D] placeholder:text-[#3C318D]/50 selection:bg-[#F02A30]/20 selection:text-[#3C318D]"
+              />
+            </div>
 
-          <div>
-            <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-              placeholder="your@email.com"
-            />
-          </div>
+            {/* WhatsApp Field */}
+            <div className="space-y-2">
+              <Label htmlFor="whatsapp" className="text-[#3C318D] font-semibold text-sm">
+                {language === "es" ? "Tu WhatsApp *" : "Il Tuo WhatsApp *"}
+              </Label>
+              <Input
+                id="whatsapp"
+                required
+                value={formData.whatsapp}
+                onChange={(e) => setFormData((prev) => ({ ...prev, whatsapp: e.target.value }))}
+                placeholder="+34 600 000 000"
+                className="h-12 text-base border-2 border-[#9852A7]/20 focus:border-[#F02A30] focus:ring-2 focus:ring-[#F02A30]/20 rounded-xl transition-all duration-300 bg-white/80 backdrop-blur text-[#3C318D] placeholder:text-[#3C318D]/50 selection:bg-[#F02A30]/20 selection:text-[#3C318D]"
+              />
+            </div>
 
-          <div>
-            <Label htmlFor="phone">{language === "es" ? "Número de Teléfono *" : "Numero di Telefono *"}</Label>
-            <Input
-              id="phone"
-              required
-              value={formData.phone}
-              onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-              placeholder="+34 123 456 789"
-            />
-          </div>
+            {/* Workshop Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="workshop" className="text-[#3C318D] font-semibold text-sm">
+                {language === "es" ? "Selecciona Workshop *" : "Seleziona Workshop *"}
+              </Label>
+              <Select
+                value={formData.workshop}
+                onValueChange={(value) => setFormData((prev) => ({ ...prev, workshop: value }))}
+                required
+              >
+                <SelectTrigger className="h-12 text-base border-2 border-[#9852A7]/20 focus:border-[#F02A30] focus:ring-2 focus:ring-[#F02A30]/20 rounded-xl transition-all duration-300 bg-white/80 backdrop-blur text-[#3C318D] selection:bg-[#F02A30]/20 selection:text-[#3C318D]">
+                  <SelectValue placeholder={language === "es" ? "Elige tu workshop" : "Scegli il tuo workshop"} className="text-[#3C318D]/50" />
+                </SelectTrigger>
+                <SelectContent className="border-2 border-[#9852A7]/20 rounded-xl bg-white/95 backdrop-blur">
+                  <SelectItem value="workshop1day" className="text-base py-3 hover:bg-[#F02A30]/10 focus:bg-[#F02A30]/10 rounded-lg text-[#3C318D] selection:bg-[#F02A30]/20 selection:text-[#3C318D]">
+                    {language === "es" ? "Workshop de 1 Día - €50" : "Workshop di 1 Giorno - €50"}
+                  </SelectItem>
+                  <SelectItem value="workshop3day" className="text-base py-3 hover:bg-[#9852A7]/10 focus:bg-[#9852A7]/10 rounded-lg text-[#3C318D] selection:bg-[#F02A30]/20 selection:text-[#3C318D]">
+                    {language === "es" ? "Workshop de 3 Días - €180 ⭐" : "Workshop di 3 Giorni - €180 ⭐"}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div>
-            <Label htmlFor="journey">{language === "es" ? "Seleccionar Viaje *" : "Seleziona Viaggio *"}</Label>
-            <Select
-              value={formData.journey}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, journey: value }))}
+            {/* Privacy Assurance */}
+            <div className="flex items-start space-x-3 text-xs text-[#3C318D]/70 bg-gradient-to-r from-[#9852A7]/5 to-[#3C318D]/5 p-4 rounded-xl border border-[#9852A7]/10">
+              <Shield className="h-4 w-4 text-[#9852A7] mt-0.5 flex-shrink-0" />
+              <span className="leading-relaxed">
+                {language === "es" 
+                  ? "Tus datos están seguros. Solo los usamos para contactarte sobre el workshop." 
+                  : "I tuoi dati sono sicuri. Li usiamo solo per contattarti riguardo al workshop."}
+              </span>
+            </div>
+
+            {/* Submit Button */}
+            <Button 
+              type="submit" 
+              className="w-full h-14 bg-gradient-to-r from-[#F02A30] to-[#9852A7] hover:from-[#F02A30]/90 hover:to-[#9852A7]/90 text-white font-bold text-base rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              disabled={!formData.name || !formData.whatsapp || !formData.workshop}
             >
-              <SelectTrigger>
-                <SelectValue placeholder={language === "es" ? "Elige tu viaje" : "Scegli il tuo viaggio"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="essential">
-                  {language === "es" ? "Retiro Esencial - €180" : "Ritiro Essenziale - €180"}
-                </SelectItem>
-                <SelectItem value="premium">
-                  {language === "es" ? "Viaje Premium - €350" : "Viaggio Premium - €350"}
-                </SelectItem>
-                <SelectItem value="vip">
-                  {language === "es" ? "Intensivo VIP - €750" : "Intensivo VIP - €750"}
-                </SelectItem>
-              </SelectContent>
-            </Select>
+              <MessageCircle className="h-5 w-5 mr-3" />
+              {language === "es" ? "Enviar a WhatsApp" : "Invia su WhatsApp"}
+            </Button>
+          </form>
+          
+          {/* Trust Signal */}
+          <div className="text-center pt-4 border-t border-[#9852A7]/10 mt-6">
+            <p className="text-xs text-[#3C318D]/60 font-medium">
+              {language === "es" 
+                ? "✓ Respuesta en menos de 1 hora • ✓ Sin spam garantizado" 
+                : "✓ Risposta in meno di 1 ora • ✓ Niente spam garantito"}
+            </p>
           </div>
-
-          <div>
-            <Label htmlFor="language">{language === "es" ? "Idioma Preferido" : "Lingua Preferita"}</Label>
-            <Select
-              value={formData.language}
-              onValueChange={(value: "es" | "it") => setFormData((prev) => ({ ...prev, language: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="it">Italiano</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="message">{language === "es" ? "Mensaje Adicional" : "Messaggio Aggiuntivo"}</Label>
-            <Textarea
-              id="message"
-              value={formData.message}
-              onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-              placeholder={
-                language === "es"
-                  ? "Cualquier pregunta o solicitud especial..."
-                  : "Qualsiasi domanda o richiesta speciale..."
-              }
-              rows={3}
-            />
-          </div>
-
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-            {language === "es" ? "Enviar Mensaje WhatsApp" : "Invia Messaggio WhatsApp"}
-          </Button>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   )

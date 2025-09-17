@@ -14,11 +14,11 @@ export function FAQSection() {
   }
 
   return (
-    <section id="faq" className="py-16 sm:py-24 bg-muted/30">
+    <section id="faq" className="py-16 sm:py-24 bg-transparent">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">{t.faq.title}</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">{t.faq.subtitle}</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-balance" style={{ fontFamily: '"Bebas Neue", "Arial Black", sans-serif' }}>{t.faq.title}</h2>
+          <p className="text-lg text-white/90 max-w-2xl mx-auto text-pretty">{t.faq.subtitle}</p>
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">
@@ -48,13 +48,13 @@ export function FAQSection() {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-muted-foreground mb-4">{t.faq.stillQuestions}</p>
+          <p className="text-white/80 mb-4">{t.faq.stillQuestions}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="mailto:info@freevoice.es" className="text-primary hover:underline font-medium">
+            <a href="mailto:info@freevoice.es" className="text-[#F02A30] hover:underline font-medium">
               info@freevoice.es
             </a>
-            <div className="hidden sm:inline text-muted-foreground">•</div>
-            <a href="tel:+34697798991" className="text-primary hover:underline font-medium">
+            <div className="hidden sm:inline text-white/60">•</div>
+            <a href="tel:+34697798991" className="text-[#F02A30] hover:underline font-medium">
               +34 697 79 89 91
             </a>
           </div>
