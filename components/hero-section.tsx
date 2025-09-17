@@ -105,7 +105,7 @@ export function HeroSection() {
           </div>
 
           {/* Social Proof Above the Fold */}
-          <div className={`flex flex-col items-center justify-center gap-3 xs:gap-4 sm:flex-row sm:gap-6 text-white/90 transition-all duration-1200 ease-out delay-1400 px-2 xs:px-0 ${
+          <div className={`flex flex-col items-center justify-center gap-3 xs:gap-4 sm:flex-row sm:gap-6 text-white/90 transition-all duration-1200 ease-out delay-1400 px-2 xs:px-0 mb-8 xs:mb-12 sm:mb-16 md:mb-20 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             <div className="flex items-center space-x-2">
