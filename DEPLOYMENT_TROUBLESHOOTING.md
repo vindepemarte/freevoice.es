@@ -1,62 +1,40 @@
 # FreeVoice.es Environment Variables
 
-## Database Configuration
+## Database Configuration (SSL DISABLED)
 
 ### For Development
 ```env
-DATABASE_URL=postgres://freevoice:password@localhost:5432/freevoice-es
+DATABASE_URL=postgres://freevoice:password@localhost:5432/freevoice-es?sslmode=disable
 NODE_ENV=development
 ```
 
-### For Production (Coolify/Docker)
+### For Production (Coolify/Docker) - SSL Disabled
 ```env
 DATABASE_URL=postgres://username:password@host:port/database?sslmode=disable
 NODE_ENV=production
 ```
 
-### Alternative SSL-Disabled URLs for Problematic Connections
+### Recommended DATABASE_URL Format for SSL-Disabled Setup
 
-If you're getting persistent SSL certificate verification errors:
+```
+postgres://username:password@host:port/database?sslmode=disable
+```
 
-1. **Completely disable SSL:**
-   ```
-   postgres://username:password@host:port/database?sslmode=disable
-   ```
+**Important**: Ensure your PostgreSQL server is configured to accept non-SSL connections.
 
-2. **Force non-SSL connection:**
-   ```
-   postgres://username:password@host:port/database?ssl=false&sslmode=disable
-   ```
+## Common Connection Issues and Solutions
 
-### SSL Configuration Options
-
-If you're getting SSL certificate verification errors, try these DATABASE_URL variations:
-
-1. **Force SSL with certificate verification disabled:**
-   ```
-   postgres://username:password@host:port/database?sslmode=require&sslcert=&sslkey=&sslrootcert=
-   ```
-
-2. **SSL preferred but not required:**
-   ```
-   postgres://username:password@host:port/database?sslmode=prefer
-   ```
-
-3. **SSL required but skip certificate verification:**
-   ```
-   postgres://username:password@host:port/database?sslmode=require&sslcert=&sslkey=&sslrootcert=&ssl=true
-   ```
-
-## Common SSL Issues and Solutions
-
-### Issue: "unable to verify the first certificate"
-**Solution:** The SSL configuration in `lib/database.ts` is designed to handle this by setting `rejectUnauthorized: false`
+### Issue: "unable to verify the first certificate" (RESOLVED)
+**Solution:** SSL has been disabled in the application configuration. This error should no longer occur.
 
 ### Issue: "ENOTFOUND" or connection timeout
 **Solution:** Check if your database host is accessible from your deployment environment
 
 ### Issue: "password authentication failed"
 **Solution:** Verify your database credentials in the DATABASE_URL
+
+### Issue: "server does not support SSL connections"
+**Solution:** This is expected when SSL is disabled. The application is configured to work without SSL.
 
 ## Testing Database Connection
 
@@ -79,9 +57,20 @@ Default admin credentials:
 ✅ `NODE_ENV=production`  
 ✅ `NEXT_TELEMETRY_DISABLED=1` (optional)  
 
-## Troubleshooting SSL
+## Troubleshooting Database Connection
 
-1. Check if your PostgreSQL provider requires specific SSL settings
-2. Try different `sslmode` values in your DATABASE_URL
-3. Verify that your database actually supports SSL connections
-4. Check if your hosting provider has specific SSL requirements
+1. **Verify your DATABASE_URL includes `?sslmode=disable`**
+2. **Check that your PostgreSQL server accepts non-SSL connections**
+3. **Test connection using the test script:**
+   ```bash
+   node scripts/test-db-connection.js
+   ```
+4. **Check deployment logs for database connection debug output**
+
+## Security Considerations
+
+**Note**: With SSL disabled, database communications are not encrypted. Ensure your database network is secure:
+- Use private networks when possible
+- Restrict database access by IP
+- Use strong authentication credentials
+- Consider VPN or other network-level security

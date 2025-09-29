@@ -1,13 +1,12 @@
 import { Pool } from 'pg'
 
-// Parse and modify DATABASE_URL to handle SSL issues
+// Simple database configuration for SSL-disabled setup
 function getDatabaseConfig() {
   let connectionString = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
   
-  console.log('🔗 Database connection setup:')
+  console.log('🔗 Database connection setup (SSL disabled):')
   console.log('   NODE_ENV:', process.env.NODE_ENV)
-  console.log('   Original URL length:', connectionString.length)
-  console.log('   URL contains ssl:', connectionString.includes('ssl'))
+  console.log('   Connection string length:', connectionString.length)
   
   // Skip SSL during build with dummy URL
   if (connectionString.includes('dummy')) {
@@ -18,40 +17,34 @@ function getDatabaseConfig() {
     }
   }
   
-  // For production, force SSL disable if we're having certificate issues
-  if (process.env.NODE_ENV === 'production') {
-    console.log('   Production mode detected - forcing SSL disable')
-    // Try to append sslmode=disable to the connection string
-    try {
-      const url = new URL(connectionString)
-      url.searchParams.set('sslmode', 'disable')
-      connectionString = url.toString()
-      console.log('   Modified URL to disable SSL')
-    } catch (error) {
-      console.log('   Could not parse URL, appending sslmode manually')
-      connectionString += connectionString.includes('?') ? '&sslmode=disable' : '?sslmode=disable'
-    }
-    
-    return {
-      connectionString,
-      ssl: false // Explicitly disable SSL
-    }
+  // Ensure sslmode=disable is in the connection string
+  if (!connectionString.includes('sslmode=disable')) {
+    console.log('   Adding sslmode=disable to connection string')
+    connectionString += connectionString.includes('?') ? '&sslmode=disable' : '?sslmode=disable'
   }
   
-  console.log('   Development mode - no SSL')
+  // Remove any SSL-related parameters that might conflict
+  connectionString = connectionString.replace(/[&?]ssl=true/g, '')
+  connectionString = connectionString.replace(/[&?]sslmode=require/g, '')
+  connectionString = connectionString.replace(/[&?]sslmode=prefer/g, '')
+  
+  console.log('   SSL explicitly disabled in connection string')
+  
   return {
     connectionString,
-    ssl: false
+    ssl: false // Explicitly disable SSL
   }
 }
 
 const dbConfig = getDatabaseConfig()
 const pool = new Pool({
   ...dbConfig,
-  // Additional connection options for better reliability
+  // Connection pool settings optimized for non-SSL connections
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
   connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
+  statement_timeout: 60000, // 60 second statement timeout
+  query_timeout: 60000, // 60 second query timeout
 })
 
 export { pool }
