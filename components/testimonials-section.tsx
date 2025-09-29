@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight, Star, Play, Volume2, Award, Users } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "@/components/booking-form"
+import { usePublicTestimonials } from "@/hooks/use-admin-data"
+import { ResponsiveVideoPlayer } from "@/components/ui/responsive-video-player"
 
 // Generate random rating between 4.8 and 5.0
 const generateRandomRating = () => {
@@ -84,6 +86,7 @@ const testimonials = [
 
 export function TestimonialsSection() {
   const { t, language } = useLanguage()
+  const { testimonials: dynamicTestimonials, loading } = usePublicTestimonials()
   const [playingVideo, setPlayingVideo] = useState(false)
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
@@ -91,11 +94,14 @@ export function TestimonialsSection() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
+  // Use dynamic testimonials if available, fallback to static ones
+  const testimonialsToShow = dynamicTestimonials.length > 0 ? dynamicTestimonials : testimonials
+
   // Initialize dynamic ratings for each testimonial
   useEffect(() => {
-    const ratings = testimonials.map(() => generateRandomRating())
+    const ratings = testimonialsToShow.map(() => generateRandomRating())
     setDynamicRatings(ratings)
-  }, [])
+  }, [testimonialsToShow])
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -129,7 +135,7 @@ export function TestimonialsSection() {
     const scroll = () => {
       if (isMobile) {
         // On mobile, show one testimonial at a time
-        setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length)
+        setCurrentTestimonialIndex((prev) => (prev + 1) % testimonialsToShow.length)
       } else {
         // On desktop, use horizontal scroll
         const { scrollLeft, scrollWidth, clientWidth } = scrollContainer
@@ -245,52 +251,54 @@ export function TestimonialsSection() {
             <div className={`px-2 xs:px-4 flex justify-center transition-all duration-800 ease-out delay-900 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
-              <Card className="w-full max-w-xs xs:max-w-sm bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <CardContent className="p-3 xs:p-4">
-                  {/* Rating */}
-                  <div className="flex items-center space-x-1 mb-2 xs:mb-3">
-                    {[...Array(testimonials[currentTestimonialIndex].rating)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 xs:h-3 xs:w-3 text-[#F02A30] fill-current" />
-                    ))}
-                    <span className="ml-2 text-[#3C318D] font-semibold text-xs xs:text-xs">
-                      {dynamicRatings[currentTestimonialIndex] || "5.0"}
-                    </span>
-                  </div>
-
-                  {/* Testimonial Quote */}
-                  <div className="mb-2 xs:mb-3 min-h-[60px] xs:min-h-[80px]">
-                    <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
-                      "{testimonials[currentTestimonialIndex].content[language]}"
-                    </p>
-                  </div>
-
-                  {/* Student Info */}
-                  <div className="flex items-center space-x-2">
-                    <img
-                      src={testimonials[currentTestimonialIndex].image || "/placeholder.svg"}
-                      alt={testimonials[currentTestimonialIndex].name}
-                      className="w-6 h-6 xs:w-8 xs:h-8 rounded-full object-cover border-2 border-[#9852A7]/20 flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-[#3C318D] text-xs xs:text-xs truncate">{testimonials[currentTestimonialIndex].name}</h4>
-                      <p className="text-gray-600 text-xs xs:text-xs truncate">{testimonials[currentTestimonialIndex].role[language]}</p>
-                      <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{testimonials[currentTestimonialIndex].location}</p>
+              {testimonialsToShow.length > 0 && (
+                <Card className="w-full max-w-xs xs:max-w-sm bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-3 xs:p-4">
+                    {/* Rating */}
+                    <div className="flex items-center space-x-1 mb-2 xs:mb-3">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-3 w-3 xs:h-3 xs:w-3 text-[#F02A30] fill-current" />
+                      ))}
+                      <span className="ml-2 text-[#3C318D] font-semibold text-xs xs:text-xs">
+                        {dynamicRatings[currentTestimonialIndex] || "5.0"}
+                      </span>
                     </div>
-                    
-                    {/* Workshop Badge */}
-                    <Badge className="bg-[#F02A30] text-white text-xs xs:text-xs flex-shrink-0">
-                      {testimonials[currentTestimonialIndex].workshopType === "3day" 
-                        ? (language === "es" ? "3D" : "3G")
-                        : (language === "es" ? "1D" : "1G")}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+
+                    {/* Testimonial Quote */}
+                    <div className="mb-2 xs:mb-3 min-h-[60px] xs:min-h-[80px]">
+                      <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
+                        "{testimonialsToShow[currentTestimonialIndex]?.content_it && testimonialsToShow[currentTestimonialIndex]?.content_es 
+                          ? (language === 'es' ? testimonialsToShow[currentTestimonialIndex].content_es : testimonialsToShow[currentTestimonialIndex].content_it)
+                          : (testimonialsToShow[currentTestimonialIndex]?.content?.[language] || '')}"
+                      </p>
+                    </div>
+
+                    {/* Student Info */}
+                    <div className="flex items-center space-x-2">
+                      <img
+                        src={testimonialsToShow[currentTestimonialIndex]?.image_url || testimonialsToShow[currentTestimonialIndex]?.image || "/placeholder.svg"}
+                        alt={testimonialsToShow[currentTestimonialIndex]?.name || ''}
+                        className="w-6 h-6 xs:w-8 xs:h-8 rounded-full object-cover border-2 border-[#9852A7]/20 flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-[#3C318D] text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.name}</h4>
+                        <p className="text-gray-600 text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.role}</p>
+                        <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.location || ''}</p>
+                      </div>
+                      
+                      {/* Workshop Badge */}
+                      <Badge className="bg-[#F02A30] text-white text-xs xs:text-xs flex-shrink-0">
+                        {language === "es" ? "Workshop" : "Workshop"}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
             
             {/* Mobile testimonial indicators */}
             <div className="flex justify-center mt-3 xs:mt-4 space-x-2">
-              {testimonials.map((_, index) => (
+              {testimonialsToShow.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonialIndex(index)}
@@ -311,8 +319,12 @@ export function TestimonialsSection() {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {/* Duplicate testimonials for seamless loop */}
-            {[...testimonials, ...testimonials].map((testimonial, index) => {
-              const originalIndex = index % testimonials.length
+            {[...testimonialsToShow, ...testimonialsToShow].map((testimonial, index) => {
+              const originalIndex = index % testimonialsToShow.length
+              const content = testimonial.content_it && testimonial.content_es 
+                ? (language === 'es' ? testimonial.content_es : testimonial.content_it)
+                : (testimonial.content?.[language] || '')
+              
               return (
                 <Card 
                   key={`${testimonial.name}-${index}`} 
@@ -325,9 +337,22 @@ export function TestimonialsSection() {
                   }}
                 >
                   <CardContent className="p-6">
+                    {/* Video Testimonial (if available) */}
+                    {testimonial.video_url && (
+                      <div className="mb-4">
+                        <ResponsiveVideoPlayer 
+                          src={testimonial.video_url}
+                          poster={testimonial.image_url}
+                          className="h-32 rounded-lg"
+                          controls={true}
+                          preload="metadata"
+                        />
+                      </div>
+                    )}
+                    
                     {/* Rating */}
                     <div className="flex items-center space-x-1 mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
+                      {[...Array(5)].map((_, i) => (
                         <Star key={i} className="h-4 w-4 text-[#F02A30] fill-current" />
                       ))}
                       <span className="ml-2 text-[#3C318D] font-semibold text-sm">
@@ -338,34 +363,31 @@ export function TestimonialsSection() {
                     {/* Testimonial Quote */}
                     <div className="mb-4 h-24 overflow-hidden">
                       <p className="text-[#3C318D]/90 leading-relaxed text-sm line-clamp-4">
-                        "{testimonial.content[language]}"
+                        "{content}"
                       </p>
                     </div>
 
                     {/* Student Info */}
                     <div className="flex items-center space-x-3">
                       <img
-                        src={testimonial.image || "/placeholder.svg"}
+                        src={testimonial.image_url || testimonial.image || "/placeholder.svg"}
                         alt={testimonial.name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-[#9852A7]/20"
                       />
                       <div className="flex-1">
                         <h4 className="font-semibold text-[#3C318D] text-sm">{testimonial.name}</h4>
-                        <p className="text-gray-600 text-xs">{testimonial.role[language]}</p>
-                        <p className="text-[#3C318D]/60 text-xs">{testimonial.location}</p>
+                        <p className="text-gray-600 text-xs">{testimonial.role}</p>
                       </div>
                       
                       {/* Workshop Badge */}
                       <Badge className="bg-[#F02A30] text-white text-xs">
-                        {testimonial.workshopType === "3day" 
-                          ? (language === "es" ? "3D" : "3G")
-                          : (language === "es" ? "1D" : "1G")}
+                        {language === "es" ? "Workshop" : "Workshop"}
                       </Badge>
                     </div>
                   </CardContent>
                 </Card>
               )
-            })}
+            })}}
           </div>
         </div>
         
