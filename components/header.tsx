@@ -36,12 +36,22 @@ export function Header() {
         `}>
           <div className="flex items-center justify-between h-full">
             
-            {/* Brand Text */}
+            {/* Logo */}
             <div className="flex items-center">
-              <h1 className={`font-bold transition-all duration-300 ${
+              <div className={`transition-all duration-300 ${isScrolled ? 'h-8 w-8 sm:h-12 sm:w-12' : 'h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24'} max-h-[300px] max-w-[300px]`}>
+                <Image
+                  src="/free-voice-logo.png"
+                  alt="Free Voice Academy Logo"
+                  width={300}
+                  height={300}
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
+              <h1 className={`ml-2 sm:ml-3 font-bold transition-all duration-300 ${
                 isScrolled 
-                  ? 'text-lg sm:text-xl md:text-2xl' 
-                  : 'text-xl sm:text-2xl md:text-3xl'
+                  ? 'text-sm sm:text-base md:text-lg' 
+                  : 'text-base sm:text-lg md:text-xl lg:text-2xl'
               } text-white`}>
                 FREE VOICE
               </h1>

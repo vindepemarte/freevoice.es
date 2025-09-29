@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
@@ -9,17 +9,109 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Users, DollarSign, MessageSquare, Video, Plus, Edit, Trash2, LogOut } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Calendar, Users, DollarSign, MessageSquare, Video, Plus, Edit, Trash2, LogOut, Star, Upload, Play, Eye, Save, X } from "lucide-react"
 import { AdminUser } from "@/lib/auth"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 interface AdminDashboardProps {
   user: AdminUser
 }
 
+interface Workshop {
+  id: string
+  title_it: string
+  title_es: string
+  description_it: string
+  description_es: string
+  details_it: string
+  details_es: string
+  date: string
+  location: string
+  price: number
+  maxParticipants: number
+  instructors: string
+  status: 'open' | 'full' | 'closed'
+}
+
+interface PricingModal {
+  id: string
+  title_it: string
+  title_es: string
+  price: number
+  features_it: string[]
+  features_es: string[]
+  isPopular: boolean
+  workshopId: string
+}
+
+interface Testimonial {
+  id: string
+  name: string
+  role_it: string
+  role_es: string
+  content_it: string
+  content_es: string
+  videoUrl?: string
+  imageUrl?: string
+  approved: boolean
+}
+
+interface Coach {
+  id: string
+  name: string
+  title_it: string
+  title_es: string
+  bio_it: string
+  bio_es: string
+  imageUrl: string
+  specialties_it: string[]
+  specialties_es: string[]
+}
+
 export function AdminDashboard({ user }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState("overview")
+  const [workshops, setWorkshops] = useState<Workshop[]>([])
+  const [pricingModals, setPricingModals] = useState<PricingModal[]>([])
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [coaches, setCoaches] = useState<Coach[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [editingItem, setEditingItem] = useState<any>(null)
+  const [showModal, setShowModal] = useState(false)
   const router = useRouter()
+
+  // Load initial data
+  useEffect(() => {
+    loadInitialData()
+  }, [])
+
+  const loadInitialData = async () => {
+    // Initialize with sample data - replace with real API calls
+    setPricingModals([
+      {
+        id: '1',
+        title_it: 'Workshop di 1 Giorno',
+        title_es: 'Taller de 1 Día',
+        price: 50,
+        features_it: ['Lezioni di canto'],
+        features_es: ['Clases de canto'],
+        isPopular: false,
+        workshopId: '1'
+      },
+      {
+        id: '2',
+        title_it: 'Workshop di 3 Giorni',
+        title_es: 'Taller de 3 Días',
+        price: 180,
+        features_it: ['Lavoro corporeo', 'Orientamento nutrizionale', 'Pratica di gruppo', 'Lezioni di canto', 'Gruppo WhatsApp privato'],
+        features_es: ['Trabajo corporal', 'Orientación nutricional', 'Práctica grupal', 'Clases de canto', 'Grupo privado WhatsApp'],
+        isPopular: true,
+        workshopId: '1'
+      }
+    ])
+  }
 
   const handleLogout = async () => {
     try {
@@ -29,6 +121,24 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
       router.refresh()
     } catch (error) {
       console.error('Logout error:', error)
+    }
+  }
+
+  const handleTogglePopular = async (pricingId: string) => {
+    setPricingModals(prev => prev.map(p => ({
+      ...p,
+      isPopular: p.id === pricingId ? !p.isPopular : false
+    })))
+  }
+
+  const handleSavePricing = async (pricing: PricingModal) => {
+    // API call to save pricing modal
+    console.log('Saving pricing:', pricing)
+  }
+
+  const handleDeleteItem = async (type: string, id: string) => {
+    if (confirm(`Are you sure you want to delete this ${type}?`)) {
+      console.log(`Deleting ${type}:`, id)
     }
   }
 
@@ -49,15 +159,19 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="workshops">Workshops</TabsTrigger>
-            <TabsTrigger value="pricing">Pricing</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
-          </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto">
+            <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7 lg:grid-cols-8 min-w-[800px] sm:min-w-0">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="workshops" className="text-xs sm:text-sm">Workshops</TabsTrigger>
+              <TabsTrigger value="pricing" className="text-xs sm:text-sm">Pricing</TabsTrigger>
+              <TabsTrigger value="testimonials" className="text-xs sm:text-sm">Testimonials</TabsTrigger>
+              <TabsTrigger value="coaches" className="text-xs sm:text-sm">Coaches</TabsTrigger>
+              <TabsTrigger value="content" className="text-xs sm:text-sm">Content</TabsTrigger>
+              <TabsTrigger value="videos" className="text-xs sm:text-sm">Videos</TabsTrigger>
+              <TabsTrigger value="footer" className="text-xs sm:text-sm">Footer</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -177,73 +291,109 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             </Card>
           </TabsContent>
 
-          <TabsContent value="pricing" className="space-y-6">
+          <TabsContent value="pricing" className="space-y-4 sm:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Updated Single Workshop Pricing</CardTitle>
-                <p className="text-sm text-muted-foreground">New structure: Single workshop at €90 (updated from €50)</p>
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle>Pricing Modals Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Add, edit, and delete pricing modals with "Most Popular" toggle (only one can be popular at a time)</p>
+                </div>
+                <Button onClick={() => { setEditingItem({ type: 'pricing', data: null }); setShowModal(true); }}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Pricing Modal
+                </Button>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="border rounded-lg p-6 bg-gradient-to-r from-blue-50 to-purple-50">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold">Workshop di 1 Giorno / Taller de 1 Día</h3>
-                    <Badge className="bg-green-500">Active</Badge>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label htmlFor="current-price">Current Price (€)</Label>
-                      <Input id="current-price" defaultValue="90" type="number" />
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {pricingModals.map((pricing) => (
+                    <div key={pricing.id} className={`relative border rounded-lg p-6 ${pricing.isPopular ? 'border-yellow-400 bg-yellow-50' : 'border-gray-200'}`}>
+                      {pricing.isPopular && (
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                          <Badge className="bg-yellow-500 text-white px-3 py-1">
+                            <Star className="h-3 w-3 mr-1" />
+                            Most Popular
+                          </Badge>
+                        </div>
+                      )}
+                      
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-semibold">{pricing.title_it}</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={pricing.isPopular}
+                                onCheckedChange={() => handleTogglePopular(pricing.id)}
+                              />
+                              <Label className="text-sm">Most Popular</Label>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <p className="text-2xl font-bold text-primary">€{pricing.price}</p>
+                        
+                        <div className="space-y-2">
+                          <h4 className="font-medium text-sm text-muted-foreground">Italian Features:</h4>
+                          <ul className="text-sm space-y-1">
+                            {pricing.features_it.map((feature, idx) => (
+                              <li key={idx} className="flex items-center">
+                                <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <h4 className="font-medium text-sm text-muted-foreground">Spanish Features:</h4>
+                          <ul className="text-sm space-y-1">
+                            {pricing.features_es.map((feature, idx) => (
+                              <li key={idx} className="flex items-center">
+                                <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="flex gap-2 pt-4">
+                          <Button variant="outline" size="sm" className="flex-1" onClick={() => { setEditingItem({ type: 'pricing', data: pricing }); setShowModal(true); }}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleDeleteItem('pricing', pricing.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Eye className="h-4 w-4 mr-2" />
+                                Preview Modal
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl">
+                              <DialogHeader>
+                                <DialogTitle>Workshop Details - {pricing.title_it}</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <h4 className="font-semibold mb-2">Italian Description:</h4>
+                                    <p className="text-sm text-muted-foreground">Workshop details would appear here in Italian...</p>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-semibold mb-2">Spanish Description:</h4>
+                                    <p className="text-sm text-muted-foreground">Workshop details would appear here in Spanish...</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="duration">Duration</Label>
-                      <Input id="duration" defaultValue="8 hours (10:00 - 18:00)" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="features-it">Features (Italian) - One per line</Label>
-                      <Textarea
-                        id="features-it"
-                        rows={8}
-                        defaultValue="Lavoro vocale intensivo
-Tecniche di respirazione avanzate  
-Esercizi di movimento corporeo
-Connessione con la natura
-Pausa pranzo inclusa
-Ambiente supportivo e sicuro
-Esperienza trasformativa di gruppo
-Accesso al gruppo WhatsApp privato"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="features-es">Features (Spanish) - One per line</Label>
-                      <Textarea
-                        id="features-es"
-                        rows={8}
-                        defaultValue="Trabajo vocal intensivo
-Técnicas de respiración avanzadas
-Ejercicios de movimiento corporal  
-Conexión con la naturaleza
-Pausa para el almuerzo incluida
-Ambiente de apoyo y seguro
-Experiencia transformadora grupal
-Acceso al grupo privado de WhatsApp"
-                      />
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                
-                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                  <h4 className="font-semibold text-yellow-800 mb-2">Pricing Update Information</h4>
-                  <p className="text-sm text-yellow-700">
-                    The pricing structure has been updated from the previous two-workshop model (€50 and €180) 
-                    to a single workshop offering at €90. This reflects the new focused approach as specified in the requirements.
-                  </p>
-                </div>
-                
-                <Button className="w-full">Save Pricing Changes</Button>
               </CardContent>
             </Card>
           </TabsContent>

@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Database initialized and seeded successfully',
+      adminUrl: '/admin',
       adminCredentials: {
         email: 'xk7m9p@freevoice.es',
         password: 'K9mR7nQ2vX8pL5wY',
