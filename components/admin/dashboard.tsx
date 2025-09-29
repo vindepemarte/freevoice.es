@@ -95,8 +95,8 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
         title_it: 'Workshop di 1 Giorno',
         title_es: 'Taller de 1 Día',
         price: 50,
-        features_it: ['Lezioni di canto'],
-        features_es: ['Clases de canto'],
+        features_it: ['Lezioni di canto', 'Tecniche vocali avanzate', 'Lavoro sulla respirazione', 'Ambiente naturale'],
+        features_es: ['Clases de canto', 'Técnicas vocales avanzadas', 'Trabajo de respiración', 'Ambiente natural'],
         isPopular: false,
         workshopId: '1'
       },
@@ -105,10 +105,48 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
         title_it: 'Workshop di 3 Giorni',
         title_es: 'Taller de 3 Días',
         price: 180,
-        features_it: ['Lavoro corporeo', 'Orientamento nutrizionale', 'Pratica di gruppo', 'Lezioni di canto', 'Gruppo WhatsApp privato'],
-        features_es: ['Trabajo corporal', 'Orientación nutricional', 'Práctica grupal', 'Clases de canto', 'Grupo privado WhatsApp'],
+        features_it: ['Lavoro corporeo completo', 'Orientamento nutrizionale personalizzato', 'Pratica di gruppo intensiva', 'Lezioni di canto avanzate', 'Accesso al Gruppo WhatsApp privato', 'Supporto post-workshop'],
+        features_es: ['Trabajo corporal completo', 'Orientación nutricional personalizada', 'Práctica grupal intensiva', 'Clases de canto avanzadas', 'Acceso al Grupo privado WhatsApp', 'Soporte post-taller'],
         isPopular: true,
         workshopId: '1'
+      }
+    ])
+    
+    setTestimonials([
+      {
+        id: '1',
+        name: 'Maria Rodriguez',
+        role_it: 'Ex Studentessa',
+        role_es: 'Ex Estudiante',
+        content_it: 'Il workshop ha cambiato la mia vita! Ho scoperto una voce che non sapevo di avere.',
+        content_es: 'El taller cambió mi vida! Descubrí una voz que no sabía que tenía.',
+        videoUrl: '/testimonials/maria.mp4',
+        approved: true
+      }
+    ])
+    
+    setCoaches([
+      {
+        id: '1',
+        name: 'Jenny Rospo',
+        title_it: 'Coach Vocale Principale',
+        title_es: 'Coach Vocal Principal',
+        bio_it: 'Esperta in tecniche vocali e respirazione con oltre 15 anni di esperienza.',
+        bio_es: 'Experta en técnicas vocales y respiración con más de 15 años de experiencia.',
+        imageUrl: '/coaches/jenny.jpg',
+        specialties_it: ['Tecniche vocali', 'Respirazione', 'Performance'],
+        specialties_es: ['Técnicas vocales', 'Respiración', 'Rendimiento']
+      },
+      {
+        id: '2',
+        name: 'Marian Giral Vega',
+        title_it: 'Coach di Benessere',
+        title_es: 'Coach de Bienestar',
+        bio_it: 'Specialista in orientamento nutrizionale e lavoro corporeo.',
+        bio_es: 'Especialista en orientación nutricional y trabajo corporal.',
+        imageUrl: '/coaches/marian.jpg',
+        specialties_it: ['Nutrizione', 'Lavoro corporeo', 'Benessere'],
+        specialties_es: ['Nutrición', 'Trabajo corporal', 'Bienestar']
       }
     ])
   }
@@ -394,6 +432,256 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="testimonials" className="space-y-4 sm:space-y-6">
+            <Card>
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle>Testimonials Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Manage video testimonials with full bilingual content</p>
+                </div>
+                <Button onClick={() => { setEditingItem({ type: 'testimonial', data: null }); setShowModal(true); }}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Testimonial
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {testimonials.map((testimonial) => (
+                    <div key={testimonial.id} className="border rounded-lg p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                            {testimonial.imageUrl ? (
+                              <Image src={testimonial.imageUrl} alt={testimonial.name} width={64} height={64} className="object-cover" />
+                            ) : (
+                              <Video className="h-6 w-6 text-muted-foreground" />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-semibold">{testimonial.name}</h4>
+                            <p className="text-sm text-muted-foreground">{testimonial.role_it} / {testimonial.role_es}</p>
+                            <Badge variant={testimonial.approved ? 'default' : 'secondary'}>
+                              {testimonial.approved ? 'Approved' : 'Pending'}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm" onClick={() => { setEditingItem({ type: 'testimonial', data: testimonial }); setShowModal(true); }}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleDeleteItem('testimonial', testimonial.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          {testimonial.videoUrl && (
+                            <Button variant="outline" size="sm" onClick={() => window.open(testimonial.videoUrl, '_blank')}>
+                              <Play className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="font-medium text-muted-foreground mb-1">Italian Content:</p>
+                          <p className="line-clamp-3">{testimonial.content_it}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-muted-foreground mb-1">Spanish Content:</p>
+                          <p className="line-clamp-3">{testimonial.content_es}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="coaches" className="space-y-4 sm:space-y-6">
+            <Card>
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle>Coaches Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Add, edit, and delete coach profiles with images and specialties</p>
+                </div>
+                <Button onClick={() => { setEditingItem({ type: 'coach', data: null }); setShowModal(true); }}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Coach
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {coaches.map((coach) => (
+                    <div key={coach.id} className="border rounded-lg p-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-20 h-20 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                          {coach.imageUrl ? (
+                            <Image src={coach.imageUrl} alt={coach.name} width={80} height={80} className="object-cover" />
+                          ) : (
+                            <Users className="h-8 w-8 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg">{coach.name}</h3>
+                          <p className="text-sm text-muted-foreground">{coach.title_it} / {coach.title_es}</p>
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {coach.specialties_it.map((specialty, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">{specialty}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm" onClick={() => { setEditingItem({ type: 'coach', data: coach }); setShowModal(true); }}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleDeleteItem('coach', coach.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="mt-4 space-y-2">
+                        <div>
+                          <p className="font-medium text-xs text-muted-foreground">Italian Bio:</p>
+                          <p className="text-sm line-clamp-2">{coach.bio_it}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-xs text-muted-foreground">Spanish Bio:</p>
+                          <p className="text-sm line-clamp-2">{coach.bio_es}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="videos" className="space-y-4 sm:space-y-6">
+            <Card>
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle>Video Content Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Manage workshop presentation videos and other video content</p>
+                </div>
+                <Button onClick={() => { setEditingItem({ type: 'video', data: null }); setShowModal(true); }}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Video
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="border rounded-lg p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-20 h-20 bg-muted rounded-lg flex items-center justify-center">
+                          <Video className="h-8 w-8 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">Workshop Presentation Video</h4>
+                          <p className="text-sm text-muted-foreground">Main promotional video</p>
+                          <Badge>Active</Badge>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Upload className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Play className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Video className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Add more videos to showcase your workshops and coaching sessions.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="footer" className="space-y-4 sm:space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Footer Content Management</CardTitle>
+                <p className="text-sm text-muted-foreground">Edit footer information, contact details, and links</p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h3 className="font-semibold">Contact Information</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <Label htmlFor="footer-email">Email</Label>
+                        <Input id="footer-email" defaultValue="info@freevoice.es" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footer-phone">WhatsApp Number</Label>
+                        <Input id="footer-phone" defaultValue="+34697798991" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footer-address-it">Address (Italian)</Label>
+                        <Input id="footer-address-it" defaultValue="Healing Garden, Guía de Isora, Tenerife" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footer-address-es">Address (Spanish)</Label>
+                        <Input id="footer-address-es" defaultValue="Jardín de Sanación, Guía de Isora, Tenerife" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="font-semibold">Social Media Links</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <Label htmlFor="footer-instagram">Instagram URL</Label>
+                        <Input id="footer-instagram" placeholder="https://instagram.com/freevoice" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footer-facebook">Facebook URL</Label>
+                        <Input id="footer-facebook" placeholder="https://facebook.com/freevoice" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footer-youtube">YouTube URL</Label>
+                        <Input id="footer-youtube" placeholder="https://youtube.com/freevoice" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Footer Text</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="footer-text-it">Footer Description (Italian)</Label>
+                      <Textarea
+                        id="footer-text-it"
+                        rows={4}
+                        defaultValue="Free Voice Academy - Trasforma la tua voce, trasforma la tua vita. Scopri il potere della tua voce autentica."
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="footer-text-es">Footer Description (Spanish)</Label>
+                      <Textarea
+                        id="footer-text-es"
+                        rows={4}
+                        defaultValue="Free Voice Academy - Transforma tu voz, transforma tu vida. Descubre el poder de tu voz auténtica."
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <Button className="w-full">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Footer Changes
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
