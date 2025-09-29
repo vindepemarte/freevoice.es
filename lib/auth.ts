@@ -8,14 +8,19 @@ export interface AdminUser {
 }
 
 export async function validateAdminCredentials(email: string, password: string): Promise<AdminUser | null> {
-  const client = await pool.connect()
+  let client
   try {
+    console.log('Attempting to connect to database for credential validation...')
+    client = await pool.connect()
+    console.log('Database connection successful for credential validation')
+    
     const result = await client.query(
       'SELECT id, email, password_hash FROM admin_users WHERE email = $1',
       [email]
     )
 
     if (result.rows.length === 0) {
+      console.log('No user found with email:', email)
       return null
     }
 
@@ -23,15 +28,24 @@ export async function validateAdminCredentials(email: string, password: string):
     const isValidPassword = await bcrypt.compare(password, user.password_hash)
 
     if (!isValidPassword) {
+      console.log('Invalid password for user:', email)
       return null
     }
 
+    console.log('Credential validation successful for user:', email)
     return { id: user.id, email: user.email }
   } catch (error) {
-    console.error('Error validating admin credentials:', error)
+    console.error('Database connection error during credential validation:', error)
+    console.error('Error details:', {
+      code: (error as any)?.code,
+      message: (error as any)?.message,
+      stack: (error as any)?.stack
+    })
     return null
   } finally {
-    client.release()
+    if (client) {
+      client.release()
+    }
   }
 }
 

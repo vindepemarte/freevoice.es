@@ -1,10 +1,29 @@
 import { Pool } from 'pg'
 
+// Configure SSL based on environment and database URL
+function getSSLConfig() {
+  const dbUrl = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
+  
+  // Skip SSL during build with dummy URL
+  if (dbUrl.includes('dummy')) {
+    return false
+  }
+  
+  // For production or SSL-enabled databases, configure SSL with proper settings
+  if (process.env.NODE_ENV === 'production' || dbUrl.includes('ssl=true') || dbUrl.includes('sslmode=require')) {
+    return {
+      rejectUnauthorized: false, // This allows self-signed certificates
+      ca: undefined, // Let PostgreSQL handle certificate verification
+      checkServerIdentity: () => undefined // Skip hostname verification
+    }
+  }
+  
+  return false
+}
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es',
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false
-  } : false
+  ssl: getSSLConfig()
 })
 
 export { pool }
