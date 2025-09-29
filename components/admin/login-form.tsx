@@ -33,7 +33,7 @@ export function AdminLoginForm() {
       const data = await response.json()
 
       if (response.ok) {
-        router.push('/admin/dashboard')
+        router.push('/admin')
         router.refresh()
       } else {
         setError(data.error || 'Login failed')
