@@ -36,11 +36,29 @@ postgres://username:password@host:port/database?sslmode=disable
 ### Issue: "server does not support SSL connections"
 **Solution:** This is expected when SSL is disabled. The application is configured to work without SSL.
 
-## Testing Database Connection
+## Database Setup After Deployment
 
-Run this script to test your database connection:
+If you get the error `relation "admin_users" does not exist`, it means your database needs to be initialized.
+
+### Option 1: Using the Setup API Endpoint (Recommended for production)
+
+1. **Make a POST request to your deployed app**:
+   ```bash
+   curl -X POST https://your-app-url.com/api/setup-database \
+     -H "Content-Type: application/json" \
+     -d '{"setupKey": "freevoice-setup-2025"}'
+   ```
+
+2. **Or use your browser** to navigate to:
+   ```
+   https://your-app-url.com/api/setup-database
+   ```
+   Then send a POST request with the setup key.
+
+### Option 2: Using the Setup Script (Local/Development)
+
 ```bash
-node scripts/test-db-connection.js
+node scripts/setup-db.js
 ```
 
 ## Admin Access
@@ -53,7 +71,7 @@ Default admin credentials:
 
 ## Environment Variables Checklist for Coolify
 
-✅ `DATABASE_URL` - Your PostgreSQL connection string  
+✅ `DATABASE_URL` - Your PostgreSQL connection string with `?sslmode=disable`  
 ✅ `NODE_ENV=production`  
 ✅ `NEXT_TELEMETRY_DISABLED=1` (optional)  
 
