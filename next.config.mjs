@@ -10,6 +10,9 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'standalone',
+  experimental: {
+    serverComponentsExternalPackages: ['pg'],
+  },
 }
 
 export default nextConfig

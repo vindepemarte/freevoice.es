@@ -9,6 +9,7 @@ import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "@/components/booking-form"
 import { usePublicTestimonials } from "@/hooks/use-admin-data"
 import { ResponsiveVideoPlayer } from "@/components/ui/responsive-video-player"
+import { getTestimonialContent, getTestimonialImage } from '@/lib/testimonial-utils'
 
 // Generate random rating between 4.8 and 5.0
 const generateRandomRating = () => {
@@ -268,7 +269,7 @@ export function TestimonialsSection() {
                     <div className="mb-2 xs:mb-3 min-h-[60px] xs:min-h-[80px]">
                       <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
                         "{testimonialsToShow[currentTestimonialIndex]?.content_it && testimonialsToShow[currentTestimonialIndex]?.content_es 
-                          ? (language === 'es' ? testimonialsToShow[currentTestimonialIndex].content_es : testimonialsToShow[currentTestimonialIndex].content_it)
+                          ? (language === 'es' ? testimonialsToShow[currentTestimonialIndex]?.content_es : testimonialsToShow[currentTestimonialIndex]?.content_it)
                           : (testimonialsToShow[currentTestimonialIndex]?.content?.[language] || '')}"
                       </p>
                     </div>
@@ -282,7 +283,12 @@ export function TestimonialsSection() {
                       />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-[#3C318D] text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.name}</h4>
-                        <p className="text-gray-600 text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.role}</p>
+                        <p className="text-gray-600 text-xs xs:text-xs truncate">
+                          {typeof testimonialsToShow[currentTestimonialIndex]?.role === 'string' 
+                            ? testimonialsToShow[currentTestimonialIndex]?.role 
+                            : (language === 'es' ? testimonialsToShow[currentTestimonialIndex]?.role?.es : testimonialsToShow[currentTestimonialIndex]?.role?.it) || testimonialsToShow[currentTestimonialIndex]?.role
+                          }
+                        </p>
                         <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.location || ''}</p>
                       </div>
                       
@@ -376,7 +382,12 @@ export function TestimonialsSection() {
                       />
                       <div className="flex-1">
                         <h4 className="font-semibold text-[#3C318D] text-sm">{testimonial.name}</h4>
-                        <p className="text-gray-600 text-xs">{testimonial.role}</p>
+                        <p className="text-gray-600 text-xs">
+                          {typeof testimonial.role === 'string' 
+                            ? testimonial.role 
+                            : (language === 'es' ? testimonial.role?.es : testimonial.role?.it) || testimonial.role
+                          }
+                        </p>
                       </div>
                       
                       {/* Workshop Badge */}
