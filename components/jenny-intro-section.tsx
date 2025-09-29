@@ -1,0 +1,126 @@
+"use client"
+
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Play, Volume2, Pause } from "lucide-react"
+import { useLanguage } from "@/hooks/use-language"
+import { useState, useRef } from "react"
+
+export function JennyIntroSection() {
+  const { t, language } = useLanguage()
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const handlePlayVideo = () => {
+    setShowVideo(true)
+    setIsPlaying(true)
+    // For now we'll show video player - you can replace with actual video URL
+  }
+
+  const handlePauseVideo = () => {
+    setIsPlaying(false)
+    if (videoRef.current) {
+      videoRef.current.pause()
+    }
+  }
+
+  const handleVideoPlay = () => {
+    setIsPlaying(true)
+  }
+
+  const handleVideoPause = () => {
+    setIsPlaying(false)
+  }
+
+  return (
+    <section className="py-16 sm:py-24 bg-transparent">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-balance" style={{ fontFamily: '"Bebas Neue", "Arial Black", sans-serif' }}>
+              {language === "es" ? "Conoce a Jenny Rospo" : "Incontra Jenny Rospo"}
+            </h2>
+            <p className="text-lg text-white/80 max-w-2xl mx-auto text-pretty">
+              {language === "es"
+                ? "Nuestra fundadora y coach principal te presenta el workshop Free Voice Academy"
+                : "La nostra fondatrice e coach principale ti presenta el workshop Free Voice Academy"}
+            </p>
+          </div>
+
+          <Card className="bg-card border-border overflow-hidden shadow-xl">
+            <CardContent className="p-0">
+              <div className="relative aspect-video bg-gradient-to-br from-[#9852A7]/10 to-[#3C318D]/10">
+                {!showVideo ? (
+                  // Video Thumbnail
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src="/professional-female-vocal-coach-singing.jpg"
+                      alt="Jenny Rospo"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center hover:bg-black/30 transition-colors">
+                      <Button
+                        size="lg"
+                        onClick={handlePlayVideo}
+                        className="bg-[#F02A30]/90 hover:bg-[#F02A30] text-white rounded-full w-24 h-24 p-0 shadow-2xl transform hover:scale-110 transition-all duration-300"
+                      >
+                        <Play className="h-10 w-10 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  // Actual Video Player
+                  <div className="absolute inset-0">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full object-cover"
+                      controls
+                      autoPlay
+                      onPlay={handleVideoPlay}
+                      onPause={handleVideoPause}
+                      poster="/professional-female-vocal-coach-singing.jpg"
+                    >
+                      <source src="/jenny-intro-video.mp4" type="video/mp4" />
+                      <source src="/jenny-intro-video.webm" type="video/webm" />
+                      {/* Fallback for browsers that don't support video */}
+                      <img 
+                        src="/professional-female-vocal-coach-singing.jpg" 
+                        alt="Jenny Rospo introducing Free Voice Academy" 
+                        className="w-full h-full object-cover"
+                      />
+                    </video>
+                  </div>
+                )}
+
+                {/* Video Controls Overlay - only show when not playing actual video */}
+                {!showVideo && (
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-3 text-white">
+                      <Volume2 className="h-5 w-5" />
+                      <span className="text-sm font-medium">
+                        {language === "es" ? "Introducción al Workshop" : "Introduzione al Workshop"}
+                      </span>
+                    </div>
+                    <div className="text-white text-sm bg-black/50 px-2 py-1 rounded">3:45</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-8">
+                <h3 className="text-2xl font-semibold text-card-foreground mb-4">
+                  Jenny Rospo - {language === "es" ? "Fundadora" : "Fondatrice"}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {language === "es"
+                    ? "En este video, Jenny te explica la filosofía detrás de Free Voice Academy y cómo nuestro enfoque único puede ayudarte a descubrir tu voz auténtica y transformar tu vida a través del poder de la expresión vocal."
+                    : "In questo video, Jenny ti spiega la filosofia dietro Free Voice Academy e come il nostro approccio unico può aiutarti a scoprire la tua voce autentica e trasformare la tua vita attraverso il potere dell'espressione vocale."}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+  )
+}
