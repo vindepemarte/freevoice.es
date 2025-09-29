@@ -24,7 +24,7 @@ export const translations = {
       bookSpot: "Reserva Tu Lugar Ahora",
       scheduleCall: "Hablar por WhatsApp",
       rating: "4.9/5 de más de 200 estudiantes",
-      nextRetreat: "Próximo workshop: 15-17 de Marzo, 2025",
+      nextRetreat: "Próximo workshop: 12 de octubre 2025",
       spotsLeft: "¡Solo 3 lugares disponibles!",
       urgentBooking: "RESERVA AHORA - ÚLTIMOS LUGARES",
       whatsappMessage: "¡Hola! Quiero más información sobre el workshop Free Voice. ¿Quedan lugares disponibles?"
@@ -82,41 +82,50 @@ export const translations = {
     },
     // Pricing
     pricing: {
-      title: "Elige Tu Workshop de Transformación",
+      title: "Workshop de Transformación Vocal",
       subtitle:
-        "Solo 2 opciones - máximo enfoque. Ambos workshops incluyen acceso al grupo privato WhatsApp para seguimiento continuo.",
+        "Experiencia inmersiva de un día completo. Incluye acceso al grupo privado WhatsApp para seguimiento continuo.",
       workshop1Day: {
-        name: "Workshop de 1 Día",
-        price: "€50",
-        period: "experiencia de 1 día",
-        description: "Perfecto para descubrir los fundamentos del coaching vocal",
+        name: "Workshop de 1 Día - Octubre",
+        price: "€90",
+        period: "experiencia de 8 horas",
+        duration: "10:00 - 18:00",
+        date: "12 de octubre 2025",
+        location: "Healing Garden, Guía de Isora", 
+        instructors: "Jenny Rospo & Marian Giral Vega",
+        description: "Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración",
         features: [
-          "Solo lecciones de canto",
-          "Técnicas de respiración básicas",
-          "Introducción al trabajo vocal",
-          "Material de práctica incluido"
-        ]
+          "Trabajo vocal intensivo",
+          "Técnicas de respiración avanzadas",
+          "Ejercicios de movimiento corporal",
+          "Conexión con la naturaleza",
+          "Pausa para el almuerzo incluida",
+          "Ambiente de apoyo y seguro",
+          "Experiencia transformadora grupal",
+          "Acceso al grupo privado de WhatsApp"
+        ],
+        fullDetails: {
+          schedule: {
+            "09:30": "Llegada y bienvenida",
+            "10:00": "Comienzo de la actividad", 
+            "13:00 - 14:00": "Pausa para el almuerzo",
+            "18:30": "Círculo de cierre"
+          },
+          whatToBring: [
+            "Ropa cómoda",
+            "Cuaderno", 
+            "Agua/infusión de hierbas",
+            "Comida ligera y saludable"
+          ],
+          policies: [
+            "Teléfonos en modo silencioso durante las actividades",
+            "Plazas limitadas - se recomienda reserva"
+          ]
+        }
       },
-      workshop3Day: {
-        name: "Workshop de 3 Días",
-        price: "€180",
-        period: "experiencia de 3 días completos",
-        description: "La experiencia completa de transformación vocal y personal",
-        popular: true,
-        features: [
-          "Trabajo corporal completo",
-          "Orientación nutricional personalizada",
-          "Práctica de grupo intensiva",
-          "Lecciones de canto avanzadas",
-          "Acceso al Grupo privado WhatsApp",
-          "Seguimiento post-workshop",
-          "Grabación de tu progreso",
-          "Certificado de participación"
-        ]
-      },
-      included: "¿Qué Incluye Cada Workshop?",
-      nextRetreat: "Próximo workshop: 15-17 de Marzo, 2025",
-      spotsLeft: "¡Solo 3 lugares disponibles!",
+      included: "¿Qué Incluye el Workshop?",
+      nextRetreat: "Próximo workshop: 12 de octubre 2025",
+      spotsLeft: "¡Plazas limitadas disponibles!",
     },
     // FAQ
     faq: {
@@ -147,7 +156,7 @@ export const translations = {
         "Únete a cientos de estudiantes que han descubierto su voz auténtica y transformado sus vidas. Tu viaje hacia la libertad vocal comienza aquí.",
       bookSpot: "Reserva Tu Lugar Ahora",
       scheduleCall: "Programar una Llamada",
-      limited: "Lugares limitados disponibles • Próximo retiro: 15-17 de Marzo, 2025",
+      limited: "Lugares limitados disponibles • Próximo workshop: 12 de octubre, 2025",
       happyStudents: "Estudiantes Felices",
       averageRating: "Calificación Promedio",
       daysMaxExperience: "Días Máx Experiencia",
@@ -206,7 +215,7 @@ export const translations = {
       bookSpot: "Prenota Il Tuo Posto Ora",
       scheduleCall: "Parla su WhatsApp",
       rating: "4.9/5 da oltre 200 studenti",
-      nextRetreat: "Prossimo workshop: 15-17 Marzo, 2025",
+      nextRetreat: "Prossimo workshop: 12 ottobre, 2025",
       spotsLeft: "Solo 3 posti disponibili!",
       urgentBooking: "PRENOTA ORA - ULTIMI POSTI",
       whatsappMessage: "Ciao! Voglio maggiori informazioni sul workshop Free Voice. Ci sono ancora posti disponibili?"
@@ -264,41 +273,50 @@ export const translations = {
     },
     // Pricing
     pricing: {
-      title: "Scegli Il Tuo Workshop di Trasformazione",
+      title: "Workshop di Trasformazione Vocale",
       subtitle:
-        "Solo 2 opzioni - massima concentrazione. Entrambi i workshop includono accesso al gruppo privato WhatsApp per supporto continuo.",
+        "Esperienza immersiva di una giornata completa. Include accesso al gruppo privato WhatsApp per supporto continuo.",
       workshop1Day: {
-        name: "Workshop di 1 Giorno",
-        price: "€50",
-        period: "esperienza di 1 giorno",
-        description: "Perfetto per scoprire i fondamenti del coaching vocale",
+        name: "Workshop di 1 Giorno - Ottobre",
+        price: "€90",
+        period: "esperienza di 8 ore",
+        duration: "10:00 - 18:00",
+        date: "12 ottobre 2025",
+        location: "Healing Garden, Guía de Isora",
+        instructors: "Jenny Rospo & Marian Giral Vega",
+        description: "Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione",
         features: [
-          "Solo lezioni di canto",
-          "Tecniche di respirazione di base",
-          "Introduzione al lavoro vocale",
-          "Materiale di pratica incluso"
-        ]
+          "Lavoro vocale intensivo",
+          "Tecniche di respirazione avanzate",
+          "Esercizi di movimento corporeo",
+          "Connessione con la natura",
+          "Pausa pranzo inclusa",
+          "Ambiente supportivo e sicuro",
+          "Esperienza trasformativa di gruppo",
+          "Accesso al gruppo WhatsApp privato"
+        ],
+        fullDetails: {
+          schedule: {
+            "09:30": "Arrivo e accoglienza",
+            "10:00": "Inizio attività",
+            "13:00 - 14:00": "Pausa pranzo", 
+            "18:30": "Cerchio di chiusura"
+          },
+          whatToBring: [
+            "Abiti comodi",
+            "Quaderno",
+            "Acqua/tisane",
+            "Pranzo leggero e sano"
+          ],
+          policies: [
+            "Telefoni in modalità silenziosa durante le attività",
+            "Posti limitati - prenotazione consigliata"
+          ]
+        }
       },
-      workshop3Day: {
-        name: "Workshop di 3 Giorni",
-        price: "€180",
-        period: "esperienza di 3 giorni completi",
-        description: "L'esperienza completa di trasformazione vocale e personale",
-        popular: true,
-        features: [
-          "Lavoro corporeo completo",
-          "Orientamento nutrizionale personalizzato",
-          "Pratica di gruppo intensiva",
-          "Lezioni di canto avanzate",
-          "Accesso al Gruppo privato WhatsApp",
-          "Monitoraggio post-workshop",
-          "Registrazione dei tuoi progressi",
-          "Certificato di partecipazione"
-        ]
-      },
-      included: "Cosa Include Ogni Workshop?",
-      nextRetreat: "Prossimo workshop: 15-17 Marzo, 2025",
-      spotsLeft: "Solo 3 posti disponibili!",
+      included: "Cosa Include il Workshop?",
+      nextRetreat: "Prossimo workshop: 12 ottobre 2025",
+      spotsLeft: "¡Posti limitati disponibili!",
     },
     // FAQ
     faq: {
@@ -329,7 +347,7 @@ export const translations = {
         "Unisciti a centinaia di studenti che hanno scoperto la loro voce autentica e trasformato le loro vite. Il tuo viaggio verso la libertà vocale inizia qui.",
       bookSpot: "Prenota Il Tuo Posto Ora",
       scheduleCall: "Programma una Chiamata",
-      limited: "Posti limitati disponibili • Prossimo ritiro: 15-17 Marzo, 2025",
+      limited: "Posti limitati disponibili • Prossimo workshop: 12 ottobre, 2025",
       happyStudents: "Studenti Felici",
       averageRating: "Valutazione Media",
       daysMaxExperience: "Giorni Max Esperienza",

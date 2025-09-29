@@ -362,6 +362,77 @@
 
 /* Brand-Specific Conversion Components */
 @layer components {
+  /* Mobile-First Responsive Design - Starting from 320px */
+  
+  /* Extra Small Devices: 320px - 479px */
+  .container-xs {
+    @apply px-4 mx-auto;
+    max-width: 320px;
+  }
+  
+  /* Small Devices: 480px - 767px */
+  .container-sm {
+    @apply px-6 mx-auto;
+    max-width: 480px;
+  }
+  
+  /* Medium Devices: 768px - 1023px */
+  .container-md {
+    @apply px-8 mx-auto;
+    max-width: 768px;
+  }
+  
+  /* Large Devices: 1024px+ */
+  .container-lg {
+    @apply px-12 mx-auto;
+    max-width: 1200px;
+  }
+  
+  /* Responsive Text Scaling */
+  .text-responsive-xs {
+    @apply text-sm;
+  }
+  
+  @media (min-width: 480px) {
+    .text-responsive-xs {
+      @apply text-base;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .text-responsive-xs {
+      @apply text-lg;
+    }
+  }
+  
+  /* Mobile-optimized button sizes */
+  .btn-mobile-friendly {
+    @apply min-h-[44px] min-w-[44px] px-4 py-2;
+  }
+  
+  @media (min-width: 480px) {
+    .btn-mobile-friendly {
+      @apply px-6 py-3;
+    }
+  }
+  
+  /* Responsive spacing utilities */
+  .space-responsive {
+    @apply space-y-4;
+  }
+  
+  @media (min-width: 480px) {
+    .space-responsive {
+      @apply space-y-6;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .space-responsive {
+      @apply space-y-8;
+    }
+  }
+  
   /* High-contrast text for better conversion */
   .text-conversion-primary {
     color: #3C318D;
