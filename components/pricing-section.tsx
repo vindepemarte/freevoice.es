@@ -31,32 +31,27 @@ export function PricingSection() {
     return () => observer.disconnect()
   }, [])
 
-  // Correct pricing structure per rules: Only 2 plans
+  // Updated pricing structure per design requirements: Single workshop only
   const workshopPlans = [
     {
       id: "workshop1day",
       name: t.pricing.workshop1Day.name,
       price: t.pricing.workshop1Day.price,
       period: t.pricing.workshop1Day.period,
+      duration: t.pricing.workshop1Day.duration,
+      date: t.pricing.workshop1Day.date,
+      location: t.pricing.workshop1Day.location,
+      instructors: t.pricing.workshop1Day.instructors,
       description: t.pricing.workshop1Day.description,
       features: t.pricing.workshop1Day.features,
-      popular: false,
-    },
-    {
-      id: "workshop3day",
-      name: t.pricing.workshop3Day.name,
-      price: t.pricing.workshop3Day.price,
-      period: t.pricing.workshop3Day.period,
-      description: t.pricing.workshop3Day.description,
-      features: t.pricing.workshop3Day.features,
-      popular: true, // "Più Popolare" as per rules
+      popular: true, // Single workshop is always highlighted
+      fullDetails: t.pricing.workshop1Day.fullDetails,
     },
   ]
 
   const handleWhatsAppBooking = (workshopType: string, workshopName: string, price: string) => {
     const workshopDetails = {
-      workshop1day: language === "es" ? "Workshop de 1 Día (€50)" : "Workshop di 1 Giorno (€50)",
-      workshop3day: language === "es" ? "Workshop de 3 Días (€180)" : "Workshop di 3 Giorni (€180)",
+      workshop1day: language === "es" ? `Workshop de 1 Día - Octubre (€90)` : `Workshop di 1 Giorno - Ottobre (€90)`,
     }
 
     const message =
@@ -64,17 +59,17 @@ export function PricingSection() {
         ? `¡Hola! Me gustaría reservar mi lugar en ${workshopDetails[workshopType as keyof typeof workshopDetails]}.
 
 Por favor, envíenme más información sobre:
-- Fechas disponibles
-- Proceso de reserva
 - Detalles del programa
+- Proceso de reserva
+- Qué incluye el workshop
 
 ¡Gracias!`
         : `Ciao! Vorrei prenotare il mio posto per ${workshopDetails[workshopType as keyof typeof workshopDetails]}.
 
 Per favore, inviatemi maggiori informazioni su:
-- Date disponibili
-- Processo di prenotazione
 - Dettagli del programma
+- Processo di prenotazione
+- Cosa include il workshop
 
 Grazie!`
 
@@ -109,12 +104,12 @@ Grazie!`
           </div>
         </div>
 
-        {/* Simplified 2-plan layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 max-w-5xl mx-auto px-3 xs:px-4 sm:px-6">
+        {/* Single workshop layout - centered */}
+        <div className="flex justify-center max-w-5xl mx-auto px-3 xs:px-4 sm:px-6">
           {workshopPlans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative bg-white/98 border-[#9852A7]/20 flex flex-col shadow-lg transition-all duration-500 hover:shadow-2xl rounded-2xl ${
+              className={`relative bg-white/98 border-[#9852A7]/20 flex flex-col shadow-lg transition-all duration-500 hover:shadow-2xl rounded-2xl max-w-md w-full ${
                 plan.popular 
                   ? "ring-2 ring-[#F02A30] shadow-xl scale-100 hover:scale-105 animate-fade-in-up" 
                   : "hover:shadow-xl hover:scale-105 animate-fade-in-up"
@@ -136,16 +131,18 @@ Grazie!`
               )}
 
               <CardHeader className="text-center pb-4 xs:pb-6 px-4 xs:px-6 sm:px-8 pt-6 xs:pt-8">
-                <CardTitle className={`text-xl xs:text-2xl sm:text-3xl font-bold text-[#3C318D] mb-3 xs:mb-4 transition-colors duration-300 ${
-                  plan.popular ? 'group-hover:text-[#F02A30]' : ''
-                }`}>{plan.name}</CardTitle>
+                <CardTitle className={`text-xl xs:text-2xl sm:text-3xl font-bold text-[#3C318D] mb-3 xs:mb-4 transition-colors duration-300`}>{plan.name}</CardTitle>
                 <div className="mb-3 xs:mb-4">
-                  <span className={`text-4xl xs:text-5xl sm:text-6xl font-bold transition-all duration-300 ${
-                    plan.popular ? 'text-[#F02A30] hover:scale-110' : 'text-[#F02A30]'
-                  }`}>{plan.price}</span>
+                  <span className="text-4xl xs:text-5xl sm:text-6xl font-bold text-[#F02A30] hover:scale-110 transition-all duration-300">{plan.price}</span>
                   <span className="text-muted-foreground ml-2 text-sm xs:text-base">/ {plan.period}</span>
                 </div>
-                <p className="text-muted-foreground text-sm xs:text-base sm:text-lg leading-relaxed px-2">{plan.description}</p>
+                <div className="space-y-2 text-sm xs:text-base text-[#3C318D]/80">
+                  <p><strong>{language === "es" ? "Duración:" : "Durata:"}</strong> {plan.duration}</p>
+                  <p><strong>{language === "es" ? "Fecha:" : "Data:"}</strong> {plan.date}</p>
+                  <p><strong>{language === "es" ? "Ubicación:" : "Luogo:"}</strong> {plan.location}</p>
+                  <p><strong>{language === "es" ? "Instructores:" : "Istruttori:"}</strong> {plan.instructors}</p>
+                </div>
+                <p className="text-muted-foreground text-sm xs:text-base sm:text-lg leading-relaxed px-2 mt-4">{plan.description}</p>
               </CardHeader>
 
               <CardContent className="pt-0 flex-grow flex flex-col px-4 xs:px-6 sm:px-8 pb-6 xs:pb-8">
@@ -161,13 +158,9 @@ Grazie!`
                 </ul>
 
                 <div className="flex flex-col gap-3">
-                  <BookingForm workshopType={plan.id as "workshop1day" | "workshop3day"}>
+                  <BookingForm workshopType={plan.id as "workshop1day"}>
                     <Button
-                      className={`w-full py-3 xs:py-4 sm:py-5 font-semibold text-base xs:text-lg sm:text-xl transition-all duration-300 hover:scale-105 rounded-xl ${
-                        plan.popular
-                          ? "bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse"
-                          : "bg-[#9852A7] hover:bg-[#9852A7]/90 text-white hover:shadow-lg"
-                      }`}
+                      className="w-full py-3 xs:py-4 sm:py-5 font-semibold text-base xs:text-lg sm:text-xl transition-all duration-300 hover:scale-105 rounded-xl bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse"
                     >
                       {language === "es" ? `Reservar ${plan.name}` : `Prenota ${plan.name}`}
                     </Button>
