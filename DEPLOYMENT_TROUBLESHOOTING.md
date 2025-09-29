@@ -10,9 +10,23 @@ NODE_ENV=development
 
 ### For Production (Coolify/Docker)
 ```env
-DATABASE_URL=postgres://username:password@host:port/database?sslmode=require
+DATABASE_URL=postgres://username:password@host:port/database?sslmode=disable
 NODE_ENV=production
 ```
+
+### Alternative SSL-Disabled URLs for Problematic Connections
+
+If you're getting persistent SSL certificate verification errors:
+
+1. **Completely disable SSL:**
+   ```
+   postgres://username:password@host:port/database?sslmode=disable
+   ```
+
+2. **Force non-SSL connection:**
+   ```
+   postgres://username:password@host:port/database?ssl=false&sslmode=disable
+   ```
 
 ### SSL Configuration Options
 

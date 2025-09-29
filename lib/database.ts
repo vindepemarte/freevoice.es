@@ -1,29 +1,57 @@
 import { Pool } from 'pg'
 
-// Configure SSL based on environment and database URL
-function getSSLConfig() {
-  const dbUrl = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
+// Parse and modify DATABASE_URL to handle SSL issues
+function getDatabaseConfig() {
+  let connectionString = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
+  
+  console.log('🔗 Database connection setup:')
+  console.log('   NODE_ENV:', process.env.NODE_ENV)
+  console.log('   Original URL length:', connectionString.length)
+  console.log('   URL contains ssl:', connectionString.includes('ssl'))
   
   // Skip SSL during build with dummy URL
-  if (dbUrl.includes('dummy')) {
-    return false
-  }
-  
-  // For production or SSL-enabled databases, configure SSL with proper settings
-  if (process.env.NODE_ENV === 'production' || dbUrl.includes('ssl=true') || dbUrl.includes('sslmode=require')) {
+  if (connectionString.includes('dummy')) {
+    console.log('   Using dummy URL for build')
     return {
-      rejectUnauthorized: false, // This allows self-signed certificates
-      ca: undefined, // Let PostgreSQL handle certificate verification
-      checkServerIdentity: () => undefined // Skip hostname verification
+      connectionString,
+      ssl: false
     }
   }
   
-  return false
+  // For production, force SSL disable if we're having certificate issues
+  if (process.env.NODE_ENV === 'production') {
+    console.log('   Production mode detected - forcing SSL disable')
+    // Try to append sslmode=disable to the connection string
+    try {
+      const url = new URL(connectionString)
+      url.searchParams.set('sslmode', 'disable')
+      connectionString = url.toString()
+      console.log('   Modified URL to disable SSL')
+    } catch (error) {
+      console.log('   Could not parse URL, appending sslmode manually')
+      connectionString += connectionString.includes('?') ? '&sslmode=disable' : '?sslmode=disable'
+    }
+    
+    return {
+      connectionString,
+      ssl: false // Explicitly disable SSL
+    }
+  }
+  
+  console.log('   Development mode - no SSL')
+  return {
+    connectionString,
+    ssl: false
+  }
 }
 
+const dbConfig = getDatabaseConfig()
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es',
-  ssl: getSSLConfig()
+  ...dbConfig,
+  // Additional connection options for better reliability
+  max: 20, // Maximum number of clients in the pool
+  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
 })
 
 export { pool }
