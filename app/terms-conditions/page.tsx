@@ -33,8 +33,7 @@ Somos una academia de coaching vocal especializada en workshops inmersivos y tra
           title: "3. Descripción de Servicios",
           content: `Ofrecemos los siguientes servicios:
 
-• **Workshop de 1 Día (€50)**: Introducción al coaching vocal con técnicas básicas de respiración y canto
-• **Workshop de 3 Días (€180)**: Experiencia completa que incluye coaching vocal, trabajo corporal, orientación nutricional y acceso al grupo privado de WhatsApp
+• **Workshop de 1 Día (€90)**: Introducción al coaching vocal con técnicas básicas de respiración y canto
 • **Seguimiento Post-Workshop**: Apoyo continuo a través de nuestro grupo privado de WhatsApp
 • **Certificados de Participación**: Para workshops completados
 
@@ -196,8 +195,7 @@ Siamo un'accademia di coaching vocale specializzata in workshop immersivi e tras
           title: "3. Descrizione dei Servizi",
           content: `Offriamo i seguenti servizi:
 
-• **Workshop di 1 Giorno (€50)**: Introduzione al coaching vocale con tecniche base di respirazione e canto
-• **Workshop di 3 Giorni (€180)**: Esperienza completa che include coaching vocale, lavoro corporeo, orientamento nutrizionale e accesso al gruppo privato WhatsApp
+• **Workshop di 1 Giorno (€90)**: Introduzione al coaching vocale con tecniche base di respirazione e canto
 • **Follow-up Post-Workshop**: Supporto continuo attraverso il nostro gruppo privato WhatsApp
 • **Certificati di Partecipazione**: Per workshop completati
 

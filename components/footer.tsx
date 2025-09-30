@@ -1,6 +1,6 @@
 "use client"
 
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import Image from "next/image"
 
@@ -35,9 +35,6 @@ export function Footer() {
               </a>
               <a href="#" className="text-white/60 hover:text-[#F02A30] transition-colors">
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-white/60 hover:text-[#F02A30] transition-colors">
-                <Twitter className="h-5 w-5" />
               </a>
               <a href="#" className="text-white/60 hover:text-[#F02A30] transition-colors">
                 <Youtube className="h-5 w-5" />

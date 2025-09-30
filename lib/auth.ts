@@ -67,7 +67,7 @@ export async function createAdminSession(userId: number): Promise<string> {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       expires: expiresAt,
-      path: '/admin'
+      path: '/' // Fix: Allow cookie for all paths, not just /admin
     })
 
     return sessionId
@@ -83,9 +83,11 @@ export async function validateAdminSession(sessionId?: string): Promise<AdminUse
   if (!sessionId) {
     const cookieStore = cookies()
     sessionId = cookieStore.get('admin_session')?.value
+    console.log('Session validation - cookie value:', sessionId ? 'FOUND' : 'NOT_FOUND')
   }
 
   if (!sessionId) {
+    console.log('No session ID found')
     return null
   }
 
@@ -99,11 +101,13 @@ export async function validateAdminSession(sessionId?: string): Promise<AdminUse
     `, [sessionId])
 
     if (result.rows.length === 0) {
+      console.log('No valid session found for ID:', sessionId.substring(0, 8) + '...')
       // Clean up expired session
       await client.query('DELETE FROM admin_sessions WHERE id = $1', [sessionId])
       return null
     }
 
+    console.log('Valid session found for user:', result.rows[0].email)
     return result.rows[0]
   } catch (error) {
     console.error('Error validating admin session:', error)
@@ -128,8 +132,13 @@ export async function destroyAdminSession(sessionId?: string): Promise<void> {
   try {
     await client.query('DELETE FROM admin_sessions WHERE id = $1', [sessionId])
     
-    // Clear the cookie
+    // Clear the cookie with the correct path
     cookieStore.delete('admin_session')
+    // Also clear any cookie that might be on /admin path
+    cookieStore.set('admin_session', '', {
+      expires: new Date(0),
+      path: '/'
+    })
   } catch (error) {
     console.error('Error destroying admin session:', error)
   } finally {
