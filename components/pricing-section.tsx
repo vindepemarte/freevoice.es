@@ -4,10 +4,10 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Check, Star, Clock, AlertTriangle, MessageCircle, Calendar, MapPin, Users, Utensils, Smartphone, Heart, Eye } from "lucide-react"
+import { Check, Star, Clock, AlertTriangle, MessageCircle, Calendar, MapPin, Users, Utensils, Smartphone, Heart, Eye, X } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "@/components/booking-form"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Workshop {
@@ -285,10 +285,18 @@ Grazie!`
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-[#3C318D]/20 shadow-2xl">
-                      <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold text-[#3C318D] text-center mb-4">
+                      <DialogHeader className="relative">
+                        <DialogTitle className="text-2xl font-bold text-[#3C318D] text-center mb-4 pr-8">
                           {language === "es" ? "Itinerario del Taller" : "Itinerario del Workshop"}
                         </DialogTitle>
+                        <DialogClose asChild>
+                          <button
+                            className="absolute top-0 right-0 p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 text-gray-500 hover:text-gray-700"
+                            aria-label="Close modal"
+                          >
+                            <X className="h-5 w-5" />
+                          </button>
+                        </DialogClose>
                       </DialogHeader>
                       
                       <Tabs defaultValue="overview" className="w-full">
