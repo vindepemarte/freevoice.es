@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Star, Clock, AlertCircle } from "lucide-react"
+import { Star, Clock, AlertCircle } from "lucide-react"
 import { BookingForm } from "@/components/booking-form"
 import { useLanguage } from "@/hooks/use-language"
 import { useEffect, useState } from "react"
@@ -14,13 +14,7 @@ export function HeroSection() {
     setIsVisible(true)
   }, [])
 
-  const handleWhatsAppBooking = () => {
-    const message = t.hero.whatsappMessage
-    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
-  }
-
-  return (
+return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20 md:pt-24 lg:pt-28">
       {/* Brand-aligned background with proper color distribution */}
       <div className="absolute inset-0">
@@ -43,7 +37,7 @@ export function HeroSection() {
             <img
               src="/free-voice-logo.png"
               alt="Free Voice Academy"
-              className="h-24 w-24 xs:h-28 xs:w-28 sm:h-32 sm:w-32 md:h-36 md:w-36 lg:h-40 lg:w-40 xl:h-48 xl:w-48 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300"
+              className="w-[250px] h-[250px] xs:w-[260px] xs:h-[260px] sm:w-[270px] sm:h-[270px] md:w-[280px] md:h-[280px] lg:w-[290px] lg:h-[290px] xl:w-[300px] xl:h-[300px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300"
             />
           </div>
 
@@ -81,19 +75,7 @@ export function HeroSection() {
                 {t.hero.bookSpot}
               </Button>
             </BookingForm>
-            
-            {/* Secondary CTA - WhatsApp */}
-            <div className="mt-3 xs:mt-4 sm:mt-6">
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-4 xs:px-6 sm:px-8 py-2 xs:py-2 sm:py-3 text-sm xs:text-base sm:text-lg border-white/80 text-white hover:bg-white hover:text-[#9852A7] transition-colors backdrop-blur-sm hover:scale-105 transform duration-200 w-full xs:w-auto"
-                onClick={handleWhatsAppBooking}
-              >
-                <MessageCircle className="h-4 w-4 xs:h-4 xs:w-4 sm:h-5 sm:w-5 mr-2" />
-                {t.hero.scheduleCall}
-              </Button>
-            </div>
+
           </div>
 
           {/* Scarcity - Spots Left */}

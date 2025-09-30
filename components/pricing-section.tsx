@@ -4,14 +4,85 @@ import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Check, Star, Clock, AlertTriangle, MessageCircle } from "lucide-react"
+import { Check, Star, Clock, AlertTriangle, MessageCircle, Calendar, MapPin, Users, Utensils, Smartphone, Heart, Eye } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "@/components/booking-form"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+interface Workshop {
+  id: number
+  title_it: string
+  title_es: string
+  description_it: string
+  description_es: string
+  price: number
+  date: string
+  location: string
+  instructors: string
+  max_participants: number
+  is_active: boolean
+  is_popular: boolean
+}
 
 export function PricingSection() {
   const { t, language } = useLanguage()
   const [isVisible, setIsVisible] = useState(false)
+  const [workshops, setWorkshops] = useState<Workshop[]>([])
+  const [loading, setLoading] = useState(true)
   const sectionRef = useRef<HTMLDivElement>(null)
+
+  // Load workshops from database
+  useEffect(() => {
+    const loadWorkshops = async () => {
+      try {
+        const response = await fetch('/api/public/workshops')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.workshops && data.workshops.length > 0) {
+            setWorkshops(data.workshops)
+          } else {
+            // Fallback to default workshop structure
+            setWorkshops([{
+              id: 1,
+              title_it: 'Workshop di 1 Giorno - Ottobre',
+              title_es: 'Taller de 1 Día - Octubre',
+              description_it: 'Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione.',
+              description_es: 'Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración.',
+              price: 90,
+              date: '2025-10-12',
+              location: 'Healing Garden, Guía de Isora',
+              instructors: 'Jenny Rospo & Marian Giral Vega',
+              max_participants: 20,
+              is_active: true,
+              is_popular: true
+            }])
+          }
+        }
+      } catch (error) {
+        console.error('Error loading workshops:', error)
+        // Use fallback data
+        setWorkshops([{
+          id: 1,
+          title_it: 'Workshop di 1 Giorno - Ottobre',
+          title_es: 'Taller de 1 Día - Octubre',
+          description_it: 'Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione.',
+          description_es: 'Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración.',
+          price: 90,
+          date: '2025-10-12',
+          location: 'Healing Garden, Guía de Isora',
+          instructors: 'Jenny Rospo & Marian Giral Vega', 
+          max_participants: 20,
+          is_active: true,
+          is_popular: true
+        }])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadWorkshops()
+  }, [])
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -31,27 +102,61 @@ export function PricingSection() {
     return () => observer.disconnect()
   }, [])
 
-  // Updated pricing structure per design requirements: Single workshop only
-  const workshopPlans = [
-    {
-      id: "workshop1day",
-      name: t.pricing.workshop1Day.name,
-      price: t.pricing.workshop1Day.price,
-      period: t.pricing.workshop1Day.period,
-      duration: t.pricing.workshop1Day.duration,
-      date: t.pricing.workshop1Day.date,
-      location: t.pricing.workshop1Day.location,
-      instructors: t.pricing.workshop1Day.instructors,
-      description: t.pricing.workshop1Day.description,
-      features: t.pricing.workshop1Day.features,
-      popular: true, // Single workshop is always highlighted
-      fullDetails: t.pricing.workshop1Day.fullDetails,
-    },
-  ]
+  // Convert workshops to pricing plans format
+  const workshopPlans = workshops.map(workshop => ({
+    id: `workshop${workshop.id}`,
+    name: language === 'es' ? workshop.title_es : workshop.title_it,
+    price: `€${workshop.price}`,
+    period: language === 'es' ? 'por persona' : 'a persona',
+    duration: language === "es" ? "8 horas" : "8 ore",
+    date: new Date(workshop.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'it-IT'),
+    location: workshop.location,
+    instructors: workshop.instructors,
+    description: language === 'es' ? workshop.description_es : workshop.description_it,
+    features: [
+      language === "es" ? "Lecciones de canto completas" : "Lezioni di canto complete",
+      language === "es" ? "Técnicas vocales avanzadas" : "Tecniche vocali avanzate", 
+      language === "es" ? "Trabajo de respiración" : "Lavoro sulla respirazione",
+      language === "es" ? "Ambiente natural inspirador" : "Ambiente naturale ispirante",
+      language === "es" ? "Grupos pequeños (máx 10 personas)" : "Piccoli gruppi (max 10 persone)",
+      language === "es" ? "Certificado de participación" : "Certificato di partecipazione"
+    ],
+    popular: workshop.is_popular,
+    fullDetails: {
+      // Workshop details would be here
+    }
+  }))
+
+  // If no workshops from database, use fallback
+  const fallbackWorkshops = [{
+    id: "workshop1day",
+    name: language === "es" ? "Taller de 1 Día - Octubre" : "Workshop di 1 Giorno - Ottobre",
+    price: "€90",
+    period: language === "es" ? "por persona" : "a persona",
+    duration: language === "es" ? "8 horas" : "8 ore",
+    date: language === "es" ? "12 Octubre 2025" : "12 Ottobre 2025",
+    location: "Healing Garden, Guía de Isora",
+    instructors: "Jenny Rospo & Marian Giral Vega",
+    description: language === "es" 
+      ? "Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración."
+      : "Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione.",
+    features: [
+      language === "es" ? "Lecciones de canto completas" : "Lezioni di canto complete",
+      language === "es" ? "Técnicas vocales avanzadas" : "Tecniche vocali avanzate", 
+      language === "es" ? "Trabajo de respiración" : "Lavoro sulla respirazione",
+      language === "es" ? "Ambiente natural inspirador" : "Ambiente naturale ispirante",
+      language === "es" ? "Grupos pequeños (máx 10 personas)" : "Piccoli gruppi (max 10 persone)",
+      language === "es" ? "Certificado de participación" : "Certificato di partecipazione"
+    ],
+    popular: true,
+    fullDetails: {}
+  }]
+
+  const plansToShow = workshopPlans.length > 0 ? workshopPlans : fallbackWorkshops
 
   const handleWhatsAppBooking = (workshopType: string, workshopName: string, price: string) => {
     const workshopDetails = {
-      workshop1day: language === "es" ? `Workshop de 1 Día - Octubre (€90)` : `Workshop di 1 Giorno - Ottobre (€90)`,
+      workshop1day: language === "es" ? `Taller de 1 Día - Octubre (€90)` : `Workshop di 1 Giorno - Ottobre (€90)`,
     }
 
     const message =
@@ -106,7 +211,7 @@ Grazie!`
 
         {/* Single workshop layout - centered */}
         <div className="flex justify-center max-w-5xl mx-auto px-3 xs:px-4 sm:px-6">
-          {workshopPlans.map((plan, index) => (
+          {plansToShow.map((plan, index) => (
             <Card
               key={index}
               className={`relative bg-white/98 border-[#9852A7]/20 flex flex-col shadow-lg transition-all duration-500 hover:shadow-2xl rounded-2xl max-w-md w-full ${
@@ -166,14 +271,236 @@ Grazie!`
                     </Button>
                   </BookingForm>
                   
-                  <Button
-                    variant="outline"
-                    className="w-full py-2 xs:py-3 sm:py-4 font-medium text-sm xs:text-base sm:text-lg border-[#9852A7] text-[#9852A7] hover:bg-[#9852A7] hover:text-white transition-all duration-300 hover:scale-105 rounded-xl"
-                    onClick={() => handleWhatsAppBooking(plan.id, plan.name, plan.price)}
-                  >
-                    <MessageCircle className="h-4 w-4 xs:h-5 xs:w-5 mr-2" />
-                    {language === "es" ? "Hablar por WhatsApp" : "Parla su WhatsApp"}
-                  </Button>
+
+                  
+                  {/* Workshop Details Modal */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full py-2 xs:py-3 sm:py-4 font-medium text-sm xs:text-base sm:text-lg border-[#3C318D]/30 text-[#3C318D] hover:bg-[#3C318D] hover:text-white transition-all duration-300 hover:scale-105 rounded-xl"
+                      >
+                        <Eye className="h-4 w-4 xs:h-5 xs:w-5 mr-2" />
+                        {language === "es" ? "Ver Itinerario Completo" : "Vedi Itinerario Completo"}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-[#3C318D]/20 shadow-2xl">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold text-[#3C318D] text-center mb-4">
+                          {language === "es" ? "Itinerario del Taller" : "Itinerario del Workshop"}
+                        </DialogTitle>
+                      </DialogHeader>
+                      
+                      <Tabs defaultValue="overview" className="w-full">
+                        <TabsList className="grid w-full grid-cols-3 mb-6 bg-[#F8F9FA] border border-[#3C318D]/10">
+                          <TabsTrigger value="overview" className="text-[#3C318D] data-[state=active]:bg-white data-[state=active]:text-[#3C318D] data-[state=active]:shadow-sm">
+                            {language === "es" ? "Resumen" : "Panoramica"}
+                          </TabsTrigger>
+                          <TabsTrigger value="schedule" className="text-[#3C318D] data-[state=active]:bg-white data-[state=active]:text-[#3C318D] data-[state=active]:shadow-sm">
+                            {language === "es" ? "Horario" : "Programma"}
+                          </TabsTrigger>
+                          <TabsTrigger value="details" className="text-[#3C318D] data-[state=active]:bg-white data-[state=active]:text-[#3C318D] data-[state=active]:shadow-sm">
+                            {language === "es" ? "Detalles" : "Dettagli"}
+                          </TabsTrigger>
+                        </TabsList>
+                        
+                        <TabsContent value="overview" className="space-y-6">
+                          <div className="text-center">
+                            <h3 className="text-xl font-semibold text-[#3C318D] mb-4">
+                              {language === "es" 
+                                ? "🎶 Canta para reencontrarte, crece para resonar con tu alma auténtica"
+                                : "🎶 Canta per ritrovarti, cresci per risuonare con la tua anima autentica"}
+                            </h3>
+                            <p className="text-[#3C318D]/80 text-lg leading-relaxed">
+                              {language === "es" 
+                                ? "Un día especial para redescubrir tu voz... y algo más profundo. Una experiencia dedicada a quienes cantan, hablan, crean con la voz - y a quienes desean reconectarse con su esencia a través del sonido, la respiración, el cuerpo y el silencio."
+                                : "Una giornata speciale per ritrovare la tua voce... e qualcosa di più profondo. Un'esperienza dedicata a chi canta, a chi parla, a chi crea con la voce – e a chi desidera riconnettersi con la propria essenza attraverso il suono, il respiro, il corpo e il silenzio."}
+                            </p>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-[#9852A7]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
+                                <Heart className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                {language === "es" ? "¿Qué te espera?" : "Cosa ti aspetta?"}
+                              </h4>
+                              <p className="text-[#3C318D]/80 text-sm leading-relaxed">
+                                {language === "es" 
+                                  ? "Un recorrido experiencial entre voz, cuerpo, respiración y emoción, pensado para quienes desean usar la voz de manera más auténtica, libre y consciente."
+                                  : "Un percorso esperienziale tra voce, corpo, respiro e emozione, pensato per chi desidera usare la voce in modo più autentico, libero e consapevole."}
+                              </p>
+                            </div>
+                            
+                            <div className="bg-[#F02A30]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
+                                <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                {language === "es" ? "¿A quién está dirigido?" : "A chi è rivolto?"}
+                              </h4>
+                              <ul className="text-[#3C318D]/80 text-sm space-y-1">
+                                <li>• {language === "es" ? "Quienes cantan, por pasión o profesión" : "A chi canta, per passione o professione"}</li>
+                                <li>• {language === "es" ? "Profesionales de la voz" : "A chi lavora con la voce"}</li>
+                                <li>• {language === "es" ? "Quienes buscan su voz auténtica" : "A chi vuole ritrovare la propria voce autentica"}</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </TabsContent>
+                        
+                        <TabsContent value="schedule" className="space-y-6">
+                          <div className="bg-gradient-to-r from-[#9852A7]/10 to-[#3C318D]/10 p-6 rounded-xl">
+                            <h3 className="text-xl font-semibold text-[#3C318D] mb-6 text-center">
+                              {language === "es" ? "Programa del Día" : "Programma della Giornata"}
+                            </h3>
+                            
+                            <div className="space-y-4">
+                              <div className="flex items-start space-x-4">
+                                <div className="bg-[#F02A30] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
+                                  09:30
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-[#3C318D]">
+                                    {language === "es" ? "Llegada y bienvenida" : "Arrivo e accoglienza"}
+                                  </h4>
+                                  <p className="text-[#3C318D]/70 text-sm">
+                                    {language === "es" ? "Momento de conexión y preparación" : "Momento di connessione e preparazione"}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-start space-x-4">
+                                <div className="bg-[#9852A7] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
+                                  10:00
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-[#3C318D]">
+                                    {language === "es" ? "Inicio de actividades" : "Inizio attività"}
+                                  </h4>
+                                  <p className="text-[#3C318D]/70 text-sm">
+                                    {language === "es" ? "Conexión con la naturaleza y respiración, ejercicios vocales al aire libre" : "Connessione con la natura e il respiro, esercizi vocali all'aria aperta"}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-start space-x-4">
+                                <div className="bg-[#3C318D] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
+                                  13:00
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-[#3C318D]">
+                                    {language === "es" ? "Pausa para el almuerzo" : "Pausa pranzo"}
+                                  </h4>
+                                  <p className="text-[#3C318D]/70 text-sm">
+                                    {language === "es" ? "Tiempo para la alimentación consciente" : "Tempo per l'alimentazione consapevole"}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-start space-x-4">
+                                <div className="bg-[#F02A30] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
+                                  14:00
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-[#3C318D]">
+                                    {language === "es" ? "Sesión de tarde" : "Sessione pomeridiana"}
+                                  </h4>
+                                  <p className="text-[#3C318D]/70 text-sm">
+                                    {language === "es" ? "Experiencias de canto en movimiento, exploraciones expresivas" : "Esperienze di canto in movimento, esplorazioni espressive"}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-start space-x-4">
+                                <div className="bg-[#9852A7] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
+                                  18:30
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-[#3C318D]">
+                                    {language === "es" ? "Círculo de cierre" : "Cerchio di chiusura"}
+                                  </h4>
+                                  <p className="text-[#3C318D]/70 text-sm">
+                                    {language === "es" ? "Compartir, reflexión y celebración" : "Condivisioni, riflessione e celebrazione"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </TabsContent>
+                        
+                        <TabsContent value="details" className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-[#3C318D]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                <Utensils className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                {language === "es" ? "Qué traer" : "Cosa portare"}
+                              </h4>
+                              <ul className="text-[#3C318D]/80 text-sm space-y-2">
+                                <li>• {language === "es" ? "Un corazón abierto y ganas de experimentar" : "Un cuore aperto e la voglia di metterti in gioco"}</li>
+                                <li>• {language === "es" ? "Agua o infusión" : "Acqua o tisana"}</li>
+                                <li>• {language === "es" ? "Cuaderno para inspiraciones" : "Un block notes per annotare ispirazioni"}</li>
+                                <li>• {language === "es" ? "Ropa cómoda" : "Abiti comodi"}</li>
+                                <li>• {language === "es" ? "Almuerzo ligero y saludable" : "Pranzo semplice e leggero"}</li>
+                              </ul>
+                            </div>
+                            
+                            <div className="bg-[#F02A30]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                <Smartphone className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                {language === "es" ? "Día sin móvil" : "Una giornata senza cellulare"}
+                              </h4>
+                              <p className="text-[#3C318D]/80 text-sm leading-relaxed">
+                                {language === "es" 
+                                  ? "Durante las actividades, los teléfonos permanecerán en silencio. Un pequeño ritual para volver a la presencia y redescubrir el poder de la escucha verdadera."
+                                  : "Durante le attività, i telefoni resteranno in silenzio. Un piccolo rituale per tornare in presenza e riscoprire la potenza dell'ascolto vero."}
+                              </p>
+                            </div>
+                            
+                            <div className="bg-[#9852A7]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                <MapPin className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                {language === "es" ? "Ubicación" : "Luogo"}
+                              </h4>
+                              <p className="text-[#3C318D]/80 text-sm">
+                                <strong>The Healing Garden</strong><br />
+                                Guía de Isora, Tenerife<br />
+                                {language === "es" ? "En un contexto natural e inspirador" : "In un contesto naturale e ispirante"}
+                              </p>
+                            </div>
+                            
+                            <div className="bg-[#3C318D]/10 p-6 rounded-xl">
+                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                {language === "es" ? "Facilitadores" : "Con gratitudine, vi accompagneranno"}
+                              </h4>
+                              <div className="text-[#3C318D]/80 text-sm space-y-2">
+                                <p><strong>Jenny Rospo</strong> - {language === "es" ? "Cantante vocal coach" : "Cantante vocal coach"}</p>
+                                <p><strong>Marian Giral Vega</strong> - {language === "es" ? "Bailarina, profesora Body-brain" : "Ballerina Insegnante Body brain"}</p>
+                                <p><strong>Freddy Martin</strong> - {language === "es" ? "Cantante showman" : "Cantante Showman"}</p>
+                                <p className="text-xs italic">
+                                  {language === "es" 
+                                    ? "Tres almas apasionadas, listas para acompañarte con competencia, presencia y corazón."
+                                    : "Tre anime appassionate, pronte a sostenervi con competenza, presenza e cuore."}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="text-center bg-gradient-to-r from-[#F02A30]/10 to-[#9852A7]/10 p-6 rounded-xl">
+                            <h4 className="font-semibold text-[#3C318D] mb-3">
+                              💫 {language === "es" ? "Contribución" : "Contributo"}
+                            </h4>
+                            <p className="text-2xl font-bold text-[#F02A30] mb-2">€90</p>
+                            <p className="text-[#3C318D]/80 text-sm">
+                              {language === "es" 
+                                ? "Para toda la jornada de workshop (8 horas). El pago se puede efectuar al finalizar el workshop o según modalidades acordadas."
+                                : "per l'intera giornata di workshop (8 ore). Il pagamento potrà essere effettuato al termine del workshop o secondo modalità concordate."}
+                            </p>
+                            <p className="text-[#F02A30] font-medium text-sm mt-2">
+                              🌺 {language === "es" ? "Plazas limitadas - reserva recomendada" : "Posti limitati – prenotazione consigliata"}
+                            </p>
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardContent>
             </Card>

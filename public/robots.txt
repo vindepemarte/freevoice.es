@@ -1,0 +1,48 @@
+# Free Voice Academy - Vocal Coaching & Personal Growth Workshops
+# Website: https://freevoice.es
+# Location: Tenerife, Spain
+# Languages: Italian, Spanish
+
+User-agent: *
+Allow: /
+
+# Main pages - High priority for crawling
+Allow: /
+Allow: /privacy-policy
+Allow: /terms-conditions
+
+# Important for SEO - Workshop and coaching content
+Allow: /api/og
+Allow: /sitemap.xml
+
+# Block admin and internal areas
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /setup.html
+
+# Block development and build files
+Disallow: /_next/
+Disallow: /static/
+Disallow: /.well-known/
+
+# Block sensitive files
+Disallow: /package.json
+Disallow: /next.config.*
+Disallow: /tsconfig.json
+Disallow: /*.log
+
+# Allow important assets for SEO
+Allow: /free-voice-logo.png
+Allow: /music-coaching-session-with-vocal-exercises-and-in.jpg
+Allow: /og-image.jpg
+Allow: /favicon.ico
+
+# Sitemap location
+Sitemap: https://freevoice.es/sitemap.xml
+
+# Crawl delay to be respectful (optional)
+Crawl-delay: 1
+
+# Cache directive for better performance
+# This helps search engines understand update frequency
+# Main pages change weekly, content monthly

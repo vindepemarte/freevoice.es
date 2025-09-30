@@ -110,15 +110,52 @@ export async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS coaches (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
-        title TEXT,
+        title_it TEXT,
+        title_es TEXT,
         bio_it TEXT,
         bio_es TEXT,
         image_url TEXT,
-        specialties TEXT[],
+        specialties_it TEXT[],
+        specialties_es TEXT[],
         display_order INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
+    `)
+
+    // Add missing columns if they don't exist (for existing databases)
+    await client.query(`
+      DO $$ 
+      BEGIN
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='title_it') THEN
+          ALTER TABLE coaches ADD COLUMN title_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='title_es') THEN
+          ALTER TABLE coaches ADD COLUMN title_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='specialties_it') THEN
+          ALTER TABLE coaches ADD COLUMN specialties_it TEXT[];
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='specialties_es') THEN
+          ALTER TABLE coaches ADD COLUMN specialties_es TEXT[];
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='title') THEN
+          UPDATE coaches SET title_it = title, title_es = title WHERE title_it IS NULL;
+          ALTER TABLE coaches DROP COLUMN title;
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='coaches' AND column_name='specialties') THEN
+          UPDATE coaches SET specialties_it = specialties, specialties_es = specialties WHERE specialties_it IS NULL;
+          ALTER TABLE coaches DROP COLUMN specialties;
+        END IF;
+        
+        -- Add itinerary columns to workshops table if they don't exist
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='itinerary_it') THEN
+          ALTER TABLE workshops ADD COLUMN itinerary_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='itinerary_es') THEN
+          ALTER TABLE workshops ADD COLUMN itinerary_es TEXT;
+        END IF;
+      END $$;
     `)
 
     // Create site_content table
@@ -178,8 +215,8 @@ export async function seedInitialData() {
 
     // Insert default workshop data based on new pricing structure
     await client.query(`
-      INSERT INTO workshops (title_it, title_es, description_it, description_es, price, date, location, instructors, is_popular) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+      INSERT INTO workshops (title_it, title_es, description_it, description_es, price, date, location, instructors, is_popular, itinerary_it, itinerary_es) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
       ON CONFLICT DO NOTHING
     `, [
       'Workshop di 1 Giorno - Ottobre',
@@ -190,8 +227,114 @@ export async function seedInitialData() {
       '2025-10-12',
       'Healing Garden, Guía de Isora',
       'Jenny Rospo & Marian Giral Vega',
-      true
+      true,
+      '9:30 - Arrivo e registrazione\n10:00 - Cerchio di apertura e presentazioni\n10:30 - Riscaldamento vocale e respirazione\n11:30 - Pausa\n12:00 - Tecnica vocale e improvvisazione\n13:30 - Pausa pranzo\n14:30 - Lavoro corporeo e movimento\n15:30 - Connessione voce-corpo\n16:30 - Pausa\n17:00 - Performance individuale\n18:00 - Cerchio di chiusura\n18:30 - Saluti finali',
+      '9:30 - Llegada y registro\n10:00 - Círculo de apertura y presentaciones\n10:30 - Calentamiento vocal y respiración\n11:30 - Descanso\n12:00 - Técnica vocal e improvisación\n13:30 - Pausa para almorzar\n14:30 - Trabajo corporal y movimiento\n15:30 - Conexión voz-cuerpo\n16:30 - Descanso\n17:00 - Performance individual\n18:00 - Círculo de cierre\n18:30 - Despedidas finales'
     ])
+
+    // Insert default coaches
+    const coaches = [
+      {
+        name: 'David Cardano',
+        title_it: 'Dott. in Scienze della Motricità, Psicologo, Psicoterapeuta',
+        title_es: 'Dr. en Ciencias de la Motricidad, Psicólogo, Psicoterapeuta',
+        bio_it: 'Specialista in psicologia della performance e sviluppo personale attraverso il movimento.',
+        bio_es: 'Especialista en psicología del rendimiento y desarrollo personal a través del movimiento.',
+        image_url: '/professional-male-coach-with-glasses.jpg',
+        specialties_it: ['Psicologia', 'Motricità', 'Terapia'],
+        specialties_es: ['Psicología', 'Motricidad', 'Terapia'],
+        display_order: 1
+      },
+      {
+        name: 'Laura Monza',
+        title_it: 'Mental Trainer, Coach Spirituale di Vita, Psicologa',
+        title_es: 'Entrenadora Mental, Coach Spiritual de Vida, Psicóloga',
+        bio_it: 'Esperta in trasformazione personale e coaching spirituale per artisti e performer.',
+        bio_es: 'Experta en transformación personal y coaching espiritual para artistas y performers.',
+        image_url: '/professional-female-spiritual-coach.jpg',
+        specialties_it: ['Coaching Mentale', 'Spiritualità', 'Sviluppo Personale'],
+        specialties_es: ['Coaching Mental', 'Espiritualidad', 'Desarrollo Personal'],
+        display_order: 2
+      },
+      {
+        name: 'Jenny Rospo',
+        title_it: 'Cantante, Vocal Coach',
+        title_es: 'Cantante, Vocal Coach',
+        bio_it: 'Cantante professionale e vocal coach specializzata nella liberazione della voce autentica.',
+        bio_es: 'Cantante profesional y coach vocal especializada en liberación de la voz auténtica.',
+        image_url: '/professional-female-vocal-coach-singing.jpg',
+        specialties_it: ['Tecnica Vocale', 'Interpretazione', 'Performance'],
+        specialties_es: ['Técnica Vocal', 'Interpretación', 'Performance'],
+        display_order: 3
+      },
+      {
+        name: 'Marian Giral Vega',
+        title_it: 'Ballerina, Istruttrice di Corpo e Cuore',
+        title_es: 'Bailarina, Instructora de Cuerpo y Corazón',
+        bio_it: 'Ballerina professionale specializzata nella connessione tra corpo, cuore ed espressione artistica.',
+        bio_es: 'Bailarina profesional especializada en la conexión entre cuerpo, corazón y expresión artística.',
+        image_url: '/professional-female-dance-instructor.jpg',
+        specialties_it: ['Danza', 'Espressione Corporea', 'Connessione Emotiva'],
+        specialties_es: ['Danza', 'Expresión Corporal', 'Conexión Emocional'],
+        display_order: 4
+      }
+    ]
+
+    for (const coach of coaches) {
+      await client.query(`
+        INSERT INTO coaches (name, title_it, title_es, bio_it, bio_es, image_url, specialties_it, specialties_es, display_order)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT DO NOTHING
+      `, [
+        coach.name, coach.title_it, coach.title_es, coach.bio_it, coach.bio_es,
+        coach.image_url, coach.specialties_it, coach.specialties_es, coach.display_order
+      ])
+    }
+
+    // Insert default testimonials
+    const testimonials = [
+      {
+        name: 'María Rodríguez',
+        role: 'Ex Estudiante',
+        content_it: 'Il workshop ha cambiato la mia vita! Ho scoperto una voce che non sapevo di avere.',
+        content_es: 'El workshop cambió mi vida! Descubrí una voz que no sabía que tenía.',
+        image_url: '/happy-female-singer-headshot.jpg',
+        video_url: '/testimonials/maria-rodriguez-testimonial.mp4',
+        is_approved: true,
+        display_order: 1
+      },
+      {
+        name: 'Alessandro Bianchi',
+        role: 'Attore Teatrale',
+        content_it: 'Jenny e il suo team sono incredibili. Il lavoro corporeo + vocale ha cambiato la mia recitazione per sempre.',
+        content_es: 'Jenny y su equipo son increíbles. El trabajo corporal + vocal cambio mi actuación para siempre.',
+        image_url: '/confident-male-actor-headshot.jpg',
+        video_url: '/testimonials/alessandro-bianchi-testimonial.mp4',
+        is_approved: true,
+        display_order: 2
+      },
+      {
+        name: 'Carmen Gutiérrez',
+        role: 'Insegnante di Musica',
+        content_it: 'Ero scettica all\'inizio. Ma questo workshop supera ogni aspettativa. Ora insegno questi principi ai miei studenti.',
+        content_es: 'Era escéptica al principio. Pero este workshop supera toda expectativa. Ahora enseño estos principios a mis estudiantes.',
+        image_url: '/professional-female-music-teacher.jpg',
+        video_url: '/testimonials/carmen-gutierrez-testimonial.mp4',
+        is_approved: true,
+        display_order: 3
+      }
+    ]
+
+    for (const testimonial of testimonials) {
+      await client.query(`
+        INSERT INTO testimonials (name, role, content_it, content_es, image_url, video_url, is_approved, display_order)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT DO NOTHING
+      `, [
+        testimonial.name, testimonial.role, testimonial.content_it, testimonial.content_es,
+        testimonial.image_url, testimonial.video_url, testimonial.is_approved, testimonial.display_order
+      ])
+    }
 
     console.log('Initial data seeded successfully')
   } catch (error) {

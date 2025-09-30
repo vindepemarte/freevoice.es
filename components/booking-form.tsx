@@ -30,8 +30,7 @@ export function BookingForm({ children, workshopType }: BookingFormProps) {
 
     // Minimal friction - directly format WhatsApp message
     const workshopDetails = {
-      workshop1day: language === "es" ? "Workshop de 1 Día (€50)" : "Workshop di 1 Giorno (€50)",
-      workshop3day: language === "es" ? "Workshop de 3 Días (€180)" : "Workshop di 3 Giorni (€180)",
+      workshop1day: language === "es" ? "Workshop de 1 Día (€90)" : "Workshop di 1 Giorno (€90)",
     }
 
     const selectedWorkshop = workshopDetails[formData.workshop as keyof typeof workshopDetails] || 
@@ -125,10 +124,7 @@ Grazie!`
                 </SelectTrigger>
                 <SelectContent className="border-2 border-[#9852A7]/20 rounded-xl bg-white/95 backdrop-blur">
                   <SelectItem value="workshop1day" className="text-base py-3 hover:bg-[#F02A30]/10 focus:bg-[#F02A30]/10 rounded-lg text-[#3C318D] selection:bg-[#F02A30]/20 selection:text-[#3C318D]">
-                    {language === "es" ? "Workshop de 1 Día - €50" : "Workshop di 1 Giorno - €50"}
-                  </SelectItem>
-                  <SelectItem value="workshop3day" className="text-base py-3 hover:bg-[#9852A7]/10 focus:bg-[#9852A7]/10 rounded-lg text-[#3C318D] selection:bg-[#F02A30]/20 selection:text-[#3C318D]">
-                    {language === "es" ? "Workshop de 3 Días - €180 ⭐" : "Workshop di 3 Giorni - €180 ⭐"}
+                    {language === "es" ? "Workshop de 1 Día - €90" : "Workshop di 1 Giorno - €90"}
                   </SelectItem>
                 </SelectContent>
               </Select>

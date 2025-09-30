@@ -9,15 +9,6 @@ import { useLanguage } from "@/hooks/use-language"
 export function CTASection() {
   const { t, language } = useLanguage()
 
-  const handleScheduleCall = () => {
-    const message =
-      language === "es"
-        ? "Me gustaría más información sobre el taller de Free Voice"
-        : "Vorrei maggiori informazioni sul workshop di Free Voice"
-    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
-  }
-
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-[#9852A7] via-[#B85FC7] to-[#F02A30] relative overflow-hidden">
       {/* Background Elements */}
@@ -71,14 +62,6 @@ export function CTASection() {
                 {t.cta.bookSpot}
               </Button>
             </BookingForm>
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg bg-transparent border-white text-white hover:bg-white hover:text-[#9852A7] w-full sm:w-auto"
-              onClick={handleScheduleCall}
-            >
-              {t.cta.scheduleCall}
-            </Button>
           </div>
 
           <p className="text-xs sm:text-sm text-white/80 mt-4 sm:mt-6">{t.cta.limited}</p>
