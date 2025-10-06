@@ -1,14 +1,30 @@
 import { NextResponse } from 'next/server'
-import { pool } from '@/lib/database'
+import { Pool } from 'pg'
 
 export async function GET() {
   console.log('🚀 WORKSHOPS API: Starting request')
   console.log('🚀 WORKSHOPS API: NODE_ENV =', process.env.NODE_ENV)
   console.log('🚀 WORKSHOPS API: DATABASE_URL length =', process.env.DATABASE_URL?.length)
   
+  // Create a direct pool connection for testing
+  let connectionString = process.env.DATABASE_URL || 'missing'
+  
+  // Ensure sslmode=disable is in the connection string
+  if (!connectionString.includes('sslmode=disable')) {
+    connectionString += connectionString.includes('?') ? '&sslmode=disable' : '?sslmode=disable'
+  }
+  
+  console.log('🚀 WORKSHOPS API: Connection string configured')
+  
+  const directPool = new Pool({
+    connectionString,
+    ssl: false,
+    max: 5
+  })
+  
   try {
     console.log('🚀 WORKSHOPS API: Attempting database connection...')
-    const client = await pool.connect()
+    const client = await directPool.connect()
     console.log('✅ WORKSHOPS API: Database connected successfully')
     
     try {
@@ -42,6 +58,8 @@ export async function GET() {
     console.error('❌ WORKSHOPS API: Error message:', (error as any)?.message)
     console.error('❌ WORKSHOPS API: Error code:', (error as any)?.code)
     console.error('❌ WORKSHOPS API: Error stack:', (error as any)?.stack)
-    return NextResponse.json({ workshops: [] }) // Return empty array instead of error
+    return NextResponse.json({ workshops: [], error: (error as any)?.message }) // Return empty array with error
+  } finally {
+    await directPool.end()
   }
 }
