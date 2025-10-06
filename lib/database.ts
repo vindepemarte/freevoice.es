@@ -36,31 +36,18 @@ function getDatabaseConfig() {
   }
 }
 
-// Lazy pool initialization to avoid build-time issues
-let poolInstance: Pool | null = null
+// Simple direct pool - avoid lazy loading complications
+const dbConfig = getDatabaseConfig()
+const pool = new Pool({
+  ...dbConfig,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+  statement_timeout: 60000,
+  query_timeout: 60000,
+})
 
-function getPoolInstance(): Pool {
-  if (!poolInstance) {
-    const dbConfig = getDatabaseConfig()
-    poolInstance = new Pool({
-      ...dbConfig,
-      // Connection pool settings optimized for non-SSL connections
-      max: 20, // Maximum number of clients in the pool
-      idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-      connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
-      statement_timeout: 60000, // 60 second statement timeout
-      query_timeout: 60000, // 60 second query timeout
-    })
-  }
-  return poolInstance
-}
-
-// Export a pool-like object that delegates to the lazy-initialized instance
-export const pool = {
-  connect: () => getPoolInstance().connect(),
-  query: (text: string, params?: any[]) => getPoolInstance().query(text, params),
-  end: () => getPoolInstance().end()
-}
+export { pool }
 
 export async function initializeDatabase() {
   const client = await pool.connect()
