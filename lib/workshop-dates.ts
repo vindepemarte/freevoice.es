@@ -43,7 +43,17 @@ export function getNextUpcomingWorkshop(workshops: Workshop[]): Workshop | null 
  * Format workshop date for display
  */
 export function formatWorkshopDateForDisplay(dateString: string, language: 'es' | 'it'): string {
-  const date = new Date(dateString)
+  // Handle different date formats
+  let date: Date
+  
+  if (dateString.includes('T')) {
+    // ISO format: "2025-10-12T22:00:00.000Z"
+    date = new Date(dateString.split('T')[0] + 'T00:00:00.000Z')
+  } else {
+    // Simple format: "2025-10-12"
+    const [year, month, day] = dateString.split('-')
+    date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+  }
   
   if (language === 'es') {
     const months = [
@@ -83,19 +93,24 @@ export function getNextWorkshopText(workshops: Workshop[], language: 'es' | 'it'
 /**
  * Fallback workshops for when database is not available
  */
-export const getFallbackWorkshops = (language: 'es' | 'it'): Workshop[] => [
-  {
-    id: 1,
-    title_it: 'Workshop di 1 Giorno - Ottobre',
-    title_es: 'Taller de 1 Día - Octubre',
-    description_it: 'Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione.',
-    description_es: 'Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración.',
-    price: 90,
-    date: '2025-10-12',
-    location: 'Healing Garden, Guía de Isora',
-    instructors: 'Jenny Rospo & Marian Giral Vega',
-    max_participants: 20,
-    is_active: true,
-    is_popular: true
-  }
-]
+export const getFallbackWorkshops = (language: 'es' | 'it'): Workshop[] => {
+  // Use March 15, 2025 as future date for testing
+  const futureDate = '2025-03-15'
+  
+  return [
+    {
+      id: 1,
+      title_it: 'Workshop di 1 Giorno - Marzo',
+      title_es: 'Taller de 1 Día - Marzo',
+      description_it: 'Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione.',
+      description_es: 'Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración.',
+      price: 90,
+      date: futureDate,
+      location: 'Healing Garden, Guía de Isora',
+      instructors: 'Jenny Rospo & Marian Giral Vega',
+      max_participants: 20,
+      is_active: true,
+      is_popular: true
+    }
+  ]
+}

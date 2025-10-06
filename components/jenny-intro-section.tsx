@@ -4,33 +4,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Play, Volume2, Pause } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
-import { useState, useRef } from "react"
+import { useState } from "react"
 
 export function JennyIntroSection() {
   const { t, language } = useLanguage()
-  const [isPlaying, setIsPlaying] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
 
   const handlePlayVideo = () => {
     setShowVideo(true)
-    setIsPlaying(true)
-    // For now we'll show video player - you can replace with actual video URL
-  }
-
-  const handlePauseVideo = () => {
-    setIsPlaying(false)
-    if (videoRef.current) {
-      videoRef.current.pause()
-    }
-  }
-
-  const handleVideoPlay = () => {
-    setIsPlaying(true)
-  }
-
-  const handleVideoPause = () => {
-    setIsPlaying(false)
   }
 
   return (
@@ -71,26 +52,16 @@ export function JennyIntroSection() {
                     </div>
                   </div>
                 ) : (
-                  // Actual Video Player
+                  // YouTube Video Player
                   <div className="absolute inset-0">
-                    <video
-                      ref={videoRef}
-                      className="w-full h-full object-cover"
-                      controls
-                      autoPlay
-                      onPlay={handleVideoPlay}
-                      onPause={handleVideoPause}
-                      poster="/professional-female-vocal-coach-singing.jpg"
-                    >
-                      <source src={language === "es" ? "/jenny-intro-video-es.mp4" : "/jenny-intro-video.mp4"} type="video/mp4" />
-                      <source src={language === "es" ? "/jenny-intro-video-es.webm" : "/jenny-intro-video.webm"} type="video/webm" />
-                      {/* Fallback for browsers that don't support video */}
-                      <img 
-                        src="/professional-female-vocal-coach-singing.jpg" 
-                        alt="The team introducing Free Voice Academy" 
-                        className="w-full h-full object-cover"
-                      />
-                    </video>
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/htH-nZSfKO0?autoplay=1&rel=0&modestbranding=1"
+                      title={language === "es" ? "Introducción Free Voice Academy" : "Introduzione Free Voice Academy"}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
                   </div>
                 )}
 

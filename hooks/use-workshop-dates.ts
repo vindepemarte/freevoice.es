@@ -12,18 +12,23 @@ export function useWorkshopDates(language: 'es' | 'it') {
   useEffect(() => {
     const loadWorkshops = async () => {
       try {
+        console.log('Loading workshops from API...')
         const response = await fetch('/api/public/workshops')
         
         if (response.ok) {
           const data = await response.json()
-          setWorkshops(data)
-          const nextText = getNextWorkshopText(data, language)
+          console.log('Workshops loaded from API:', data)
+          setWorkshops(data.workshops || data)
+          const nextText = getNextWorkshopText(data.workshops || data, language)
+          console.log('Next workshop text:', nextText)
           setNextWorkshopText(nextText)
         } else {
+          console.log('API response not ok, using fallback workshops')
           // Use fallback workshops
           const fallbackWorkshops = getFallbackWorkshops(language)
           setWorkshops(fallbackWorkshops)
           const nextText = getNextWorkshopText(fallbackWorkshops, language)
+          console.log('Fallback workshop text:', nextText)
           setNextWorkshopText(nextText)
         }
       } catch (error) {
@@ -32,6 +37,7 @@ export function useWorkshopDates(language: 'es' | 'it') {
         const fallbackWorkshops = getFallbackWorkshops(language)
         setWorkshops(fallbackWorkshops)
         const nextText = getNextWorkshopText(fallbackWorkshops, language)
+        console.log('Error fallback workshop text:', nextText)
         setNextWorkshopText(nextText)
       } finally {
         setLoading(false)
