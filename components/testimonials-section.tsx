@@ -212,16 +212,15 @@ export function TestimonialsSection() {
             <CardContent className="p-0">
               <div className="relative w-full" style={{ aspectRatio: '9/16' }}>
                 {playingVideo ? (
-                  <video
-                    className="w-full h-full object-cover rounded-lg"
-                    controls
-                    autoPlay
-                    poster="/testimonials-compilation-thumbnail.jpg"
+                  <iframe
+                    className="w-full h-full rounded-lg"
+                    src="https://www.youtube.com/embed/bnT4iavyXTw?autoplay=1&rel=0&modestbranding=1"
+                    title={language === "es" ? "Testimonios Free Voice Academy" : "Testimonianze Free Voice Academy"}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
                     onEnded={() => setPlayingVideo(false)}
-                  >
-                    <source src={language === "es" ? "/testimonials/compilation-video-es.mp4" : "/testimonials/compilation-video.mp4"} type="video/mp4" />
-                    <source src={language === "es" ? "/testimonials/compilation-video-es.webm" : "/testimonials/compilation-video.webm"} type="video/webm" />
-                  </video>
+                  />
                 ) : (
                   <>
                     <img
