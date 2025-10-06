@@ -37,12 +37,12 @@ function getDatabaseConfig() {
 }
 
 // Lazy pool initialization to avoid build-time issues
-let pool: Pool | null = null
+let poolInstance: Pool | null = null
 
-function getPool(): Pool {
-  if (!pool) {
+function getPoolInstance(): Pool {
+  if (!poolInstance) {
     const dbConfig = getDatabaseConfig()
-    pool = new Pool({
+    poolInstance = new Pool({
       ...dbConfig,
       // Connection pool settings optimized for non-SSL connections
       max: 20, // Maximum number of clients in the pool
@@ -52,14 +52,18 @@ function getPool(): Pool {
       query_timeout: 60000, // 60 second query timeout
     })
   }
-  return pool
+  return poolInstance
 }
 
-export { getPool as pool }
+// Export a pool-like object that delegates to the lazy-initialized instance
+export const pool = {
+  connect: () => getPoolInstance().connect(),
+  query: (text: string, params?: any[]) => getPoolInstance().query(text, params),
+  end: () => getPoolInstance().end()
+}
 
 export async function initializeDatabase() {
-  const poolInstance = getPool()
-  const client = await poolInstance.connect()
+  const client = await pool.connect()
   try {
     // Create workshops table
     await client.query(`
@@ -258,8 +262,7 @@ export async function initializeDatabase() {
 }
 
 export async function seedInitialData() {
-  const poolInstance = getPool()
-  const client = await poolInstance.connect()
+  const client = await pool.connect()
   try {
     // Insert default admin user
     const hashedPassword = await require('bcryptjs').hash('K9mR7nQ2vX8pL5wY', 12)

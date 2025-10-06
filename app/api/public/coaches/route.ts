@@ -3,8 +3,7 @@ import { pool } from '@/lib/database'
 
 export async function GET() {
   try {
-    const poolInstance = pool() // Call the function to get pool instance
-    const client = await poolInstance.connect()
+    const client = await pool.connect()
     try {
       const result = await client.query(`
         SELECT * FROM coaches 
