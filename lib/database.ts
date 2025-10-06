@@ -1,12 +1,13 @@
 import { Pool } from 'pg'
 
-// Simple database configuration for SSL-disabled setup
+// Database configuration
 function getDatabaseConfig() {
   let connectionString = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
   
   console.log('🔗 Database connection setup (SSL disabled):')
   console.log('   NODE_ENV:', process.env.NODE_ENV)
   console.log('   Connection string length:', connectionString.length)
+  console.log('   Connection string first 50 chars:', connectionString.substring(0, 50))
   
   // Skip SSL during build with dummy URL
   if (connectionString.includes('dummy')) {
@@ -29,6 +30,7 @@ function getDatabaseConfig() {
   connectionString = connectionString.replace(/[&?]sslmode=prefer/g, '')
   
   console.log('   SSL explicitly disabled in connection string')
+  console.log('   Final connection string first 50 chars:', connectionString.substring(0, 50))
   
   return {
     connectionString,
@@ -38,14 +40,30 @@ function getDatabaseConfig() {
 
 // Simple direct pool - avoid lazy loading complications
 const dbConfig = getDatabaseConfig()
-const pool = new Pool({
-  ...dbConfig,
+
+// Parse the connection string manually to ensure correct parsing
+const url = new URL(dbConfig.connectionString)
+const poolConfig = {
+  user: url.username,
+  password: url.password,
+  host: url.hostname,
+  port: parseInt(url.port) || 5432,
+  database: url.pathname.slice(1), // Remove leading slash
+  ssl: false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
   statement_timeout: 60000,
   query_timeout: 60000,
-})
+}
+
+console.log('🔗 Pool config extracted:')
+console.log('   Host:', poolConfig.host)
+console.log('   Port:', poolConfig.port)
+console.log('   Database:', poolConfig.database)
+console.log('   User:', poolConfig.user)
+
+const pool = new Pool(poolConfig)
 
 export { pool }
 
