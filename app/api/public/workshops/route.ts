@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { Pool } from 'pg'
 
+// Force dynamic rendering - don't static generate this API route
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   console.log('🚀 WORKSHOPS API: Starting request')
   console.log('🚀 WORKSHOPS API: NODE_ENV =', process.env.NODE_ENV)

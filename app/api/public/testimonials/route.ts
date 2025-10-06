@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { pool } from '@/lib/database'
 
+// Force dynamic rendering - don't static generate this API route
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     // Skip database connection during build if dummy URL is set
