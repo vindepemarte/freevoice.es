@@ -8,7 +8,8 @@ export async function GET() {
       return NextResponse.json({ testimonials: [] })
     }
     
-    const client = await pool.connect()
+    const poolInstance = pool() // Call the function to get pool instance
+    const client = await poolInstance.connect()
     try {
       const result = await client.query(`
         SELECT * FROM testimonials 

@@ -36,21 +36,30 @@ function getDatabaseConfig() {
   }
 }
 
-const dbConfig = getDatabaseConfig()
-const pool = new Pool({
-  ...dbConfig,
-  // Connection pool settings optimized for non-SSL connections
-  max: 20, // Maximum number of clients in the pool
-  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-  connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
-  statement_timeout: 60000, // 60 second statement timeout
-  query_timeout: 60000, // 60 second query timeout
-})
+// Lazy pool initialization to avoid build-time issues
+let pool: Pool | null = null
 
-export { pool }
+function getPool(): Pool {
+  if (!pool) {
+    const dbConfig = getDatabaseConfig()
+    pool = new Pool({
+      ...dbConfig,
+      // Connection pool settings optimized for non-SSL connections
+      max: 20, // Maximum number of clients in the pool
+      idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+      connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
+      statement_timeout: 60000, // 60 second statement timeout
+      query_timeout: 60000, // 60 second query timeout
+    })
+  }
+  return pool
+}
+
+export { getPool as pool }
 
 export async function initializeDatabase() {
-  const client = await pool.connect()
+  const poolInstance = getPool()
+  const client = await poolInstance.connect()
   try {
     // Create workshops table
     await client.query(`
@@ -249,7 +258,8 @@ export async function initializeDatabase() {
 }
 
 export async function seedInitialData() {
-  const client = await pool.connect()
+  const poolInstance = getPool()
+  const client = await poolInstance.connect()
   try {
     // Insert default admin user
     const hashedPassword = await require('bcryptjs').hash('K9mR7nQ2vX8pL5wY', 12)
