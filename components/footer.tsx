@@ -2,10 +2,23 @@
 
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { useDynamicContent } from "@/hooks/use-dynamic-content"
 import Image from "next/image"
 
 export function Footer() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  const { getContent } = useDynamicContent()
+  
+  // Get dynamic content with fallbacks
+  const dynamicDescription = getContent('footer', 'description', language as 'it' | 'es')
+  const dynamicWhatsApp = getContent('contact', 'whatsapp', language as 'it' | 'es')
+  const dynamicEmail = getContent('contact', 'email', language as 'it' | 'es')
+  const dynamicAddress = getContent('contact', 'address', language as 'it' | 'es')
+  
+  const footerDescription = dynamicDescription || t.footer.description
+  const contactWhatsApp = dynamicWhatsApp || '+34697798991'
+  const contactEmail = dynamicEmail || 'info@freevoice.es'
+  const contactAddress = dynamicAddress || 'Tenerife, España'
 
   return (
     <footer className="bg-transparent border-t border-[#9852A7]/20 backdrop-blur-sm">
@@ -28,7 +41,7 @@ export function Footer() {
                 FREE VOICE
               </span>
             </div>
-            <p className="text-white/80 text-sm leading-relaxed max-w-md mx-auto md:mx-0">{t.footer.description}</p>
+            <p className="text-white/80 text-sm leading-relaxed max-w-md mx-auto md:mx-0">{footerDescription}</p>
             <div className="flex space-x-4 justify-center md:justify-start">
               <a href="#" className="text-white/60 hover:text-[#F02A30] transition-colors">
                 <Facebook className="h-5 w-5" />
@@ -49,27 +62,27 @@ export function Footer() {
               <li className="flex items-center justify-center md:justify-end space-x-4">
                 <Mail className="h-5 w-5 text-[#F02A30] flex-shrink-0 md:order-2 md:ml-4" />
                 <a
-                  href="mailto:info@freevoice.es"
+                  href={`mailto:${contactEmail}`}
                   className="text-white/80 hover:text-[#F02A30] transition-colors text-sm md:order-1"
                 >
-                  info@freevoice.es
+                  {contactEmail}
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-end space-x-4">
                 <Phone className="h-5 w-5 text-[#F02A30] flex-shrink-0 md:order-2 md:ml-4" />
                 <a
-                  href="https://wa.me/34697798991"
+                  href={`https://wa.me/${contactWhatsApp.replace(/[^0-9]/g, '')}`}
                   className="text-white/80 hover:text-[#F02A30] transition-colors text-sm md:order-1"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  +34 697 79 89 91
+                  {contactWhatsApp}
                 </a>
               </li>
               <li className="flex items-start justify-center md:justify-end space-x-4">
                 <MapPin className="h-5 w-5 text-[#F02A30] flex-shrink-0 mt-0.5 md:order-2 md:ml-4" />
                 <span className="text-white/80 text-sm md:order-1">
-                  Tenerife, España
+                  {contactAddress}
                 </span>
               </li>
             </ul>

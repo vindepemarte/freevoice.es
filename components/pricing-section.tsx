@@ -6,31 +6,32 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check, Star, Clock, AlertTriangle, MessageCircle, Calendar, MapPin, Users, Utensils, Smartphone, Heart, Eye, X } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { useDynamicContent } from "@/hooks/use-dynamic-content"
+import { useWorkshopDates } from "@/hooks/use-workshop-dates"
+import { Workshop } from "@/lib/workshop-dates"
 import { BookingForm } from "@/components/booking-form"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-interface Workshop {
-  id: number
-  title_it: string
-  title_es: string
-  description_it: string
-  description_es: string
-  price: number
-  date: string
-  location: string
-  instructors: string
-  max_participants: number
-  is_active: boolean
-  is_popular: boolean
+interface WorkshopWithItinerary extends Workshop {
+  itinerary_it?: string
+  itinerary_es?: string
 }
 
 export function PricingSection() {
   const { t, language } = useLanguage()
+  const { getContent } = useDynamicContent()
+  const { nextWorkshopText } = useWorkshopDates(language as 'es' | 'it')
   const [isVisible, setIsVisible] = useState(false)
-  const [workshops, setWorkshops] = useState<Workshop[]>([])
+  const [workshops, setWorkshops] = useState<WorkshopWithItinerary[]>([])
   const [loading, setLoading] = useState(true)
   const sectionRef = useRef<HTMLDivElement>(null)
+
+  // Get dynamic WhatsApp number with fallback
+  const dynamicWhatsApp = getContent('contact', 'whatsapp', language as 'it' | 'es')
+  const contactWhatsApp = dynamicWhatsApp || '+34697798991'
+  // Clean the WhatsApp number for the URL (remove non-numeric characters except +)
+  const cleanWhatsApp = contactWhatsApp.replace(/[^0-9+]/g, '')
 
   // Load workshops from database
   useEffect(() => {
@@ -102,6 +103,19 @@ export function PricingSection() {
     return () => observer.disconnect()
   }, [])
 
+  // Function to format date without timezone issues
+  const formatWorkshopDate = (dateString: string) => {
+    // Extract just the date part to avoid timezone conversion issues
+    const datePart = dateString.split('T')[0] // Gets "2025-10-12" from "2025-10-12T22:00:00.000Z"
+    const [year, month, day] = datePart.split('-')
+    
+    if (language === 'es') {
+      return `${day}/${month}/${year}`
+    } else {
+      return `${day}/${month}/${year}`
+    }
+  }
+
   // Convert workshops to pricing plans format
   const workshopPlans = workshops.map(workshop => ({
     id: `workshop${workshop.id}`,
@@ -109,7 +123,7 @@ export function PricingSection() {
     price: `€${workshop.price}`,
     period: language === 'es' ? 'por persona' : 'a persona',
     duration: language === "es" ? "8 horas" : "8 ore",
-    date: new Date(workshop.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'it-IT'),
+    date: formatWorkshopDate(workshop.date),
     location: workshop.location,
     instructors: workshop.instructors,
     description: language === 'es' ? workshop.description_es : workshop.description_it,
@@ -118,7 +132,7 @@ export function PricingSection() {
       language === "es" ? "Técnicas vocales avanzadas" : "Tecniche vocali avanzate", 
       language === "es" ? "Trabajo de respiración" : "Lavoro sulla respirazione",
       language === "es" ? "Ambiente natural inspirador" : "Ambiente naturale ispirante",
-      language === "es" ? "Grupos pequeños (máx 10 personas)" : "Piccoli gruppi (max 10 persone)",
+      language === "es" ? `Grupos pequeños (máx ${workshop.max_participants} personas)` : `Piccoli gruppi (max ${workshop.max_participants} persone)`,
       language === "es" ? "Certificado de participación" : "Certificato di partecipazione"
     ],
     popular: workshop.is_popular,
@@ -154,6 +168,29 @@ export function PricingSection() {
 
   const plansToShow = workshopPlans.length > 0 ? workshopPlans : fallbackWorkshops
 
+  // Function to parse itinerary from database
+  const parseItinerary = (itineraryText: string) => {
+    if (!itineraryText) return []
+    
+    return itineraryText.split('\n').map(line => {
+      const match = line.match(/^(\d{1,2}:\d{2})\s*-\s*(.+)$/)
+      if (match) {
+        return {
+          time: match[1],
+          title: match[2],
+          description: ''
+        }
+      }
+      return null
+    }).filter(Boolean)
+  }
+
+  // Function to get itinerary for current language
+  const getWorkshopItinerary = (workshop: WorkshopWithItinerary) => {
+    const itineraryText = language === 'es' ? workshop.itinerary_es : workshop.itinerary_it
+    return parseItinerary(itineraryText || '')
+  }
+
   const handleWhatsAppBooking = (workshopType: string, workshopName: string, price: string) => {
     const workshopDetails = {
       workshop1day: language === "es" ? `Taller de 1 Día - Octubre (€90)` : `Workshop di 1 Giorno - Ottobre (€90)`,
@@ -178,7 +215,7 @@ Per favore, inviatemi maggiori informazioni su:
 
 Grazie!`
 
-    const whatsappUrl = `https://wa.me/34697798991?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 
@@ -204,17 +241,17 @@ Grazie!`
             </div>
             <div className="flex items-center space-x-2">
               <Clock className="h-3 w-3 xs:h-4 xs:w-4" />
-              <span className="text-xs xs:text-sm text-center">{t.pricing.nextRetreat}</span>
+              <span className="text-xs xs:text-sm text-center">{nextWorkshopText || t.pricing.nextRetreat}</span>
             </div>
           </div>
         </div>
 
-        {/* Single workshop layout - centered */}
-        <div className="flex justify-center max-w-5xl mx-auto px-3 xs:px-4 sm:px-6">
+        {/* Multiple workshops layout with proper spacing */}
+        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6 lg:gap-8 max-w-6xl mx-auto px-3 xs:px-4 sm:px-6">
           {plansToShow.map((plan, index) => (
             <Card
               key={index}
-              className={`relative bg-white/98 border-[#9852A7]/20 flex flex-col shadow-lg transition-all duration-500 hover:shadow-2xl rounded-2xl max-w-md w-full ${
+              className={`relative bg-white/98 border-[#9852A7]/20 flex flex-col shadow-lg transition-all duration-500 hover:shadow-2xl rounded-2xl w-[280px] xs:w-[320px] sm:w-[400px] lg:w-[500px] max-w-[280px] xs:max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] mx-auto ${
                 plan.popular 
                   ? "ring-2 ring-[#F02A30] shadow-xl scale-100 hover:scale-105 animate-fade-in-up" 
                   : "hover:shadow-xl hover:scale-105 animate-fade-in-up"
@@ -263,11 +300,13 @@ Grazie!`
                 </ul>
 
                 <div className="flex flex-col gap-3">
-                  <BookingForm workshopType={plan.id as "workshop1day"}>
+                  <BookingForm workshopType={plan.id}>
                     <Button
-                      className="w-full py-3 xs:py-4 sm:py-5 font-semibold text-base xs:text-lg sm:text-xl transition-all duration-300 hover:scale-105 rounded-xl bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse"
+                      className="w-full px-4 xs:px-6 sm:px-8 py-3 xs:py-4 sm:py-5 font-semibold text-sm xs:text-base sm:text-lg lg:text-xl transition-all duration-300 hover:scale-105 rounded-xl bg-[#F02A30] hover:bg-[#F02A30]/90 text-white shadow-lg hover:shadow-xl animate-pulse leading-tight"
                     >
-                      {language === "es" ? `Reservar ${plan.name}` : `Prenota ${plan.name}`}
+                      <span className="text-center break-words">
+                        {language === "es" ? `Reservar ${plan.name}` : `Prenota ${plan.name}`}
+                      </span>
                     </Button>
                   </BookingForm>
                   
@@ -360,75 +399,64 @@ Grazie!`
                             </h3>
                             
                             <div className="space-y-4">
-                              <div className="flex items-start space-x-4">
-                                <div className="bg-[#F02A30] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
-                                  09:30
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-[#3C318D]">
-                                    {language === "es" ? "Llegada y bienvenida" : "Arrivo e accoglienza"}
-                                  </h4>
-                                  <p className="text-[#3C318D]/70 text-sm">
-                                    {language === "es" ? "Momento de conexión y preparación" : "Momento di connessione e preparazione"}
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-start space-x-4">
-                                <div className="bg-[#9852A7] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
-                                  10:00
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-[#3C318D]">
-                                    {language === "es" ? "Inicio de actividades" : "Inizio attività"}
-                                  </h4>
-                                  <p className="text-[#3C318D]/70 text-sm">
-                                    {language === "es" ? "Conexión con la naturaleza y respiración, ejercicios vocales al aire libre" : "Connessione con la natura e il respiro, esercizi vocali all'aria aperta"}
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-start space-x-4">
-                                <div className="bg-[#3C318D] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
-                                  13:00
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-[#3C318D]">
-                                    {language === "es" ? "Pausa para el almuerzo" : "Pausa pranzo"}
-                                  </h4>
-                                  <p className="text-[#3C318D]/70 text-sm">
-                                    {language === "es" ? "Tiempo para la alimentación consciente" : "Tempo per l'alimentazione consapevole"}
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-start space-x-4">
-                                <div className="bg-[#F02A30] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
-                                  14:00
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-[#3C318D]">
-                                    {language === "es" ? "Sesión de tarde" : "Sessione pomeridiana"}
-                                  </h4>
-                                  <p className="text-[#3C318D]/70 text-sm">
-                                    {language === "es" ? "Experiencias de canto en movimiento, exploraciones expresivas" : "Esperienze di canto in movimento, esplorazioni espressive"}
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-start space-x-4">
-                                <div className="bg-[#9852A7] text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center">
-                                  18:30
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-[#3C318D]">
-                                    {language === "es" ? "Círculo de cierre" : "Cerchio di chiusura"}
-                                  </h4>
-                                  <p className="text-[#3C318D]/70 text-sm">
-                                    {language === "es" ? "Compartir, reflexión y celebración" : "Condivisioni, riflessione e celebrazione"}
-                                  </p>
-                                </div>
-                              </div>
+                              {(() => {
+                                // Get the first active workshop's itinerary
+                                const workshop = workshops.find(w => w.is_active)
+                                if (!workshop) {
+                                  // Fallback to hardcoded schedule if no workshop data
+                                  const fallbackSchedule = [
+                                    { time: "09:30", title: language === "es" ? "Llegada y bienvenida" : "Arrivo e accoglienza", description: language === "es" ? "Momento de conexión y preparación" : "Momento di connessione e preparazione" },
+                                    { time: "10:00", title: language === "es" ? "Inicio de actividades" : "Inizio attività", description: language === "es" ? "Conexión con la naturaleza y respiración, ejercicios vocales al aire libre" : "Connessione con la natura e il respiro, esercizi vocali all'aria aperta" },
+                                    { time: "13:00", title: language === "es" ? "Pausa para el almuerzo" : "Pausa pranzo", description: language === "es" ? "Tiempo para la alimentación consciente" : "Tempo per l'alimentazione consapevole" },
+                                    { time: "14:00", title: language === "es" ? "Sesión de tarde" : "Sessione pomeridiana", description: language === "es" ? "Experiencias de canto en movimiento, exploraciones expresivas" : "Esperienze di canto in movimento, esplorazioni espressive" },
+                                    { time: "18:30", title: language === "es" ? "Círculo de cierre" : "Cerchio di chiusura", description: language === "es" ? "Compartir, reflexión y celebración" : "Condivisioni, riflessione e celebrazione" }
+                                  ]
+                                  return fallbackSchedule.map((item, index) => (
+                                    <div key={index} className="flex items-start space-x-4">
+                                      <div className={`text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center ${
+                                        index % 4 === 0 ? 'bg-[#F02A30]' : 
+                                        index % 4 === 1 ? 'bg-[#9852A7]' : 
+                                        index % 4 === 2 ? 'bg-[#3C318D]' : 'bg-[#F02A30]'
+                                      }`}>
+                                        {item.time}
+                                      </div>
+                                      <div>
+                                        <h4 className="font-semibold text-[#3C318D]">
+                                          {item.title}
+                                        </h4>
+                                        <p className="text-[#3C318D]/70 text-sm">
+                                          {item.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ))
+                                }
+                                
+                                // Use database itinerary
+                                const itinerary = getWorkshopItinerary(workshop)
+                                return itinerary.map((item: any, index: number) => (
+                                  <div key={index} className="flex items-start space-x-4">
+                                    <div className={`text-white px-3 py-1 rounded-lg text-sm font-medium min-w-[80px] text-center ${
+                                      index % 4 === 0 ? 'bg-[#F02A30]' : 
+                                      index % 4 === 1 ? 'bg-[#9852A7]' : 
+                                      index % 4 === 2 ? 'bg-[#3C318D]' : 'bg-[#F02A30]'
+                                    }`}>
+                                      {item.time}
+                                    </div>
+                                    <div>
+                                      <h4 className="font-semibold text-[#3C318D]">
+                                        {item.title}
+                                      </h4>
+                                      {item.description && (
+                                        <p className="text-[#3C318D]/70 text-sm">
+                                          {item.description}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))
+                              })()
+                              }
                             </div>
                           </div>
                         </TabsContent>
@@ -534,7 +562,7 @@ Grazie!`
             </div>
           </div>
           <p className={`text-white/80 mt-4 xs:mt-6 transition-all duration-500 hover:scale-105 text-sm xs:text-base sm:text-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ animationDelay: '2000ms' }}>
-            <strong>{t.pricing.nextRetreat}</strong>
+            <strong>{nextWorkshopText || t.pricing.nextRetreat}</strong>
           </p>
         </div>
       </div>

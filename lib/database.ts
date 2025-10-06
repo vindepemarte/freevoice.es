@@ -155,6 +155,52 @@ export async function initializeDatabase() {
         IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='itinerary_es') THEN
           ALTER TABLE workshops ADD COLUMN itinerary_es TEXT;
         END IF;
+        
+        -- Add overview content columns to workshops table if they don't exist
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_title_it') THEN
+          ALTER TABLE workshops ADD COLUMN overview_title_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_title_es') THEN
+          ALTER TABLE workshops ADD COLUMN overview_title_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_description_it') THEN
+          ALTER TABLE workshops ADD COLUMN overview_description_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_description_es') THEN
+          ALTER TABLE workshops ADD COLUMN overview_description_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_expectations_it') THEN
+          ALTER TABLE workshops ADD COLUMN overview_expectations_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_expectations_es') THEN
+          ALTER TABLE workshops ADD COLUMN overview_expectations_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_target_audience_it') THEN
+          ALTER TABLE workshops ADD COLUMN overview_target_audience_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='overview_target_audience_es') THEN
+          ALTER TABLE workshops ADD COLUMN overview_target_audience_es TEXT;
+        END IF;
+        
+        -- Add details content columns to workshops table if they don't exist
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_what_to_bring_it') THEN
+          ALTER TABLE workshops ADD COLUMN details_what_to_bring_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_what_to_bring_es') THEN
+          ALTER TABLE workshops ADD COLUMN details_what_to_bring_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_phone_policy_it') THEN
+          ALTER TABLE workshops ADD COLUMN details_phone_policy_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_phone_policy_es') THEN
+          ALTER TABLE workshops ADD COLUMN details_phone_policy_es TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_facilitators_it') THEN
+          ALTER TABLE workshops ADD COLUMN details_facilitators_it TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='workshops' AND column_name='details_facilitators_es') THEN
+          ALTER TABLE workshops ADD COLUMN details_facilitators_es TEXT;
+        END IF;
       END $$;
     `)
 
@@ -215,8 +261,18 @@ export async function seedInitialData() {
 
     // Insert default workshop data based on new pricing structure
     await client.query(`
-      INSERT INTO workshops (title_it, title_es, description_it, description_es, price, date, location, instructors, is_popular, itinerary_it, itinerary_es) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+      INSERT INTO workshops (
+        title_it, title_es, description_it, description_es, price, date, location, instructors, is_popular, 
+        itinerary_it, itinerary_es,
+        overview_title_it, overview_title_es,
+        overview_description_it, overview_description_es,
+        overview_expectations_it, overview_expectations_es,
+        overview_target_audience_it, overview_target_audience_es,
+        details_what_to_bring_it, details_what_to_bring_es,
+        details_phone_policy_it, details_phone_policy_es,
+        details_facilitators_it, details_facilitators_es
+      ) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25) 
       ON CONFLICT DO NOTHING
     `, [
       'Workshop di 1 Giorno - Ottobre',
@@ -229,7 +285,23 @@ export async function seedInitialData() {
       'Jenny Rospo & Marian Giral Vega',
       true,
       '9:30 - Arrivo e registrazione\n10:00 - Cerchio di apertura e presentazioni\n10:30 - Riscaldamento vocale e respirazione\n11:30 - Pausa\n12:00 - Tecnica vocale e improvvisazione\n13:30 - Pausa pranzo\n14:30 - Lavoro corporeo e movimento\n15:30 - Connessione voce-corpo\n16:30 - Pausa\n17:00 - Performance individuale\n18:00 - Cerchio di chiusura\n18:30 - Saluti finali',
-      '9:30 - Llegada y registro\n10:00 - Círculo de apertura y presentaciones\n10:30 - Calentamiento vocal y respiración\n11:30 - Descanso\n12:00 - Técnica vocal e improvisación\n13:30 - Pausa para almorzar\n14:30 - Trabajo corporal y movimiento\n15:30 - Conexión voz-cuerpo\n16:30 - Descanso\n17:00 - Performance individual\n18:00 - Círculo de cierre\n18:30 - Despedidas finales'
+      '9:30 - Llegada y registro\n10:00 - Círculo de apertura y presentaciones\n10:30 - Calentamiento vocal y respiración\n11:30 - Descanso\n12:00 - Técnica vocal e improvisación\n13:30 - Pausa para almorzar\n14:30 - Trabajo corporal y movimiento\n15:30 - Conexión voz-cuerpo\n16:30 - Descanso\n17:00 - Performance individual\n18:00 - Círculo de cierre\n18:30 - Despedidas finales',
+      // Overview content
+      '🎶 Canta per ritrovarti, cresci per risuonare con la tua anima autentica',
+      '🎶 Canta para reencontrarte, crece para resonar con tu alma auténtica',
+      'Una giornata speciale per ritrovare la tua voce... e qualcosa di più profondo. Un\'esperienza dedicata a chi canta, a chi parla, a chi crea con la voce – e a chi desidera riconnettersi con la propria essenza attraverso il suono, il respiro, il corpo e il silenzio.',
+      'Un día especial para redescubrir tu voz... y algo más profundo. Una experiencia dedicada a quienes cantan, hablan, crean con la voz - y a quienes desean reconectarse con su esencia a través del sonido, la respiración, el cuerpo y el silencio.',
+      'Un percorso esperienziale tra voce, corpo, respiro e emozione, pensato per chi desidera usare la voce in modo più autentico, libero e consapevole.',
+      'Un recorrido experiencial entre voz, cuerpo, respiración y emoción, pensado para quienes desean usar la voz de manera más auténtica, libre y consciente.',
+      'A chi canta, per passione o professione\nA chi lavora con la voce\nA chi vuole ritrovare la propria voce autentica',
+      'Quienes cantan, por pasión o profesión\nProfesionales de la voz\nQuienes buscan su voz auténtica',
+      // Details content
+      'Un cuore aperto e la voglia di metterti in gioco\nAcqua o tisana\nUn block notes per annotare ispirazioni\nAbiti comodi\nPranzo semplice e leggero',
+      'Un corazón abierto y ganas de experimentar\nAgua o infusión\nCuaderno para inspiraciones\nRopa cómoda\nAlmuerzo ligero y saludable',
+      'Durante le attività, i telefoni resteranno in silenzio. Un piccolo rituale per tornare in presenza e riscoprire la potenza dell\'ascolto vero.',
+      'Durante las actividades, los teléfonos permanecerán en silencio. Un pequeño ritual para volver a la presencia y redescubrir el poder de la escucha verdadera.',
+      'Jenny Rospo - Cantante vocal coach\nMarian Giral Vega - Ballerina Insegnante Body brain\nFreddy Martin - Cantante Showman\n\nTre anime appassionate, pronte a sostenervi con competenza, presenza e cuore.',
+      'Jenny Rospo - Cantante vocal coach\nMarian Giral Vega - Bailarina, profesora Body-brain\nFreddy Martin - Cantante showman\n\nTres almas apasionadas, listas para acompañarte con competencia, presencia y corazón.'
     ])
 
     // Insert default coaches

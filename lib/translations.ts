@@ -24,7 +24,7 @@ export const translations = {
       bookSpot: "Reserva Tu Lugar Ahora",
       scheduleCall: "Hablar por WhatsApp",
       rating: "4.9/5 de más de 200 estudiantes",
-      nextRetreat: "Próximo workshop: 12 de octubre 2025",
+      nextRetreat: "Próximo workshop:", // Dynamic date will be appended
       spotsLeft: "¡Solo 3 lugares disponibles!",
       urgentBooking: "RESERVA AHORA - ÚLTIMOS LUGARES",
       whatsappMessage: "¡Hola! Quiero más información sobre el workshop Free Voice. ¿Quedan lugares disponibles?"
@@ -90,7 +90,7 @@ export const translations = {
         price: "€90",
         period: "experiencia de 8 horas",
         duration: "10:00 - 18:00",
-        date: "12 de octubre 2025",
+        // Note: date is now dynamically loaded from database
         location: "Healing Garden, Guía de Isora", 
         instructors: "Jenny Rospo & Marian Giral Vega",
         description: "Experiencia inmersiva de 8 horas para descubrir tu voz auténtica a través de técnicas vocales, trabajo corporal y respiración",
@@ -124,7 +124,7 @@ export const translations = {
         }
       },
       included: "¿Qué Incluye el Workshop?",
-      nextRetreat: "Próximo workshop: 12 de octubre 2025",
+      nextRetreat: "Próximo workshop:", // Dynamic date will be appended
       spotsLeft: "¡Plazas limitadas disponibles!",
     },
     // FAQ
@@ -156,7 +156,7 @@ export const translations = {
         "Únete a cientos de estudiantes que han descubierto su voz auténtica y transformado sus vidas. Tu viaje hacia la libertad vocal comienza aquí.",
       bookSpot: "Reserva Tu Lugar Ahora",
       scheduleCall: "Programar una Llamada",
-      limited: "Lugares limitados disponibles • Próximo workshop: 12 de octubre, 2025",
+      limited: "Lugares limitados disponibles • Próximo workshop: TBD", // Date will be dynamic
       happyStudents: "Estudiantes Felices",
       averageRating: "Calificación Promedio",
       daysMaxExperience: "Días Máx Experiencia",
@@ -215,7 +215,7 @@ export const translations = {
       bookSpot: "Prenota Il Tuo Posto Ora",
       scheduleCall: "Parla su WhatsApp",
       rating: "4.9/5 da oltre 200 studenti",
-      nextRetreat: "Prossimo workshop: 12 ottobre, 2025",
+      nextRetreat: "Prossimo workshop:", // Dynamic date will be appended
       spotsLeft: "Solo 3 posti disponibili!",
       urgentBooking: "PRENOTA ORA - ULTIMI POSTI",
       whatsappMessage: "Ciao! Voglio maggiori informazioni sul workshop Free Voice. Ci sono ancora posti disponibili?"
@@ -281,7 +281,7 @@ export const translations = {
         price: "€90",
         period: "esperienza di 8 ore",
         duration: "10:00 - 18:00",
-        date: "12 ottobre 2025",
+        // Note: date is now dynamically loaded from database
         location: "Healing Garden, Guía de Isora",
         instructors: "Jenny Rospo & Marian Giral Vega",
         description: "Esperienza immersiva di 8 ore per scoprire la tua voce autentica attraverso tecniche vocali, lavoro corporeo e respirazione",
@@ -315,7 +315,7 @@ export const translations = {
         }
       },
       included: "Cosa Include il Workshop?",
-      nextRetreat: "Prossimo workshop: 12 ottobre 2025",
+      nextRetreat: "Prossimo workshop:", // Dynamic date will be appended
       spotsLeft: "¡Posti limitati disponibili!",
     },
     // FAQ
@@ -347,7 +347,7 @@ export const translations = {
         "Unisciti a centinaia di studenti che hanno scoperto la loro voce autentica e trasformato le loro vite. Il tuo viaggio verso la libertà vocale inizia qui.",
       bookSpot: "Prenota Il Tuo Posto Ora",
       scheduleCall: "Programma una Chiamata",
-      limited: "Posti limitati disponibili • Prossimo workshop: 12 ottobre, 2025",
+      limited: "Posti limitati disponibili • Prossimo workshop: TBD", // Date will be dynamic
       happyStudents: "Studenti Felici",
       averageRating: "Valutazione Media",
       daysMaxExperience: "Giorni Max Esperienza",

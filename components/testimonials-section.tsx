@@ -219,8 +219,8 @@ export function TestimonialsSection() {
                     poster="/testimonials-compilation-thumbnail.jpg"
                     onEnded={() => setPlayingVideo(false)}
                   >
-                    <source src="/testimonials/compilation-video.mp4" type="video/mp4" />
-                    <source src="/testimonials/compilation-video.webm" type="video/webm" />
+                    <source src={language === "es" ? "/testimonials/compilation-video-es.mp4" : "/testimonials/compilation-video.mp4"} type="video/mp4" />
+                    <source src={language === "es" ? "/testimonials/compilation-video-es.webm" : "/testimonials/compilation-video.webm"} type="video/webm" />
                   </video>
                 ) : (
                   <>
@@ -268,16 +268,14 @@ export function TestimonialsSection() {
                     {/* Testimonial Quote */}
                     <div className="mb-2 xs:mb-3 min-h-[60px] xs:min-h-[80px]">
                       <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
-                        "{testimonialsToShow[currentTestimonialIndex]?.content_it && testimonialsToShow[currentTestimonialIndex]?.content_es 
-                          ? (language === 'es' ? testimonialsToShow[currentTestimonialIndex]?.content_es : testimonialsToShow[currentTestimonialIndex]?.content_it)
-                          : (testimonialsToShow[currentTestimonialIndex]?.content?.[language] || '')}"
+                        "{getTestimonialContent(testimonialsToShow[currentTestimonialIndex], language as 'it' | 'es', 'content')}"
                       </p>
                     </div>
 
                     {/* Student Info */}
                     <div className="flex items-center space-x-2">
                       <img
-                        src={testimonialsToShow[currentTestimonialIndex]?.image_url || testimonialsToShow[currentTestimonialIndex]?.image || "/placeholder.svg"}
+                        src={getTestimonialImage(testimonialsToShow[currentTestimonialIndex])}
                         alt={testimonialsToShow[currentTestimonialIndex]?.name || ''}
                         className="w-6 h-6 xs:w-8 xs:h-8 rounded-full object-cover border-2 border-[#9852A7]/20 flex-shrink-0"
                       />
@@ -286,10 +284,10 @@ export function TestimonialsSection() {
                         <p className="text-gray-600 text-xs xs:text-xs truncate">
                           {typeof testimonialsToShow[currentTestimonialIndex]?.role === 'string' 
                             ? testimonialsToShow[currentTestimonialIndex]?.role 
-                            : (language === 'es' ? testimonialsToShow[currentTestimonialIndex]?.role?.es : testimonialsToShow[currentTestimonialIndex]?.role?.it) || testimonialsToShow[currentTestimonialIndex]?.role
+                            : (language === 'es' ? (testimonialsToShow[currentTestimonialIndex]?.role as any)?.es : (testimonialsToShow[currentTestimonialIndex]?.role as any)?.it) || testimonialsToShow[currentTestimonialIndex]?.role
                           }
                         </p>
-                        <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.location || ''}</p>
+                        <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{(testimonialsToShow[currentTestimonialIndex] as any)?.location || ''}</p>
                       </div>
                       
                       {/* Workshop Badge */}
@@ -327,9 +325,7 @@ export function TestimonialsSection() {
             {/* Duplicate testimonials for seamless loop */}
             {[...testimonialsToShow, ...testimonialsToShow].map((testimonial, index) => {
               const originalIndex = index % testimonialsToShow.length
-              const content = testimonial.content_it && testimonial.content_es 
-                ? (language === 'es' ? testimonial.content_es : testimonial.content_it)
-                : (testimonial.content?.[language] || '')
+              const content = getTestimonialContent(testimonial, language as 'it' | 'es', 'content')
               
               return (
                 <Card 
@@ -344,11 +340,11 @@ export function TestimonialsSection() {
                 >
                   <CardContent className="p-6">
                     {/* Video Testimonial (if available) */}
-                    {testimonial.video_url && (
+                    {(testimonial as any).video_url && (
                       <div className="mb-4">
                         <ResponsiveVideoPlayer 
-                          src={testimonial.video_url}
-                          poster={testimonial.image_url}
+                          src={(testimonial as any).video_url}
+                          poster={getTestimonialImage(testimonial)}
                           className="h-32 rounded-lg"
                           controls={true}
                           preload="metadata"
@@ -376,7 +372,7 @@ export function TestimonialsSection() {
                     {/* Student Info */}
                     <div className="flex items-center space-x-3">
                       <img
-                        src={testimonial.image_url || testimonial.image || "/placeholder.svg"}
+                        src={getTestimonialImage(testimonial)}
                         alt={testimonial.name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-[#9852A7]/20"
                       />
@@ -385,7 +381,7 @@ export function TestimonialsSection() {
                         <p className="text-gray-600 text-xs">
                           {typeof testimonial.role === 'string' 
                             ? testimonial.role 
-                            : (language === 'es' ? testimonial.role?.es : testimonial.role?.it) || testimonial.role
+                            : (language === 'es' ? (testimonial.role as any)?.es : (testimonial.role as any)?.it) || testimonial.role
                           }
                         </p>
                       </div>
@@ -398,7 +394,7 @@ export function TestimonialsSection() {
                   </CardContent>
                 </Card>
               )
-            })}}
+            })}
           </div>
         </div>
         

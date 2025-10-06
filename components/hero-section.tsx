@@ -4,11 +4,22 @@ import { Button } from "@/components/ui/button"
 import { Star, Clock, AlertCircle } from "lucide-react"
 import { BookingForm } from "@/components/booking-form"
 import { useLanguage } from "@/hooks/use-language"
+import { useDynamicContent } from "@/hooks/use-dynamic-content"
+import { useWorkshopDates } from "@/hooks/use-workshop-dates"
 import { useEffect, useState } from "react"
 
 export function HeroSection() {
   const { t, language } = useLanguage()
+  const { getContent, isLoading } = useDynamicContent()
+  const { nextWorkshopText } = useWorkshopDates(language as 'es' | 'it')
   const [isVisible, setIsVisible] = useState(false)
+
+  // Get dynamic content with fallbacks to static translations
+  const dynamicTitle = getContent('hero', 'title', language as 'it' | 'es')
+  const dynamicSubtitle = getContent('hero', 'subtitle', language as 'it' | 'es')
+  
+  const heroTitle = dynamicTitle || t.hero.title
+  const heroSubtitle = dynamicSubtitle || t.hero.subtitle
 
   useEffect(() => {
     setIsVisible(true)
@@ -53,14 +64,14 @@ return (
           <h1 className={`text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 xs:mb-4 sm:mb-6 text-balance leading-tight drop-shadow-lg transition-all duration-1200 ease-out delay-600 px-2 xs:px-0 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`} style={{ fontFamily: '"Bebas Neue", "Arial Black", sans-serif' }}>
-            {t.hero.title}
+            {heroTitle}
           </h1>
 
           {/* Emotional Outcome Focused Subheadline */}
           <p className={`text-base xs:text-lg sm:text-xl md:text-2xl text-white/90 mb-4 xs:mb-6 sm:mb-8 max-w-3xl mx-auto text-pretty leading-relaxed drop-shadow-md transition-all duration-1000 ease-out delay-800 px-2 xs:px-0 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
-            {t.hero.subtitle}
+            {heroSubtitle}
           </p>
 
           {/* Primary CTA - Single Focus */}
@@ -99,7 +110,7 @@ return (
               <span className="font-medium text-sm xs:text-base">{t.hero.rating}</span>
             </div>
             <div className="hidden sm:block w-px h-6 bg-white/30" />
-            <span className="font-medium text-sm xs:text-base text-center">{t.hero.nextRetreat}</span>
+            <span className="font-medium text-sm xs:text-base text-center">{nextWorkshopText || t.hero.nextRetreat}</span>
           </div>
         </div>
       </div>

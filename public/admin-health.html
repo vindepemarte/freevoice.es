@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Voice Admin Health Check</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #3C318D, #9852A7, #F02A30);
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .healthy { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button {
+            background: #F02A30;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 8px;
+        }
+        button:hover { background: #d41e2a; }
+        pre { background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+        .loading { opacity: 0.6; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🏥 Free Voice Admin Health Check</h1>
+        <p>This diagnostic tool will help identify and fix admin panel issues.</p>
+        
+        <div id="status" class="status warning">
+            <strong>⏳ Checking system status...</strong>
+        </div>
+        
+        <div id="results" style="display: none;">
+            <h3>📊 Diagnostic Results</h3>
+            <pre id="diagnostic-data"></pre>
+        </div>
+        
+        <div id="actions" style="display: none;">
+            <h3>🔧 Quick Fixes</h3>
+            <button onclick="setupDatabase()">🗄️ Setup Database</button>
+            <button onclick="clearBrowserData()">🧹 Clear Browser Data</button>
+            <button onclick="testAdminAccess()">🔐 Test Admin Access</button>
+        </div>
+        
+        <div id="action-results"></div>
+    </div>
+
+    <script>
+        async function checkHealth() {
+            try {
+                const response = await fetch('/api/admin/diagnostic');
+                const data = await response.json();
+                
+                document.getElementById('diagnostic-data').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('results').style.display = 'block';
+                
+                const statusEl = document.getElementById('status');
+                if (data.status === 'healthy') {
+                    statusEl.className = 'status healthy';
+                    statusEl.innerHTML = '<strong>✅ System is healthy!</strong>';
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.innerHTML = `<strong>⚠️ Issues found:</strong><br>${data.errors.join('<br>')}`;
+                    document.getElementById('actions').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('status').innerHTML = `<strong>❌ Network error:</strong> ${error.message}`;
+                document.getElementById('status').className = 'status error';
+                document.getElementById('actions').style.display = 'block';
+            }
+        }
+        
+        async function setupDatabase() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '⏳ Setting up...';
+            
+            try {
+                const response = await fetch('/api/admin/diagnostic', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'setup' })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('action-results').innerHTML = 
+                        '<div class="status healthy">✅ Database setup completed!</div>';
+                    setTimeout(checkHealth, 1000);
+                } else {
+                    document.getElementById('action-results').innerHTML = 
+                        `<div class="status error">❌ Setup failed: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('action-results').innerHTML = 
+                    `<div class="status error">❌ Network error: ${error.message}</div>`;
+            } finally {
+                button.disabled = false;
+                button.textContent = '🗄️ Setup Database';
+            }
+        }
+        
+        function clearBrowserData() {
+            // Clear localStorage and sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            document.getElementById('action-results').innerHTML = 
+                '<div class="status healthy">✅ Browser data cleared! Please refresh the page.</div>';
+        }
+        
+        function testAdminAccess() {
+            window.open('/admin', '_blank');
+        }
+        
+        // Auto-run health check on load
+        checkHealth();
+    </script>
+</body>
+</html>

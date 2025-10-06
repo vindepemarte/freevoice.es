@@ -39,12 +39,13 @@ export function JennyIntroSection() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-balance" style={{ fontFamily: '"Bebas Neue", "Arial Black", sans-serif' }}>
-              {language === "es" ? "Conoce a Jenny Rospo" : "Incontra Jenny Rospo"}
+              {language === "es" ? "Conoce a Free Voice Academy" : "Incontra La Free Voice Academy"}
             </h2>
             <p className="text-lg text-white/80 max-w-2xl mx-auto text-pretty">
               {language === "es"
-                ? "Nuestra fundadora y coach principal te presenta el workshop Free Voice Academy"
-                : "La nostra fondatrice e coach principale ti presenta el workshop Free Voice Academy"}
+
+                ? "Nuestro equipo de coaches expertos te presenta Free Voice Academy"
+                : "Il nostro team di coach esperti ti presenta Free Voice Academy"}
             </p>
           </div>
 
@@ -55,7 +56,7 @@ export function JennyIntroSection() {
                   // Video Thumbnail
                   <div className="absolute inset-0 flex items-center justify-center">
                     <img
-                      src="/professional-female-vocal-coach-singing.jpg"
+                      src="/free-voice-logo.png"
                       alt="Jenny Rospo"
                       className="w-full h-full object-cover"
                     />
@@ -81,12 +82,12 @@ export function JennyIntroSection() {
                       onPause={handleVideoPause}
                       poster="/professional-female-vocal-coach-singing.jpg"
                     >
-                      <source src="/jenny-intro-video.mp4" type="video/mp4" />
-                      <source src="/jenny-intro-video.webm" type="video/webm" />
+                      <source src={language === "es" ? "/jenny-intro-video-es.mp4" : "/jenny-intro-video.mp4"} type="video/mp4" />
+                      <source src={language === "es" ? "/jenny-intro-video-es.webm" : "/jenny-intro-video.webm"} type="video/webm" />
                       {/* Fallback for browsers that don't support video */}
                       <img 
                         src="/professional-female-vocal-coach-singing.jpg" 
-                        alt="Jenny Rospo introducing Free Voice Academy" 
+                        alt="The team introducing Free Voice Academy" 
                         className="w-full h-full object-cover"
                       />
                     </video>
@@ -109,12 +110,13 @@ export function JennyIntroSection() {
 
               <div className="p-8">
                 <h3 className="text-2xl font-semibold text-card-foreground mb-4">
-                  Jenny Rospo - {language === "es" ? "Fundadora" : "Fondatrice"}
+                  Free Voice Academy - {language === "es" ? "Workshop" : "Workshop"}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {language === "es"
-                    ? "En este video, Jenny te explica la filosofía detrás de Free Voice Academy y cómo nuestro enfoque único puede ayudarte a descubrir tu voz auténtica y transformar tu vida a través del poder de la expresión vocal."
-                    : "In questo video, Jenny ti spiega la filosofia dietro Free Voice Academy e come il nostro approccio unico può aiutarti a scoprire la tua voce autentica e trasformare la tua vita attraverso il potere dell'espressione vocale."}
+
+                    ? "En este video, descubre cómo nuestros workshops transforman vidas a través de técnicas innovadoras de expresión vocal. Conoce la experiencia única que te espera y cómo puedes liberar tu voz auténtica en un ambiente seguro y profesional."
+                    : "In questo video, scopri come i nostri workshop trasformano le vite attraverso tecniche innovative di espressione vocale. Conosci l'esperienza unica che ti aspetta e come puoi liberare la tua voce autentica in un ambiente sicuro e professionale."}
                 </p>
               </div>
             </CardContent>

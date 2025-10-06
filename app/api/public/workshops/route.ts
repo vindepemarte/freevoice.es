@@ -10,7 +10,14 @@ export async function GET() {
         WHERE is_active = true
         ORDER BY created_at DESC
       `)
-      return NextResponse.json({ workshops: result.rows })
+      
+      // Fix timezone issue for date display - format date without timezone conversion
+      const workshops = result.rows.map(workshop => ({
+        ...workshop,
+        date: workshop.date ? `${workshop.date.getFullYear()}-${String(workshop.date.getMonth() + 1).padStart(2, '0')}-${String(workshop.date.getDate()).padStart(2, '0')}` : null
+      }))
+      
+      return NextResponse.json({ workshops })
     } finally {
       client.release()
     }
