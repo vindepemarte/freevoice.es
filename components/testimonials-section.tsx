@@ -26,7 +26,7 @@ const testimonials = [
     },
     image: "/happy-female-singer-headshot.jpg",
     videoThumbnail: "/female-singer-testimonial-video.jpg",
-    videoSrc: "/testimonials/maria-rodriguez-testimonial.mp4", // Add your video here
+    videoSrc: "/testimonials/laura.mp4", // Add your video here
     content: {
       es: "En solo 3 días descubrí mi voz auténtica. El workshop de Free Voice me transformó completamente. Ahora canto con una confianza que nunca había sentido. ¡Vale cada euro!",
       it: "In soli 3 giorni ho scoperto la mia voce autentica. Il workshop di Free Voice mi ha trasformato completamente. Ora canto con una fiducia che non avevo mai sentito. Vale ogni euro!",
@@ -48,7 +48,7 @@ const testimonials = [
     },
     image: "/confident-male-actor-headshot.jpg",
     videoThumbnail: "/male-actor-testimonial-video.jpg",
-    videoSrc: "/testimonials/alessandro-bianchi-testimonial.mp4", // Add your video here
+    videoSrc: "/testimonials/marco.mp4", // Add your video here
     content: {
       es: "Jenny y su equipo son increíbles. El trabajo corporal + vocal cambio mi actuación para siempre. Mis directores notan la diferencia inmediatamente. Mejor inversión de mi carrera.",
       it: "Jenny e il suo team sono incredibili. Il lavoro corporeo + vocale ha cambiato la mia recitazione per sempre. I miei registi notano subito la differenza. Miglior investimento della mia carriera.",
@@ -70,7 +70,7 @@ const testimonials = [
     },
     image: "/professional-female-music-teacher.jpg",
     videoThumbnail: "/female-music-teacher-testimonial-video.jpg",
-    videoSrc: "/testimonials/carmen-gutierrez-testimonial.mp4", // Add your video here
+    videoSrc: "/testimonials/cristina.mp4", // Add your video here
     content: {
       es: "Era escéptica al principio. Pero este workshop supera toda expectativa. La conexión cuerpo-voz-nutrición es REAL. Ahora enseño estos principios a mis estudiantes.",
       it: "Ero scettica all'inizio. Ma questo workshop supera ogni aspettativa. La connessione corpo-voce-nutrizione è REALE. Ora insegno questi principi ai miei studenti.",

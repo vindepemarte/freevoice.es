@@ -13,17 +13,17 @@ To add testimonial videos to your FreeVoice.es website, place your video files i
 Based on the current testimonials data, you need to add these video files:
 
 1. **María Rodríguez (Spanish Singer)**
-   - File: `/public/testimonials/maria-rodriguez-testimonial.mp4`
+   - File: `/public/testimonials/laura.mp4`
    - Duration: 2:34
    - Workshop: 3-day program
 
 2. **Alessandro Bianchi (Italian Actor)**
-   - File: `/public/testimonials/alessandro-bianchi-testimonial.mp4`
+   - File: `/public/testimonials/marco.mp4`
    - Duration: 3:12
    - Workshop: 3-day program
 
 3. **Carmen Gutiérrez (Spanish Music Teacher)**
-   - File: `/public/testimonials/carmen-gutierrez-testimonial.mp4`
+   - File: `/public/testimonials/cristina.mp4`
    - Duration: 2:58
    - Workshop: 1-day program
 
@@ -41,9 +41,9 @@ Based on the current testimonials data, you need to add these video files:
 Follow this pattern: `[first-name]-[last-name]-testimonial.mp4`
 
 Examples:
-- `maria-rodriguez-testimonial.mp4`
-- `alessandro-bianchi-testimonial.mp4`
-- `carmen-gutierrez-testimonial.mp4`
+- `laura.mp4`
+- `marco.mp4`
+- `cristina.mp4`
 
 ## Adding New Testimonials
 
@@ -86,7 +86,7 @@ Use FFmpeg to optimize your videos:
 
 ```bash
 # MP4 (H.264) - Primary format
-ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k maria-rodriguez-testimonial.mp4
+ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k laura.mp4
 
 # WebM (VP9) - Secondary format (optional)
 ffmpeg -i input.mov -c:v libvpx-vp9 -crf 30 -b:v 0 -c:a libopus -b:a 128k maria-rodriguez-testimonial.webm

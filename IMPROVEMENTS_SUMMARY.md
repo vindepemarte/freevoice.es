@@ -26,9 +26,9 @@
   - Auto-return to thumbnail when video ends
 - **Video Directory**: `/public/testimonials/`
 - **Files Expected**:
-  - `maria-rodriguez-testimonial.mp4`
-  - `alessandro-bianchi-testimonial.mp4`
-  - `carmen-gutierrez-testimonial.mp4`
+  - `laura.mp4`
+  - `marco.mp4`
+  - `cristina.mp4`
 
 ### ✅ 4. Improved Element Spacing
 - **What**: Enhanced spacing throughout the design

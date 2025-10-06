@@ -389,7 +389,7 @@ export async function seedInitialData() {
         content_it: 'Il workshop ha cambiato la mia vita! Ho scoperto una voce che non sapevo di avere.',
         content_es: 'El workshop cambió mi vida! Descubrí una voz que no sabía que tenía.',
         image_url: '/happy-female-singer-headshot.jpg',
-        video_url: '/testimonials/maria-rodriguez-testimonial.mp4',
+        video_url: '/testimonials/laura.mp4',
         is_approved: true,
         display_order: 1
       },
@@ -399,7 +399,7 @@ export async function seedInitialData() {
         content_it: 'Jenny e il suo team sono incredibili. Il lavoro corporeo + vocale ha cambiato la mia recitazione per sempre.',
         content_es: 'Jenny y su equipo son increíbles. El trabajo corporal + vocal cambio mi actuación para siempre.',
         image_url: '/confident-male-actor-headshot.jpg',
-        video_url: '/testimonials/alessandro-bianchi-testimonial.mp4',
+        video_url: '/testimonials/marco.mp4',
         is_approved: true,
         display_order: 2
       },
@@ -409,7 +409,7 @@ export async function seedInitialData() {
         content_it: 'Ero scettica all\'inizio. Ma questo workshop supera ogni aspettativa. Ora insegno questi principi ai miei studenti.',
         content_es: 'Era escéptica al principio. Pero este workshop supera toda expectativa. Ahora enseño estos principios a mis estudiantes.',
         image_url: '/professional-female-music-teacher.jpg',
-        video_url: '/testimonials/carmen-gutierrez-testimonial.mp4',
+        video_url: '/testimonials/cristina.mp4',
         is_approved: true,
         display_order: 3
       }

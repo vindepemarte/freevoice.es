@@ -3,14 +3,14 @@
 Place your testimonial videos here following this naming convention:
 
 ## Required Videos:
-- `maria-rodriguez-testimonial.mp4` (2:34 duration)
-- `alessandro-bianchi-testimonial.mp4` (3:12 duration)  
-- `carmen-gutierrez-testimonial.mp4` (2:58 duration)
+- `laura.mp4` (2:34 duration)
+- `marco.mp4` (3:12 duration)  
+- `cristina.mp4` (2:58 duration)
 
 ## Optional WebM versions for better browser compatibility:
 - `maria-rodriguez-testimonial.webm`
-- `alessandro-bianchi-testimonial.webm`
-- `carmen-gutierrez-testimonial.webm`
+- `marco.webm`
+- `cristina.webm`
 
 ## Video Specifications:
 - Format: MP4 (H.264) or WebM (VP9)
