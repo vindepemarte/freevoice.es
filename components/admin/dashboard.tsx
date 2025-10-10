@@ -106,12 +106,12 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
   const loadData = async () => {
     setIsLoading(true)
     try {
-      // Temporarily use public endpoints to show data while session issue is fixed
+      // Use admin endpoints to get all data including unapproved items
       const [workshopsRes, testimonialsRes, coachesRes, contentRes] = await Promise.all([
-        fetch('/api/public/workshops'),
-        fetch('/api/public/testimonials'),
-        fetch('/api/public/coaches'),
-        fetch('/api/public/content')
+        fetch('/api/admin/workshops'),
+        fetch('/api/admin/testimonials'),
+        fetch('/api/admin/coaches'),
+        fetch('/api/admin/content')
       ])
 
       if (workshopsRes.ok) {
@@ -582,6 +582,14 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                 <div>
                   <CardTitle className="text-gray-800">Gestione Testimonianze</CardTitle>
                   <p className="text-sm text-gray-600 mt-1">Gestisci le testimonianze dei clienti con supporto video</p>
+                  <div className="flex gap-2 mt-2">
+                    <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300">
+                      In attesa: {testimonials.filter(t => !t.is_approved).length}
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-800 border-green-300">
+                      Approvate: {testimonials.filter(t => t.is_approved).length}
+                    </Badge>
+                  </div>
                 </div>
                 <Button 
                   onClick={() => {
@@ -596,8 +604,21 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="space-y-4">
-                  {testimonials.map((testimonial) => (
-                    <div key={testimonial.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                  {/* Show pending testimonials first */}
+                  {testimonials
+                    .sort((a, b) => {
+                      // Pending first, then by display_order
+                      if (a.is_approved === b.is_approved) {
+                        return (a.display_order || 999) - (b.display_order || 999)
+                      }
+                      return a.is_approved ? 1 : -1
+                    })
+                    .map((testimonial) => (
+                    <div key={testimonial.id} className={`border rounded-lg p-4 transition-colors ${
+                      testimonial.is_approved 
+                        ? 'border-gray-200 bg-gray-50/50 hover:bg-gray-50'
+                        : 'border-yellow-300 bg-yellow-50/50 hover:bg-yellow-50'
+                    }`}>
                       <div className="flex justify-between items-start">
                         <div className="flex items-start space-x-4 flex-1">
                           <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden border border-gray-300">
@@ -621,7 +642,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                               {testimonial.is_approved ? (
                                 <Badge className="bg-green-500 text-white shadow-sm">Approvato</Badge>
                               ) : (
-                                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-300">In attesa</Badge>
+                                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-300 animate-pulse">In attesa di approvazione</Badge>
                               )}
                             </div>
                             <p className="text-sm text-gray-600 mb-2">
@@ -1165,8 +1186,80 @@ function WorkshopForm({ formData, setFormData }: any) {
 }
 
 function TestimonialForm({ formData, setFormData }: any) {
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState("")
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setUploadError("")
+
+    try {
+      const imageFormData = new FormData()
+      imageFormData.append('image', file)
+      imageFormData.append('type', 'testimonial')
+
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: imageFormData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setFormData({...formData, image_url: data.imageUrl})
+      } else {
+        const error = await response.json()
+        setUploadError(error.error || 'Upload failed')
+      }
+    } catch (error) {
+      setUploadError('Upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setUploadError("")
+
+    try {
+      const videoFormData = new FormData()
+      videoFormData.append('video', file)
+      videoFormData.append('type', 'testimonial')
+
+      const response = await fetch('/api/upload/video', {
+        method: 'POST',
+        body: videoFormData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setFormData({...formData, video_url: data.videoUrl})
+      } else {
+        const error = await response.json()
+        setUploadError(error.error || 'Upload failed')
+      }
+    } catch (error) {
+      setUploadError('Upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {uploadError && (
+        <Alert className="md:col-span-2 border-red-300 bg-red-50">
+          <AlertTriangle className="h-4 w-4 text-red-600" />
+          <AlertDescription className="text-red-800">{uploadError}</AlertDescription>
+        </Alert>
+      )}
+      
       <div>
         <Label className="text-gray-800 font-medium mb-2 block">Nome</Label>
         <Input 
@@ -1206,24 +1299,62 @@ function TestimonialForm({ formData, setFormData }: any) {
           rows={4}
         />
       </div>
-      <div>
-        <Label className="text-gray-800 font-medium mb-2 block">URL Video</Label>
-        <Input 
-          value={formData.video_url || ''} 
-          onChange={(e) => setFormData({...formData, video_url: e.target.value})}
-          className="border-gray-400 focus:border-[#3C318D] focus:ring-[#3C318D] text-gray-900 bg-white placeholder:text-gray-500"
-          placeholder="/testimonials/nome-video.mp4"
-        />
+      
+      {/* Video Upload */}
+      <div className="md:col-span-2">
+        <Label className="text-gray-800 font-medium mb-2 block">Carica Video (Opzionale)</Label>
+        <div className="flex items-center gap-4">
+          <Input
+            type="file"
+            accept="video/*"
+            onChange={handleVideoUpload}
+            disabled={uploading}
+            className="border-gray-400"
+          />
+          {formData.video_url && (
+            <Badge className="bg-green-500 text-white">
+              <CheckCircle className="h-3 w-3 mr-1" />
+              Caricato
+            </Badge>
+          )}
+        </div>
+        {formData.video_url && (
+          <p className="text-sm text-gray-600 mt-1">{formData.video_url}</p>
+        )}
       </div>
-      <div>
-        <Label className="text-gray-800 font-medium mb-2 block">URL Immagine</Label>
-        <Input 
-          value={formData.image_url || ''} 
-          onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-          className="border-gray-400 focus:border-[#3C318D] focus:ring-[#3C318D] text-gray-900 bg-white placeholder:text-gray-500"
-          placeholder="/immagine-profilo.jpg"
-        />
+
+      {/* Image Upload */}
+      <div className="md:col-span-2">
+        <Label className="text-gray-800 font-medium mb-2 block">Carica Immagine</Label>
+        <div className="flex items-center gap-4">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            disabled={uploading}
+            className="border-gray-400"
+          />
+          {formData.image_url && (
+            <div className="flex items-center gap-2">
+              <Image
+                src={formData.image_url}
+                alt="Preview"
+                width={50}
+                height={50}
+                className="rounded-lg border-2 border-gray-300 object-cover"
+              />
+              <Badge className="bg-green-500 text-white">
+                <CheckCircle className="h-3 w-3 mr-1" />
+                Caricato
+              </Badge>
+            </div>
+          )}
+        </div>
+        {formData.image_url && (
+          <p className="text-sm text-gray-600 mt-1">{formData.image_url}</p>
+        )}
       </div>
+
       <div>
         <Label className="text-gray-800 font-medium mb-2 block">Ordine di visualizzazione</Label>
         <Input 
@@ -1247,8 +1378,49 @@ function TestimonialForm({ formData, setFormData }: any) {
 }
 
 function CoachForm({ formData, setFormData }: any) {
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState("")
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setUploadError("")
+
+    try {
+      const imageFormData = new FormData()
+      imageFormData.append('image', file)
+      imageFormData.append('type', 'coach')
+
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: imageFormData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setFormData({...formData, image_url: data.imageUrl})
+      } else {
+        const error = await response.json()
+        setUploadError(error.error || 'Upload failed')
+      }
+    } catch (error) {
+      setUploadError('Upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {uploadError && (
+        <Alert className="md:col-span-2 border-red-300 bg-red-50">
+          <AlertTriangle className="h-4 w-4 text-red-600" />
+          <AlertDescription className="text-red-800">{uploadError}</AlertDescription>
+        </Alert>
+      )}
+      
       <div>
         <Label className="text-gray-800 font-medium mb-2 block">Nome</Label>
         <Input 
@@ -1259,15 +1431,35 @@ function CoachForm({ formData, setFormData }: any) {
           required
         />
       </div>
+      
+      {/* Image Upload */}
       <div>
-        <Label className="text-gray-800 font-medium mb-2 block">URL Immagine</Label>
-        <Input 
-          value={formData.image_url || ''} 
-          onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-          className="border-gray-400 focus:border-[#3C318D] focus:ring-[#3C318D] text-gray-900 bg-white placeholder:text-gray-500"
-          placeholder="/coach-immagine.jpg"
-        />
+        <Label className="text-gray-800 font-medium mb-2 block">Carica Immagine</Label>
+        <div className="flex items-center gap-4">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            disabled={uploading}
+            className="border-gray-400"
+          />
+          {formData.image_url && (
+            <div className="flex items-center gap-2">
+              <Image
+                src={formData.image_url}
+                alt="Preview"
+                width={40}
+                height={40}
+                className="rounded-lg border-2 border-gray-300 object-cover"
+              />
+            </div>
+          )}
+        </div>
+        {formData.image_url && (
+          <p className="text-xs text-gray-600 mt-1 truncate">{formData.image_url}</p>
+        )}
       </div>
+      
       <div>
         <Label className="text-gray-800 font-medium mb-2 block">Titolo (Italiano)</Label>
         <Input 

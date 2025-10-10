@@ -15,6 +15,26 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  openGraph: {
+    title: "Free Voice Academy - Libera Tu Voz, Transforma Tu Vida",
+    description: "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
+    images: [
+      {
+        url: "/logo_with_bg.png",
+        width: 1200,
+        height: 1200,
+        alt: "Free Voice Academy Logo",
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Voice Academy - Libera Tu Voz, Transforma Tu Vida",
+    description: "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
+    images: ["/logo_with_bg.png"],
+  },
 }
 
 export default function RootLayout({

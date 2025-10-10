@@ -10,6 +10,7 @@ import { BookingForm } from "@/components/booking-form"
 import { usePublicTestimonials } from "@/hooks/use-admin-data"
 import { ResponsiveVideoPlayer } from "@/components/ui/responsive-video-player"
 import { getTestimonialContent, getTestimonialImage } from '@/lib/testimonial-utils'
+import { TestimonialSubmissionForm } from "@/components/testimonial-submission-form"
 
 // Generate random rating between 4.8 and 5.0
 const generateRandomRating = () => {
@@ -406,11 +407,14 @@ export function TestimonialsSection() {
               ? "Únete a más de 200 estudiantes que ya transformaron sus vidas" 
               : "Unisciti a più di 200 studenti che hanno già trasformato le loro vite"}
           </p>
-          <BookingForm>
-            <Button className="bg-[#F02A30] hover:bg-[#F02A30]/90 text-white font-bold px-6 xs:px-8 py-3 xs:py-4 text-base xs:text-lg rounded-full shadow-xl hover:scale-105 transition-all duration-300 w-full xs:w-auto">
-              {language === "es" ? "Reserva tu Transformación" : "Prenota la tua Trasformazione"}
-            </Button>
-          </BookingForm>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <BookingForm>
+              <Button className="bg-[#F02A30] hover:bg-[#F02A30]/90 text-white font-bold px-6 xs:px-8 py-3 xs:py-4 text-base xs:text-lg rounded-full shadow-xl hover:scale-105 transition-all duration-300 w-full xs:w-auto">
+                {language === "es" ? "Reserva tu Transformación" : "Prenota la tua Trasformazione"}
+              </Button>
+            </BookingForm>
+            <TestimonialSubmissionForm />
+          </div>
         </div>
       </div>
     </section>
