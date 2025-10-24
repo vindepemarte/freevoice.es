@@ -1223,25 +1223,27 @@ function TestimonialForm({ formData, setFormData }: any) {
     setUploadError("")
 
     try {
-      const videoFormData = new FormData()
-      videoFormData.append('video', file)
-      videoFormData.append('type', 'testimonial')
+      // Validate file size (max 50MB)
+      const maxSize = 50 * 1024 * 1024
+      if (file.size > maxSize) {
+        setUploadError('Video troppo grande. Massimo 50MB.')
+        setUploading(false)
+        return
+      }
 
-      const response = await fetch('/api/upload/video', {
-        method: 'POST',
-        body: videoFormData,
+      // Convert video to base64 directly
+      const reader = new FileReader()
+      const base64 = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        // Set both video_data (base64) and video_url (for compatibility)
-        setFormData({...formData, video_data: data.videoUrl, video_url: data.videoUrl})
-      } else {
-        const error = await response.json()
-        setUploadError(error.error || 'Upload failed')
-      }
+      // Set both video_data (base64) and video_url (for compatibility)
+      setFormData({...formData, video_data: base64, video_url: base64})
     } catch (error) {
-      setUploadError('Upload failed')
+      console.error('Error converting video:', error)
+      setUploadError('Failed to process video')
     } finally {
       setUploading(false)
     }
@@ -1314,8 +1316,8 @@ function TestimonialForm({ formData, setFormData }: any) {
             </Badge>
           )}
         </div>
-        {formData.video_url && (
-          <p className="text-sm text-gray-600 mt-1">{formData.video_url}</p>
+        {formData.video_url && formData.video_url.startsWith('data:') && (
+          <p className="text-sm text-green-600 mt-1">✓ Video caricato come base64</p>
         )}
       </div>
 
@@ -1346,8 +1348,8 @@ function TestimonialForm({ formData, setFormData }: any) {
             </div>
           )}
         </div>
-        {formData.image_url && (
-          <p className="text-sm text-gray-600 mt-1">{formData.image_url}</p>
+        {formData.image_url && formData.image_url.startsWith('data:') && (
+          <p className="text-sm text-green-600 mt-1">✓ Immagine caricata come base64</p>
         )}
       </div>
 
