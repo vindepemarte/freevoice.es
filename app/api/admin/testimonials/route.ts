@@ -21,7 +21,11 @@ export async function GET() {
     }
   } catch (error) {
     console.error('Error fetching testimonials:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error'
+    return NextResponse.json({ 
+      error: 'Failed to fetch testimonials',
+      details: errorMessage 
+    }, { status: 500 })
   }
 }
 
@@ -54,7 +58,7 @@ export async function POST(request: NextRequest) {
           is_approved, display_order
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *
-      `, [name, role, content_it, content_es, video_url, video_data, image_url, image_data, is_approved, display_order])
+      `, [name, role, content_it, content_es, video_url || null, video_data || null, image_url || null, image_data || null, is_approved, display_order])
 
       return NextResponse.json({ testimonial: result.rows[0] })
     } finally {
@@ -62,7 +66,11 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error creating testimonial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error'
+    return NextResponse.json({ 
+      error: 'Failed to create testimonial',
+      details: errorMessage 
+    }, { status: 500 })
   }
 }
 
@@ -97,7 +105,7 @@ export async function PUT(request: NextRequest) {
           updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
         RETURNING *
-      `, [id, name, role, content_it, content_es, video_url, video_data, image_url, image_data, is_approved, display_order])
+      `, [id, name, role, content_it, content_es, video_url || null, video_data || null, image_url || null, image_data || null, is_approved, display_order])
 
       if (result.rows.length === 0) {
         return NextResponse.json({ error: 'Testimonial not found' }, { status: 404 })
@@ -109,7 +117,11 @@ export async function PUT(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error updating testimonial:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error'
+    return NextResponse.json({ 
+      error: 'Failed to update testimonial',
+      details: errorMessage 
+    }, { status: 500 })
   }
 }
 
