@@ -1234,7 +1234,8 @@ function TestimonialForm({ formData, setFormData }: any) {
 
       if (response.ok) {
         const data = await response.json()
-        setFormData({...formData, video_url: data.videoUrl})
+        // Set both video_data (base64) and video_url (for compatibility)
+        setFormData({...formData, video_data: data.videoUrl, video_url: data.videoUrl})
       } else {
         const error = await response.json()
         setUploadError(error.error || 'Upload failed')

@@ -39,3 +39,16 @@ export function getTestimonialImage(testimonial: any) {
   // Fallback to image_url or image field
   return testimonial.image_url || testimonial.image || '/placeholder.svg'
 }
+
+// Utility function to safely get video URL
+export function getTestimonialVideo(testimonial: any) {
+  if (!testimonial) return null
+  
+  // Prioritize base64 video data from database
+  if (testimonial.video_data) {
+    return testimonial.video_data
+  }
+  
+  // Fallback to video_url field
+  return testimonial.video_url || null
+}

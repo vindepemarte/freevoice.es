@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { validateAdminSession } from '@/lib/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const allowedTypes = ['video/mp4', 'video/webm', 'video/mov', 'video/avi']
+    const allowedTypes = ['video/mp4', 'video/webm', 'video/mov', 'video/avi', 'video/quicktime']
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         { error: 'Invalid file type. Only MP4, WebM, MOV, and AVI are allowed.' },
@@ -36,28 +34,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create upload directory
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'videos', type || 'general')
-    await mkdir(uploadDir, { recursive: true })
-
-    // Generate unique filename
-    const timestamp = Date.now()
-    const fileExtension = path.extname(file.name)
-    const filename = `${timestamp}-${Math.random().toString(36).substring(2)}${fileExtension}`
-    const filepath = path.join(uploadDir, filename)
-
-    // Save file
+    // Convert video to base64
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    await writeFile(filepath, buffer)
-
-    // Return URL
-    const videoUrl = `/uploads/videos/${type || 'general'}/${filename}`
+    const base64 = buffer.toString('base64')
+    const videoData = `data:${file.type};base64,${base64}`
 
     return NextResponse.json({
       success: true,
-      videoUrl,
-      filename,
+      videoUrl: videoData, // Return base64 data URL
+      filename: file.name,
       size: file.size,
       type: file.type
     })

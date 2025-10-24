@@ -9,7 +9,7 @@ import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "@/components/booking-form"
 import { usePublicTestimonials } from "@/hooks/use-admin-data"
 import { ResponsiveVideoPlayer } from "@/components/ui/responsive-video-player"
-import { getTestimonialContent, getTestimonialImage } from '@/lib/testimonial-utils'
+import { getTestimonialContent, getTestimonialImage, getTestimonialVideo } from '@/lib/testimonial-utils'
 import { TestimonialSubmissionForm } from "@/components/testimonial-submission-form"
 
 // Generate random rating between 4.8 and 5.0
@@ -343,10 +343,10 @@ export function TestimonialsSection() {
                 >
                   <CardContent className="p-6">
                     {/* Video Testimonial (if available) */}
-                    {(testimonial as any).video_url && (
+                    {getTestimonialVideo(testimonial) && (
                       <div className="mb-4">
                         <ResponsiveVideoPlayer 
-                          src={(testimonial as any).video_url}
+                          src={getTestimonialVideo(testimonial)!}
                           poster={getTestimonialImage(testimonial)}
                           className="h-32 rounded-lg"
                           controls={true}

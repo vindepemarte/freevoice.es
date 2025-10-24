@@ -115,6 +115,7 @@ export async function initializeDatabase() {
         content_it TEXT,
         content_es TEXT,
         video_url TEXT,
+        video_data TEXT,
         image_url TEXT,
         image_data TEXT,
         is_approved BOOLEAN DEFAULT false,
