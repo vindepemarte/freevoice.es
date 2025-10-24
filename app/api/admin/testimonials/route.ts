@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
       content_es,
       video_url,
       image_url,
+      image_data,
       is_approved,
       display_order,
     } = body
@@ -48,11 +49,11 @@ export async function POST(request: NextRequest) {
     try {
       const result = await client.query(`
         INSERT INTO testimonials (
-          name, role, content_it, content_es, video_url, image_url,
+          name, role, content_it, content_es, video_url, image_url, image_data,
           is_approved, display_order
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *
-      `, [name, role, content_it, content_es, video_url, image_url, is_approved, display_order])
+      `, [name, role, content_it, content_es, video_url, image_url, image_data, is_approved, display_order])
 
       return NextResponse.json({ testimonial: result.rows[0] })
     } finally {
@@ -80,6 +81,7 @@ export async function PUT(request: NextRequest) {
       content_es,
       video_url,
       image_url,
+      image_data,
       is_approved,
       display_order,
     } = body
@@ -89,11 +91,11 @@ export async function PUT(request: NextRequest) {
       const result = await client.query(`
         UPDATE testimonials SET 
           name = $2, role = $3, content_it = $4, content_es = $5,
-          video_url = $6, image_url = $7, is_approved = $8, display_order = $9,
+          video_url = $6, image_url = $7, image_data = $8, is_approved = $9, display_order = $10,
           updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
         RETURNING *
-      `, [id, name, role, content_it, content_es, video_url, image_url, is_approved, display_order])
+      `, [id, name, role, content_it, content_es, video_url, image_url, image_data, is_approved, display_order])
 
       if (result.rows.length === 0) {
         return NextResponse.json({ error: 'Testimonial not found' }, { status: 404 })

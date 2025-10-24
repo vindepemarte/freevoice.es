@@ -31,5 +31,11 @@ export function getTestimonialContent(testimonial: any, language: Language, fiel
 export function getTestimonialImage(testimonial: any) {
   if (!testimonial) return '/placeholder.svg'
   
+  // Prioritize base64 image data from database
+  if (testimonial.image_data) {
+    return testimonial.image_data
+  }
+  
+  // Fallback to image_url or image field
   return testimonial.image_url || testimonial.image || '/placeholder.svg'
 }

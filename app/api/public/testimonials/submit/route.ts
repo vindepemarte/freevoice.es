@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
       content_it,
       content_es,
       image_url,
+      image_data,
     } = body
 
     // Validate required fields
@@ -30,11 +31,11 @@ export async function POST(request: NextRequest) {
       // Insert testimonial with is_approved = false by default
       const result = await client.query(`
         INSERT INTO testimonials (
-          name, role, content_it, content_es, image_url,
+          name, role, content_it, content_es, image_url, image_data,
           is_approved, display_order
-        ) VALUES ($1, $2, $3, $4, $5, false, 999)
+        ) VALUES ($1, $2, $3, $4, $5, $6, false, 999)
         RETURNING id
-      `, [name, role || '', content_it, content_es, image_url || null])
+      `, [name, role || '', content_it, content_es, image_url || null, image_data || null])
 
       return NextResponse.json({
         success: true,

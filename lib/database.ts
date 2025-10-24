@@ -116,6 +116,7 @@ export async function initializeDatabase() {
         content_es TEXT,
         video_url TEXT,
         image_url TEXT,
+        image_data TEXT,
         is_approved BOOLEAN DEFAULT false,
         display_order INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

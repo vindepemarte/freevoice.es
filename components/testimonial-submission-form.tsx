@@ -111,26 +111,16 @@ export function TestimonialSubmissionForm() {
     setError("")
 
     try {
-      let imageUrl = null
+      let imageData = null
 
-      // Upload image if provided
+      // Convert image to base64 if provided
       if (imageFile) {
-        const imageFormData = new FormData()
-        imageFormData.append('image', imageFile)
-        imageFormData.append('type', 'testimonial')
-        imageFormData.append('public', 'true')
-
-        const uploadResponse = await fetch('/api/upload/image', {
-          method: 'POST',
-          body: imageFormData,
+        const reader = new FileReader()
+        imageData = await new Promise<string>((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result as string)
+          reader.onerror = reject
+          reader.readAsDataURL(imageFile)
         })
-
-        if (uploadResponse.ok) {
-          const uploadData = await uploadResponse.json()
-          imageUrl = uploadData.imageUrl
-        } else {
-          throw new Error('Image upload failed')
-        }
       }
 
       // Submit testimonial
@@ -139,7 +129,7 @@ export function TestimonialSubmissionForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          image_url: imageUrl,
+          image_data: imageData,
         }),
       })
 

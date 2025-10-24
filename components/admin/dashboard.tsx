@@ -1197,24 +1197,19 @@ function TestimonialForm({ formData, setFormData }: any) {
     setUploadError("")
 
     try {
-      const imageFormData = new FormData()
-      imageFormData.append('image', file)
-      imageFormData.append('type', 'testimonial')
-
-      const response = await fetch('/api/upload/image', {
-        method: 'POST',
-        body: imageFormData,
+      // Convert image to base64
+      const reader = new FileReader()
+      const base64 = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        setFormData({...formData, image_url: data.imageUrl})
-      } else {
-        const error = await response.json()
-        setUploadError(error.error || 'Upload failed')
-      }
+      // Set both image_data (base64) and image_url (for compatibility)
+      setFormData({...formData, image_data: base64, image_url: base64})
     } catch (error) {
-      setUploadError('Upload failed')
+      console.error('Error converting image:', error)
+      setUploadError('Failed to process image')
     } finally {
       setUploading(false)
     }

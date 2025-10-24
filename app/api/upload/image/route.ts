@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { pool } from '@/lib/database'
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,6 +7,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get('image') as File
     const type = formData.get('type') as string // 'testimonial', 'coach', etc.
     const isPublic = formData.get('public') === 'true' // Check if it's a public upload
+    const testimonialId = formData.get('testimonialId') as string // Optional: ID of testimonial to update
 
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
@@ -31,28 +31,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create upload directory
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'images', type || 'general')
-    await mkdir(uploadDir, { recursive: true })
-
-    // Generate unique filename
-    const timestamp = Date.now()
-    const fileExtension = path.extname(file.name)
-    const filename = `${timestamp}-${Math.random().toString(36).substring(2)}${fileExtension}`
-    const filepath = path.join(uploadDir, filename)
-
-    // Save file
+    // Convert file to base64
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    await writeFile(filepath, buffer)
+    const base64 = buffer.toString('base64')
+    const imageData = `data:${file.type};base64,${base64}`
 
-    // Return URL
-    const imageUrl = `/uploads/images/${type || 'general'}/${filename}`
+    // If testimonialId is provided, update the database record
+    if (testimonialId && type === 'testimonial') {
+      const client = await pool.connect()
+      try {
+        await client.query(
+          'UPDATE testimonials SET image_data = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+          [imageData, testimonialId]
+        )
+      } finally {
+        client.release()
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      imageUrl,
-      filename,
+      imageUrl: imageData, // Return base64 data URL
+      filename: file.name,
       size: file.size,
       type: file.type
     })
