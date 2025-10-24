@@ -8,6 +8,7 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://freevoice.es'),
   title: "Free Voice Academy - Libera Tu Voz, Transforma Tu Vida",
   description:
     "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
@@ -18,12 +19,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Voice Academy - Libera Tu Voz, Transforma Tu Vida",
     description: "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
+    url: 'https://freevoice.es',
+    siteName: 'Free Voice Academy',
     images: [
       {
-        url: "/logo_with_bg.png",
+        url: "https://freevoice.es/logo_with_bg.png",
         width: 1200,
         height: 1200,
         alt: "Free Voice Academy Logo",
+        type: "image/png",
       },
     ],
     locale: "es_ES",
@@ -33,7 +37,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Free Voice Academy - Libera Tu Voz, Transforma Tu Vida",
     description: "Academia de coaching vocal con retiros inmersivos en Tenerife. Descubre tu voz auténtica con nuestros coaches expertos.",
-    images: ["/logo_with_bg.png"],
+    images: ["https://freevoice.es/logo_with_bg.png"],
+    creator: "@freevoiceacademy",
   },
 }
 

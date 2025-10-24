@@ -215,7 +215,10 @@ export function TestimonialsSection() {
                 {playingVideo ? (
                   <iframe
                     className="w-full h-full rounded-lg"
-                    src="https://www.youtube.com/embed/bnT4iavyXTw?autoplay=1&rel=0&modestbranding=1"
+                    src={language === "es" 
+                      ? "https://www.youtube.com/embed/5gA6ewP0nQk?autoplay=1&rel=0&modestbranding=1"
+                      : "https://www.youtube.com/embed/bnT4iavyXTw?autoplay=1&rel=0&modestbranding=1"
+                    }
                     title={language === "es" ? "Testimonios Free Voice Academy" : "Testimonianze Free Voice Academy"}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

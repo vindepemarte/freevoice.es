@@ -56,7 +56,10 @@ export function JennyIntroSection() {
                   <div className="absolute inset-0">
                     <iframe
                       className="w-full h-full"
-                      src="https://www.youtube.com/embed/htH-nZSfKO0?autoplay=1&rel=0&modestbranding=1"
+                      src={language === "es" 
+                        ? "https://www.youtube.com/embed/aTEZkprxE9A?autoplay=1&rel=0&modestbranding=1"
+                        : "https://www.youtube.com/embed/wz9EIsW0VRU?autoplay=1&rel=0&modestbranding=1"
+                      }
                       title={language === "es" ? "Introducción Free Voice Academy" : "Introduzione Free Voice Academy"}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
