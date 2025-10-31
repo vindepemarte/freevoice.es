@@ -9,6 +9,11 @@ export const translations = {
       contact: "Contatto",
       bookNow: "Prenota Ora"
     },
+    // Navigation Info Modal
+    infoModal: {
+      title: "Información del Workshop",
+      content: "Contenido del PDF de información aquí" // Will be updated with actual PDF content
+    },
     // Hero Section
     hero: {
       badge: "Academia de Coaching Vocal #1",
@@ -199,6 +204,11 @@ export const translations = {
       pricing: "Prezzi",
       faq: "FAQ",
       contact: "Contatto",
+    },
+    // Navigation Info Modal
+    infoModal: {
+      title: "Informazioni sul Workshop",
+      content: "Contenuto del PDF di informazioni qui" // Will be updated with actual PDF content
     },
     // Hero Section
     hero: {

@@ -37,7 +37,7 @@ export function JennyIntroSection() {
                   // Video Thumbnail
                   <div className="absolute inset-0 flex items-center justify-center">
                     <img
-                      src="/intro-thumbnail.png"
+                      src="/intro-thumbnail.jpg"
                       alt="Jenny Rospo"
                       className="w-full h-full object-cover"
                     />

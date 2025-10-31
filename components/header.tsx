@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Menu, X, MessageCircle } from "lucide-react"
 import { LanguageSwitcher } from "./language-switcher"
 import { useLanguage } from "@/hooks/use-language"
 import { BookingForm } from "./booking-form"
+import { InfoModal } from "./info-modal"
 import Image from "next/image"
 
 export function Header() {
@@ -59,6 +60,26 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3 lg:space-x-6">
+              <InfoModal />
+              <Button
+                onClick={() => {
+                  const message = encodeURIComponent(t.hero.whatsappMessage || "Hola! Quiero más información sobre el workshop Free Voice.")
+                  window.open(`https://wa.me/34697798991?text=${message}`, '_blank')
+                }}
+                className={`
+                  rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white
+                  transition-all duration-300 border border-white/30 hover:border-white/50
+                  shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2
+                  ${
+                    isScrolled 
+                      ? 'px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm' 
+                      : 'px-4 py-2 text-sm sm:px-6 sm:py-2.5 sm:text-base'
+                  }
+                `}
+              >
+                <MessageCircle className={isScrolled ? "h-4 w-4" : "h-5 w-5"} />
+                <span>WhatsApp</span>
+              </Button>
               <LanguageSwitcher />
               <BookingForm>
                 <Button className={`
@@ -76,6 +97,23 @@ export function Header() {
 
             {/* Mobile Navigation */}
             <div className="md:hidden flex items-center space-x-2 sm:space-x-3">
+              <InfoModal />
+              <Button
+                onClick={() => {
+                  const message = encodeURIComponent(t.hero.whatsappMessage || "Hola! Quiero más información sobre el workshop Free Voice.")
+                  window.open(`https://wa.me/34697798991?text=${message}`, '_blank')
+                }}
+                variant="ghost"
+                size="icon"
+                className={`
+                  rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white 
+                  transition-all duration-300 border border-white/30
+                  ${isScrolled ? 'p-1.5' : 'p-2'}
+                `}
+                aria-label="WhatsApp"
+              >
+                <MessageCircle className={isScrolled ? "h-4 w-4" : "h-5 w-5"} />
+              </Button>
               <LanguageSwitcher />
               <button 
                 className={`

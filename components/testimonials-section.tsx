@@ -129,31 +129,21 @@ export function TestimonialsSection() {
 
   // Auto-scroll testimonials with mobile-specific behavior
   useEffect(() => {
-    const scrollContainer = scrollRef.current
-    if (!scrollContainer) return
-
-    const isMobile = window.innerWidth < 768
-
-    const scroll = () => {
-      if (isMobile) {
-        // On mobile, show one testimonial at a time
-        setCurrentTestimonialIndex((prev) => (prev + 1) % testimonialsToShow.length)
-      } else {
-        // On desktop, use horizontal scroll
-        const { scrollLeft, scrollWidth, clientWidth } = scrollContainer
-        const maxScroll = scrollWidth - clientWidth
-        
-        if (scrollLeft >= maxScroll) {
-          scrollContainer.scrollTo({ left: 0, behavior: 'smooth' })
-        } else {
-          scrollContainer.scrollTo({ left: scrollLeft + 320, behavior: 'smooth' })
-        }
-      }
-    }
-
-    const interval = setInterval(scroll, 3000)
-    return () => clearInterval(interval)
+    // Removed auto-scroll functionality - now controlled by arrows only
   }, [])
+
+  // Handle manual navigation
+  const handlePrevious = () => {
+    setCurrentTestimonialIndex((prev) => 
+      prev === 0 ? testimonialsToShow.length - 1 : prev - 1
+    )
+  }
+
+  const handleNext = () => {
+    setCurrentTestimonialIndex((prev) => 
+      (prev + 1) % testimonialsToShow.length
+    )
+  }
 
   // Handle window resize to update mobile behavior
   useEffect(() => {
@@ -250,57 +240,100 @@ export function TestimonialsSection() {
 
         {/* Auto-Scrolling Testimonial Cards - Mobile Optimized */}
         <div className="relative">
-          {/* Mobile: Single testimonial display */}
+          {/* Mobile: Single testimonial display with navigation arrows */}
           <div className="md:hidden">
-            <div className={`px-2 xs:px-4 flex justify-center transition-all duration-800 ease-out delay-900 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}>
-              {testimonialsToShow.length > 0 && (
-                <Card className="w-full max-w-xs xs:max-w-sm bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <CardContent className="p-3 xs:p-4">
-                    {/* Rating */}
-                    <div className="flex items-center space-x-1 mb-2 xs:mb-3">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-3 w-3 xs:h-3 xs:w-3 text-[#F02A30] fill-current" />
-                      ))}
-                      <span className="ml-2 text-[#3C318D] font-semibold text-xs xs:text-xs">
-                        {dynamicRatings[currentTestimonialIndex] || "5.0"}
-                      </span>
-                    </div>
+            <div className="relative">
+              {/* Previous Arrow */}
+              <button
+                onClick={handlePrevious}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#F02A30] hover:bg-[#F02A30]/90 text-white rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
 
-                    {/* Testimonial Quote */}
-                    <div className="mb-2 xs:mb-3 min-h-[60px] xs:min-h-[80px]">
-                      <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
-                        "{getTestimonialContent(testimonialsToShow[currentTestimonialIndex], language as 'it' | 'es', 'content')}"
-                      </p>
-                    </div>
+              {/* Next Arrow */}
+              <button
+                onClick={handleNext}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#F02A30] hover:bg-[#F02A30]/90 text-white rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
 
-                    {/* Student Info */}
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={getTestimonialImage(testimonialsToShow[currentTestimonialIndex])}
-                        alt={testimonialsToShow[currentTestimonialIndex]?.name || ''}
-                        className="w-6 h-6 xs:w-8 xs:h-8 rounded-full object-cover border-2 border-[#9852A7]/20 flex-shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-[#3C318D] text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.name}</h4>
-                        <p className="text-gray-600 text-xs xs:text-xs truncate">
-                          {typeof testimonialsToShow[currentTestimonialIndex]?.role === 'string' 
-                            ? testimonialsToShow[currentTestimonialIndex]?.role 
-                            : (language === 'es' ? (testimonialsToShow[currentTestimonialIndex]?.role as any)?.es : (testimonialsToShow[currentTestimonialIndex]?.role as any)?.it) || testimonialsToShow[currentTestimonialIndex]?.role
-                          }
-                        </p>
-                        <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{(testimonialsToShow[currentTestimonialIndex] as any)?.location || ''}</p>
+              <div className={`px-10 xs:px-12 flex justify-center transition-all duration-800 ease-out delay-900 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}>
+                {testimonialsToShow.length > 0 && (
+                  <Card className="w-full max-w-xs xs:max-w-sm bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <CardContent className="p-3 xs:p-4 flex flex-col h-full">
+                      {/* Video or Image (if available) */}
+                      {(getTestimonialVideo(testimonialsToShow[currentTestimonialIndex]) || getTestimonialImage(testimonialsToShow[currentTestimonialIndex])) && (
+                        <div className="mb-3 flex-shrink-0">
+                          {getTestimonialVideo(testimonialsToShow[currentTestimonialIndex]) ? (
+                            <ResponsiveVideoPlayer 
+                              src={getTestimonialVideo(testimonialsToShow[currentTestimonialIndex])!}
+                              poster={getTestimonialImage(testimonialsToShow[currentTestimonialIndex])}
+                              className="h-32 rounded-lg w-full object-cover"
+                              controls={true}
+                              preload="metadata"
+                            />
+                          ) : (
+                            <img
+                              src={getTestimonialImage(testimonialsToShow[currentTestimonialIndex])}
+                              alt={testimonialsToShow[currentTestimonialIndex]?.name || ''}
+                              className="h-32 w-full rounded-lg object-cover"
+                            />
+                          )}
+                        </div>
+                      )}
+
+                      {/* Rating */}
+                      <div className="flex items-center space-x-1 mb-2 xs:mb-3 flex-shrink-0">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-3 w-3 xs:h-3 xs:w-3 text-[#F02A30] fill-current" />
+                        ))}
+                        <span className="ml-2 text-[#3C318D] font-semibold text-xs xs:text-xs">
+                          {dynamicRatings[currentTestimonialIndex] || "5.0"}
+                        </span>
                       </div>
-                      
-                      {/* Workshop Badge */}
-                      <Badge className="bg-[#F02A30] text-white text-xs xs:text-xs flex-shrink-0">
-                        {language === "es" ? "Workshop" : "Workshop"}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+
+                      {/* Testimonial Quote - Fixed height */}
+                      <div className="mb-2 xs:mb-3 flex-grow">
+                        <div className="h-24 overflow-hidden">
+                          <p className="text-[#3C318D]/90 leading-relaxed text-xs xs:text-xs line-clamp-4">
+                            "{getTestimonialContent(testimonialsToShow[currentTestimonialIndex], language as 'it' | 'es', 'content')}"
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Student Info */}
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        <img
+                          src={getTestimonialImage(testimonialsToShow[currentTestimonialIndex])}
+                          alt={testimonialsToShow[currentTestimonialIndex]?.name || ''}
+                          className="w-6 h-6 xs:w-8 xs:h-8 rounded-full object-cover border-2 border-[#9852A7]/20 flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-[#3C318D] text-xs xs:text-xs truncate">{testimonialsToShow[currentTestimonialIndex]?.name}</h4>
+                          <p className="text-gray-600 text-xs xs:text-xs truncate">
+                            {typeof testimonialsToShow[currentTestimonialIndex]?.role === 'string' 
+                              ? testimonialsToShow[currentTestimonialIndex]?.role 
+                              : (language === 'es' ? (testimonialsToShow[currentTestimonialIndex]?.role as any)?.es : (testimonialsToShow[currentTestimonialIndex]?.role as any)?.it) || testimonialsToShow[currentTestimonialIndex]?.role
+                            }
+                          </p>
+                          <p className="text-[#3C318D]/60 text-xs xs:text-xs truncate">{(testimonialsToShow[currentTestimonialIndex] as any)?.location || ''}</p>
+                        </div>
+                        
+                        {/* Workshop Badge */}
+                        <Badge className="bg-[#F02A30] text-white text-xs xs:text-xs flex-shrink-0">
+                          {language === "es" ? "Workshop" : "Workshop"}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             </div>
             
             {/* Mobile testimonial indicators */}
@@ -317,87 +350,130 @@ export function TestimonialsSection() {
             </div>
           </div>
 
-          {/* Desktop: Horizontal scroll */}
-          <div 
-            ref={scrollRef}
-            className={`hidden md:flex space-x-6 overflow-x-auto scrollbar-hide pb-4 transition-all duration-1000 ease-out delay-1000 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {/* Duplicate testimonials for seamless loop */}
-            {[...testimonialsToShow, ...testimonialsToShow].map((testimonial, index) => {
-              const originalIndex = index % testimonialsToShow.length
-              const content = getTestimonialContent(testimonial, language as 'it' | 'es', 'content')
-              
-              return (
-                <Card 
-                  key={`${testimonial.name}-${index}`} 
-                  className={`flex-shrink-0 w-80 bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 ${
-                    isVisible ? 'animate-fade-in-up' : ''
-                  }`}
-                  style={{ 
-                    animationDelay: `${1200 + (originalIndex * 200)}ms`,
-                    animationFillMode: 'both'
-                  }}
-                >
-                  <CardContent className="p-6">
-                    {/* Video Testimonial (if available) */}
-                    {getTestimonialVideo(testimonial) && (
-                      <div className="mb-4">
-                        <ResponsiveVideoPlayer 
-                          src={getTestimonialVideo(testimonial)!}
-                          poster={getTestimonialImage(testimonial)}
-                          className="h-32 rounded-lg"
-                          controls={true}
-                          preload="metadata"
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Rating */}
-                    <div className="flex items-center space-x-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 text-[#F02A30] fill-current" />
-                      ))}
-                      <span className="ml-2 text-[#3C318D] font-semibold text-sm">
-                        {dynamicRatings[originalIndex] || "5.0"}
-                      </span>
-                    </div>
+          {/* Desktop: Horizontal scroll with navigation arrows */}
+          <div className="hidden md:block relative">
+            {/* Previous Arrow */}
+            <button
+              onClick={() => {
+                const container = scrollRef.current
+                if (container) {
+                  container.scrollBy({ left: -320, behavior: 'smooth' })
+                }
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#F02A30] hover:bg-[#F02A30]/90 text-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 -ml-4"
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
 
-                    {/* Testimonial Quote */}
-                    <div className="mb-4 h-24 overflow-hidden">
-                      <p className="text-[#3C318D]/90 leading-relaxed text-sm line-clamp-4">
-                        "{content}"
-                      </p>
-                    </div>
+            {/* Next Arrow */}
+            <button
+              onClick={() => {
+                const container = scrollRef.current
+                if (container) {
+                  container.scrollBy({ left: 320, behavior: 'smooth' })
+                }
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#F02A30] hover:bg-[#F02A30]/90 text-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 -mr-4"
+              aria-label="Next testimonials"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
 
-                    {/* Student Info */}
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={getTestimonialImage(testimonial)}
-                        alt={testimonial.name}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-[#9852A7]/20"
-                      />
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-[#3C318D] text-sm">{testimonial.name}</h4>
-                        <p className="text-gray-600 text-xs">
-                          {typeof testimonial.role === 'string' 
-                            ? testimonial.role 
-                            : (language === 'es' ? (testimonial.role as any)?.es : (testimonial.role as any)?.it) || testimonial.role
-                          }
-                        </p>
-                      </div>
+            <div 
+              ref={scrollRef}
+              className={`flex space-x-6 overflow-x-auto scrollbar-hide pb-4 transition-all duration-1000 ease-out delay-1000 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {/* Duplicate testimonials for seamless loop */}
+              {[...testimonialsToShow, ...testimonialsToShow].map((testimonial, index) => {
+                const originalIndex = index % testimonialsToShow.length
+                const content = getTestimonialContent(testimonial, language as 'it' | 'es', 'content')
+                
+                return (
+                  <Card 
+                    key={`${testimonial.name}-${index}`} 
+                    className={`flex-shrink-0 w-80 bg-white/98 border-[#9852A7]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex flex-col ${
+                      isVisible ? 'animate-fade-in-up' : ''
+                    }`}
+                    style={{ 
+                      animationDelay: `${1200 + (originalIndex * 200)}ms`,
+                      animationFillMode: 'both'
+                    }}
+                  >
+                    <CardContent className="p-6 flex flex-col h-full">
+                      {/* Video Testimonial (if available) */}
+                      {getTestimonialVideo(testimonial) && (
+                        <div className="mb-4 flex-shrink-0">
+                          <ResponsiveVideoPlayer 
+                            src={getTestimonialVideo(testimonial)!}
+                            poster={getTestimonialImage(testimonial)}
+                            className="h-40 rounded-lg w-full object-cover"
+                            controls={true}
+                            preload="metadata"
+                          />
+                        </div>
+                      )}
+
+                      {/* Image (if no video but image exists) */}
+                      {!getTestimonialVideo(testimonial) && getTestimonialImage(testimonial) && (
+                        <div className="mb-4 flex-shrink-0">
+                          <img
+                            src={getTestimonialImage(testimonial)}
+                            alt={testimonial.name}
+                            className="h-40 w-full rounded-lg object-cover"
+                          />
+                        </div>
+                      )}
                       
-                      {/* Workshop Badge */}
-                      <Badge className="bg-[#F02A30] text-white text-xs">
-                        {language === "es" ? "Workshop" : "Workshop"}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
+                      {/* Rating */}
+                      <div className="flex items-center space-x-1 mb-4 flex-shrink-0">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 text-[#F02A30] fill-current" />
+                        ))}
+                        <span className="ml-2 text-[#3C318D] font-semibold text-sm">
+                          {dynamicRatings[originalIndex] || "5.0"}
+                        </span>
+                      </div>
+
+                      {/* Testimonial Quote - Fixed height for uniformity */}
+                      <div className="mb-4 flex-grow">
+                        <div className="h-24 overflow-hidden">
+                          <p className="text-[#3C318D]/90 leading-relaxed text-sm line-clamp-4">
+                            "{content}"
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Student Info */}
+                      <div className="flex items-center space-x-3 flex-shrink-0">
+                        <img
+                          src={getTestimonialImage(testimonial)}
+                          alt={testimonial.name}
+                          className="w-10 h-10 rounded-full object-cover border-2 border-[#9852A7]/20"
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-[#3C318D] text-sm">{testimonial.name}</h4>
+                          <p className="text-gray-600 text-xs">
+                            {typeof testimonial.role === 'string' 
+                              ? testimonial.role 
+                              : (language === 'es' ? (testimonial.role as any)?.es : (testimonial.role as any)?.it) || testimonial.role
+                            }
+                          </p>
+                        </div>
+                        
+                        {/* Workshop Badge */}
+                        <Badge className="bg-[#F02A30] text-white text-xs">
+                          {language === "es" ? "Workshop" : "Workshop"}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
           </div>
         </div>
         
