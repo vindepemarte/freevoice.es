@@ -25,7 +25,11 @@ export function ContentManagement({ siteContent, onSave, isLoading }: ContentMan
     contact_address_it: 'Healing Garden, Guía de Isora, Tenerife',
     contact_address_es: 'Jardín de Sanación, Guía de Isora, Tenerife',
     footer_description_it: 'Free Voice Academy - Trasforma la tua voce, trasforma la tua vita. Scopri il potere della tua voce autentica.',
-    footer_description_es: 'Free Voice Academy - Transforma tu voz, transforma tu vida. Descubre el poder de tu voz auténtica.'
+    footer_description_es: 'Free Voice Academy - Transforma tu voz, transforma tu vida. Descubre el poder de tu voz auténtica.',
+    intro_video_url_it: 'https://www.youtube.com/embed/wz9EIsW0VRU',
+    intro_video_url_es: 'https://www.youtube.com/embed/aTEZkprxE9A',
+    testimonials_video_url_it: 'https://www.youtube.com/embed/bnT4iavyXTw',
+    testimonials_video_url_es: 'https://www.youtube.com/embed/5gA6ewP0nQk'
   })
 
   useEffect(() => {
@@ -40,7 +44,11 @@ export function ContentManagement({ siteContent, onSave, isLoading }: ContentMan
       contact_address_it: siteContent.contact_address_it || 'Healing Garden, Guía de Isora, Tenerife',
       contact_address_es: siteContent.contact_address_es || 'Jardín de Sanación, Guía de Isora, Tenerife',
       footer_description_it: siteContent.footer_description_it || 'Free Voice Academy - Trasforma la tua voce, trasforma la tua vita. Scopri il potere della tua voce autentica.',
-      footer_description_es: siteContent.footer_description_es || 'Free Voice Academy - Transforma tu voz, transforma tu vida. Descubre el poder de tu voz auténtica.'
+      footer_description_es: siteContent.footer_description_es || 'Free Voice Academy - Transforma tu voz, transforma tu vida. Descubre el poder de tu voz auténtica.',
+      intro_video_url_it: siteContent.intro_video_url_it || 'https://www.youtube.com/embed/wz9EIsW0VRU',
+      intro_video_url_es: siteContent.intro_video_url_es || 'https://www.youtube.com/embed/aTEZkprxE9A',
+      testimonials_video_url_it: siteContent.testimonials_video_url_it || 'https://www.youtube.com/embed/bnT4iavyXTw',
+      testimonials_video_url_es: siteContent.testimonials_video_url_es || 'https://www.youtube.com/embed/5gA6ewP0nQk'
     })
   }, [siteContent])
 
@@ -172,6 +180,56 @@ export function ContentManagement({ siteContent, onSave, isLoading }: ContentMan
                   rows={4}
                   className="mt-1 border-gray-300 focus:border-[#3C318D] focus:ring-[#3C318D]"
                 />
+              </div>
+            </div>
+          </div>
+          
+          {/* Video URLs Section */}
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="font-semibold text-gray-800 mb-4">Video YouTube</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Inserisci gli URL dei video YouTube (formato embed: https://www.youtube.com/embed/VIDEO_ID)
+            </p>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-gray-700 font-medium">Video Introduzione (Italiano)</Label>
+                  <Input 
+                    value={formData.intro_video_url_it}
+                    onChange={(e) => handleInputChange('intro_video_url_it', e.target.value)}
+                    placeholder="https://www.youtube.com/embed/wz9EIsW0VRU"
+                    className="mt-1 border-gray-300 focus:border-[#3C318D] focus:ring-[#3C318D]"
+                  />
+                </div>
+                <div>
+                  <Label className="text-gray-700 font-medium">Video Introduzione (Spagnolo)</Label>
+                  <Input 
+                    value={formData.intro_video_url_es}
+                    onChange={(e) => handleInputChange('intro_video_url_es', e.target.value)}
+                    placeholder="https://www.youtube.com/embed/aTEZkprxE9A"
+                    className="mt-1 border-gray-300 focus:border-[#3C318D] focus:ring-[#3C318D]"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-gray-700 font-medium">Video Testimonianze (Italiano)</Label>
+                  <Input 
+                    value={formData.testimonials_video_url_it}
+                    onChange={(e) => handleInputChange('testimonials_video_url_it', e.target.value)}
+                    placeholder="https://www.youtube.com/embed/bnT4iavyXTw"
+                    className="mt-1 border-gray-300 focus:border-[#3C318D] focus:ring-[#3C318D]"
+                  />
+                </div>
+                <div>
+                  <Label className="text-gray-700 font-medium">Video Testimonianze (Spagnolo)</Label>
+                  <Input 
+                    value={formData.testimonials_video_url_es}
+                    onChange={(e) => handleInputChange('testimonials_video_url_es', e.target.value)}
+                    placeholder="https://www.youtube.com/embed/5gA6ewP0nQk"
+                    className="mt-1 border-gray-300 focus:border-[#3C318D] focus:ring-[#3C318D]"
+                  />
+                </div>
               </div>
             </div>
           </div>

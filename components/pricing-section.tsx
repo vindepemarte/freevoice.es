@@ -507,32 +507,25 @@ Grazie!`
                                 {language === "es" ? "Facilitadores" : "Con gratitudine, vi accompagneranno"}
                               </h4>
                               <div className="text-[#3C318D]/80 text-sm space-y-2">
-                                <p><strong>Jenny Rospo</strong> - {language === "es" ? "Cantante vocal coach" : "Cantante vocal coach"}</p>
-                                <p><strong>Marian Giral Vega</strong> - {language === "es" ? "Bailarina, profesora Body-brain" : "Ballerina Insegnante Body brain"}</p>
-                                <p><strong>Freddy Martin</strong> - {language === "es" ? "Cantante showman" : "Cantante Showman"}</p>
-                                <p className="text-xs italic">
-                                  {language === "es" 
-                                    ? "Tres almas apasionadas, listas para acompañarte con competencia, presencia y corazón."
-                                    : "Tre anime appassionate, pronte a sostenervi con competenza, presenza e cuore."}
-                                </p>
+                                {(() => {
+                                  const workshop = workshops.find(w => w.is_active)
+                                  const instructors = workshop?.instructors || 'Jenny Rospo & Marian Giral Vega'
+                                  return (
+                                    <>
+                                      <p><strong>{instructors}</strong></p>
+                                      <p className="text-xs italic">
+                                        {language === "es" 
+                                          ? "Almas apasionadas, listas para acompañarte con competencia, presencia y corazón."
+                                          : "Anime appassionate, pronte a sostenervi con competenza, presenza e cuore."}
+                                      </p>
+                                    </>
+                                  )
+                                })()}
                               </div>
                             </div>
                           </div>
                           
-                          <div className="text-center bg-gradient-to-r from-[#F02A30]/10 to-[#9852A7]/10 p-6 rounded-xl">
-                            <h4 className="font-semibold text-[#3C318D] mb-3">
-                              💫 {language === "es" ? "Contribución" : "Contributo"}
-                            </h4>
-                            <p className="text-2xl font-bold text-[#F02A30] mb-2">€90</p>
-                            <p className="text-[#3C318D]/80 text-sm">
-                              {language === "es" 
-                                ? "Para toda la jornada de workshop (8 horas). El pago se puede efectuar al finalizar el workshop o según modalidades acordadas."
-                                : "per l'intera giornata di workshop (8 ore). Il pagamento potrà essere effettuato al termine del workshop o secondo modalità concordate."}
-                            </p>
-                            <p className="text-[#F02A30] font-medium text-sm mt-2">
-                              🌺 {language === "es" ? "Plazas limitadas - reserva recomendada" : "Posti limitati – prenotazione consigliata"}
-                            </p>
-                          </div>
+
                         </TabsContent>
                       </Tabs>
                     </DialogContent>

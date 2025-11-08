@@ -281,6 +281,25 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
         })
       }
 
+      // Video URLs
+      if (contentData.intro_video_url_it || contentData.intro_video_url_es) {
+        contentUpdates.push({
+          section: 'video',
+          content_key: 'intro',
+          content_it: contentData.intro_video_url_it,
+          content_es: contentData.intro_video_url_es
+        })
+      }
+
+      if (contentData.testimonials_video_url_it || contentData.testimonials_video_url_es) {
+        contentUpdates.push({
+          section: 'video',
+          content_key: 'testimonials',
+          content_it: contentData.testimonials_video_url_it,
+          content_es: contentData.testimonials_video_url_es
+        })
+      }
+
       // Save all content updates
       for (const update of contentUpdates) {
         const response = await fetch('/api/admin/content', {

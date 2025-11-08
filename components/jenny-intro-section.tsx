@@ -4,14 +4,25 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Play, Volume2, Pause } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { useDynamicContent } from "@/hooks/use-dynamic-content"
 import { useState } from "react"
 
 export function JennyIntroSection() {
   const { t, language } = useLanguage()
+  const { getContent } = useDynamicContent()
   const [showVideo, setShowVideo] = useState(false)
 
   const handlePlayVideo = () => {
     setShowVideo(true)
+  }
+
+  // Get dynamic video URL with fallback
+  const getVideoUrl = () => {
+    const videoUrl = getContent('video', 'intro', language as 'it' | 'es')
+    const fallbackUrl = language === "es" 
+      ? "https://www.youtube.com/embed/aTEZkprxE9A"
+      : "https://www.youtube.com/embed/wz9EIsW0VRU"
+    return (videoUrl || fallbackUrl) + "?autoplay=1&rel=0&modestbranding=1"
   }
 
   return (
@@ -56,10 +67,7 @@ export function JennyIntroSection() {
                   <div className="absolute inset-0">
                     <iframe
                       className="w-full h-full"
-                      src={language === "es" 
-                        ? "https://www.youtube.com/embed/aTEZkprxE9A?autoplay=1&rel=0&modestbranding=1"
-                        : "https://www.youtube.com/embed/wz9EIsW0VRU?autoplay=1&rel=0&modestbranding=1"
-                      }
+                      src={getVideoUrl()}
                       title={language === "es" ? "Introducción Free Voice Academy" : "Introduzione Free Voice Academy"}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

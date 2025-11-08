@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight, Star, Play, Volume2, Award, Users } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { useDynamicContent } from "@/hooks/use-dynamic-content"
 import { BookingForm } from "@/components/booking-form"
 import { usePublicTestimonials } from "@/hooks/use-admin-data"
 import { ResponsiveVideoPlayer } from "@/components/ui/responsive-video-player"
@@ -88,6 +89,7 @@ const testimonials = [
 
 export function TestimonialsSection() {
   const { t, language } = useLanguage()
+  const { getContent } = useDynamicContent()
   const { testimonials: dynamicTestimonials, loading } = usePublicTestimonials()
   const [playingVideo, setPlayingVideo] = useState(false)
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
@@ -98,6 +100,15 @@ export function TestimonialsSection() {
 
   // Use dynamic testimonials if available, fallback to static ones
   const testimonialsToShow = dynamicTestimonials.length > 0 ? dynamicTestimonials : testimonials
+
+  // Get dynamic video URL with fallback
+  const getTestimonialsVideoUrl = () => {
+    const videoUrl = getContent('video', 'testimonials', language as 'it' | 'es')
+    const fallbackUrl = language === "es" 
+      ? "https://www.youtube.com/embed/5gA6ewP0nQk"
+      : "https://www.youtube.com/embed/bnT4iavyXTw"
+    return (videoUrl || fallbackUrl) + "?autoplay=1&rel=0&modestbranding=1"
+  }
 
   // Initialize dynamic ratings for each testimonial
   useEffect(() => {
@@ -205,10 +216,7 @@ export function TestimonialsSection() {
                 {playingVideo ? (
                   <iframe
                     className="w-full h-full rounded-lg"
-                    src={language === "es" 
-                      ? "https://www.youtube.com/embed/5gA6ewP0nQk?autoplay=1&rel=0&modestbranding=1"
-                      : "https://www.youtube.com/embed/bnT4iavyXTw?autoplay=1&rel=0&modestbranding=1"
-                    }
+                    src={getTestimonialsVideoUrl()}
                     title={language === "es" ? "Testimonios Free Voice Academy" : "Testimonianze Free Voice Academy"}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -478,7 +486,7 @@ export function TestimonialsSection() {
         </div>
         
         {/* CTA Section */}
-        <div className={`text-center mt-12 xs:mt-16 transition-all duration-1000 ease-out delay-1400 px-2 xs:px-4 ${
+        <div className={`text-center mt-12 xs:mt-16 transition-all duration-1000 ease-out delay-1400 px-4 xs:px-6 sm:px-8 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <p className="text-white/80 font-medium mb-4 xs:mb-6 text-sm xs:text-base">
@@ -486,9 +494,9 @@ export function TestimonialsSection() {
               ? "Únete a más de 200 estudiantes que ya transformaron sus vidas" 
               : "Unisciti a più di 200 studenti che hanno già trasformato le loro vite"}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col gap-4 justify-center items-center max-w-md mx-auto">
             <BookingForm>
-              <Button className="bg-[#F02A30] hover:bg-[#F02A30]/90 text-white font-bold px-6 xs:px-8 py-3 xs:py-4 text-base xs:text-lg rounded-full shadow-xl hover:scale-105 transition-all duration-300 w-full xs:w-auto">
+              <Button className="bg-[#F02A30] hover:bg-[#F02A30]/90 text-white font-bold px-6 xs:px-8 py-3 xs:py-4 text-base xs:text-lg rounded-full shadow-xl hover:scale-105 transition-all duration-300 w-full">
                 {language === "es" ? "Reserva tu Transformación" : "Prenota la tua Trasformazione"}
               </Button>
             </BookingForm>
