@@ -16,6 +16,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 interface WorkshopWithItinerary extends Workshop {
   itinerary_it?: string
   itinerary_es?: string
+  overview_title_it?: string
+  overview_title_es?: string
+  overview_description_it?: string
+  overview_description_es?: string
+  overview_expectations_it?: string
+  overview_expectations_es?: string
+  overview_target_audience_it?: string
+  overview_target_audience_es?: string
+  details_what_to_bring_it?: string
+  details_what_to_bring_es?: string
+  details_phone_policy_it?: string
+  details_phone_policy_es?: string
+  details_facilitators_it?: string
+  details_facilitators_es?: string
 }
 
 export function PricingSection() {
@@ -352,44 +366,64 @@ Grazie!`
                         </TabsList>
                         
                         <TabsContent value="overview" className="space-y-6">
-                          <div className="text-center">
-                            <h3 className="text-xl font-semibold text-[#3C318D] mb-4">
-                              {language === "es" 
-                                ? "🎶 Canta para reencontrarte, crece para resonar con tu alma auténtica"
-                                : "🎶 Canta per ritrovarti, cresci per risuonare con la tua anima autentica"}
-                            </h3>
-                            <p className="text-[#3C318D]/80 text-lg leading-relaxed">
-                              {language === "es" 
-                                ? "Un día especial para redescubrir tu voz... y algo más profundo. Una experiencia dedicada a quienes cantan, hablan, crean con la voz - y a quienes desean reconectarse con su esencia a través del sonido, la respiración, el cuerpo y el silencio."
-                                : "Una giornata speciale per ritrovare la tua voce... e qualcosa di più profondo. Un'esperienza dedicata a chi canta, a chi parla, a chi crea con la voce – e a chi desidera riconnettersi con la propria essenza attraverso il suono, il respiro, il corpo e il silenzio."}
-                            </p>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-[#9852A7]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
-                                <Heart className="h-5 w-5 mr-2 text-[#F02A30]" />
-                                {language === "es" ? "¿Qué te espera?" : "Cosa ti aspetta?"}
-                              </h4>
-                              <p className="text-[#3C318D]/80 text-sm leading-relaxed">
-                                {language === "es" 
-                                  ? "Un recorrido experiencial entre voz, cuerpo, respiración y emoción, pensado para quienes desean usar la voz de manera más auténtica, libre y consciente."
-                                  : "Un percorso esperienziale tra voce, corpo, respiro e emozione, pensato per chi desidera usare la voce in modo più autentico, libero e consapevole."}
-                              </p>
-                            </div>
+                          {(() => {
+                            const workshop = workshops.find(w => w.is_active)
+                            const title = language === 'es' ? workshop?.overview_title_es : workshop?.overview_title_it
+                            const description = language === 'es' ? workshop?.overview_description_es : workshop?.overview_description_it
+                            const expectations = language === 'es' ? workshop?.overview_expectations_es : workshop?.overview_expectations_it
+                            const targetAudience = language === 'es' ? workshop?.overview_target_audience_es : workshop?.overview_target_audience_it
                             
-                            <div className="bg-[#F02A30]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
-                                <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
-                                {language === "es" ? "¿A quién está dirigido?" : "A chi è rivolto?"}
-                              </h4>
-                              <ul className="text-[#3C318D]/80 text-sm space-y-1">
-                                <li>• {language === "es" ? "Quienes cantan, por pasión o profesión" : "A chi canta, per passione o professione"}</li>
-                                <li>• {language === "es" ? "Profesionales de la voz" : "A chi lavora con la voce"}</li>
-                                <li>• {language === "es" ? "Quienes buscan su voz auténtica" : "A chi vuole ritrovare la propria voce autentica"}</li>
-                              </ul>
-                            </div>
-                          </div>
+                            return (
+                              <>
+                                <div className="text-center">
+                                  <h3 className="text-xl font-semibold text-[#3C318D] mb-4">
+                                    {title || (language === "es" 
+                                      ? "🎶 Canta para reencontrarte, crece para resonar con tu alma auténtica"
+                                      : "🎶 Canta per ritrovarti, cresci per risuonare con la tua anima autentica")}
+                                  </h3>
+                                  <p className="text-[#3C318D]/80 text-lg leading-relaxed">
+                                    {description || (language === "es" 
+                                      ? "Un día especial para redescubrir tu voz... y algo más profundo. Una experiencia dedicada a quienes cantan, hablan, crean con la voz - y a quienes desean reconectarse con su esencia a través del sonido, la respiración, el cuerpo y el silencio."
+                                      : "Una giornata speciale per ritrovare la tua voce... e qualcosa di più profondo. Un'esperienza dedicata a chi canta, a chi parla, a chi crea con la voce – e a chi desidera riconnettersi con la propria essenza attraverso il suono, il respiro, il corpo e il silenzio.")}
+                                  </p>
+                                </div>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                  <div className="bg-[#9852A7]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
+                                      <Heart className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                      {language === "es" ? "¿Qué te espera?" : "Cosa ti aspetta?"}
+                                    </h4>
+                                    <p className="text-[#3C318D]/80 text-sm leading-relaxed">
+                                      {expectations || (language === "es" 
+                                        ? "Un recorrido experiencial entre voz, cuerpo, respiración y emoción, pensado para quienes desean usar la voz de manera más auténtica, libre y consciente."
+                                        : "Un percorso esperienziale tra voce, corpo, respiro e emozione, pensato per chi desidera usare la voce in modo più autentico, libero e consapevole.")}
+                                    </p>
+                                  </div>
+                                  
+                                  <div className="bg-[#F02A30]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-3 flex items-center">
+                                      <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                      {language === "es" ? "¿A quién está dirigido?" : "A chi è rivolto?"}
+                                    </h4>
+                                    {targetAudience ? (
+                                      <ul className="text-[#3C318D]/80 text-sm space-y-1">
+                                        {targetAudience.split('\n').filter(line => line.trim()).map((line, i) => (
+                                          <li key={i}>{line.startsWith('•') ? line : '• ' + line}</li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <ul className="text-[#3C318D]/80 text-sm space-y-1">
+                                        <li>• {language === "es" ? "Quienes cantan, por pasión o profesión" : "A chi canta, per passione o professione"}</li>
+                                        <li>• {language === "es" ? "Profesionales de la voz" : "A chi lavora con la voce"}</li>
+                                        <li>• {language === "es" ? "Quienes buscan su voz auténtica" : "A chi vuole ritrovare la propria voce autentica"}</li>
+                                      </ul>
+                                    )}
+                                  </div>
+                                </div>
+                              </>
+                            )
+                          })()}
                         </TabsContent>
                         
                         <TabsContent value="schedule" className="space-y-6">
@@ -463,66 +497,83 @@ Grazie!`
                         
                         <TabsContent value="details" className="space-y-6">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-[#3C318D]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
-                                <Utensils className="h-5 w-5 mr-2 text-[#F02A30]" />
-                                {language === "es" ? "Qué traer" : "Cosa portare"}
-                              </h4>
-                              <ul className="text-[#3C318D]/80 text-sm space-y-2">
-                                <li>• {language === "es" ? "Un corazón abierto y ganas de experimentar" : "Un cuore aperto e la voglia di metterti in gioco"}</li>
-                                <li>• {language === "es" ? "Agua o infusión" : "Acqua o tisana"}</li>
-                                <li>• {language === "es" ? "Cuaderno para inspiraciones" : "Un block notes per annotare ispirazioni"}</li>
-                                <li>• {language === "es" ? "Ropa cómoda" : "Abiti comodi"}</li>
-                                <li>• {language === "es" ? "Almuerzo ligero y saludable" : "Pranzo semplice e leggero"}</li>
-                              </ul>
-                            </div>
-                            
-                            <div className="bg-[#F02A30]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
-                                <Smartphone className="h-5 w-5 mr-2 text-[#9852A7]" />
-                                {language === "es" ? "Día sin móvil" : "Una giornata senza cellulare"}
-                              </h4>
-                              <p className="text-[#3C318D]/80 text-sm leading-relaxed">
-                                {language === "es" 
-                                  ? "Durante las actividades, los teléfonos permanecerán en silencio. Un pequeño ritual para volver a la presencia y redescubrir el poder de la escucha verdadera."
-                                  : "Durante le attività, i telefoni resteranno in silenzio. Un piccolo rituale per tornare in presenza e riscoprire la potenza dell'ascolto vero."}
-                              </p>
-                            </div>
-                            
-                            <div className="bg-[#9852A7]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
-                                <MapPin className="h-5 w-5 mr-2 text-[#F02A30]" />
-                                {language === "es" ? "Ubicación" : "Luogo"}
-                              </h4>
-                              <p className="text-[#3C318D]/80 text-sm">
-                                <strong>The Healing Garden</strong><br />
-                                Guía de Isora, Tenerife<br />
-                                {language === "es" ? "En un contexto natural e inspirador" : "In un contesto naturale e ispirante"}
-                              </p>
-                            </div>
-                            
-                            <div className="bg-[#3C318D]/10 p-6 rounded-xl">
-                              <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
-                                <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
-                                {language === "es" ? "Facilitadores" : "Con gratitudine, vi accompagneranno"}
-                              </h4>
-                              <div className="text-[#3C318D]/80 text-sm space-y-2">
-                                {(() => {
-                                  const workshop = workshops.find(w => w.is_active)
-                                  const instructors = workshop?.instructors || 'Jenny Rospo & Marian Giral Vega'
-                                  return (
-                                    <>
-                                      <p><strong>{instructors}</strong></p>
-                                      <p className="text-xs italic">
-                                        {language === "es" 
-                                          ? "Almas apasionadas, listas para acompañarte con competencia, presencia y corazón."
-                                          : "Anime appassionate, pronte a sostenervi con competenza, presenza e cuore."}
-                                      </p>
-                                    </>
-                                  )
-                                })()}
-                              </div>
-                            </div>
+                            {(() => {
+                              const workshop = workshops.find(w => w.is_active)
+                              const whatToBring = language === 'es' ? workshop?.details_what_to_bring_es : workshop?.details_what_to_bring_it
+                              const phonePolicy = language === 'es' ? workshop?.details_phone_policy_es : workshop?.details_phone_policy_it
+                              const facilitators = language === 'es' ? workshop?.details_facilitators_es : workshop?.details_facilitators_it
+                              
+                              return (
+                                <>
+                                  <div className="bg-[#3C318D]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                      <Utensils className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                      {language === "es" ? "Qué traer" : "Cosa portare"}
+                                    </h4>
+                                    {whatToBring ? (
+                                      <ul className="text-[#3C318D]/80 text-sm space-y-2">
+                                        {whatToBring.split('\n').filter(line => line.trim()).map((line, i) => (
+                                          <li key={i}>{line.startsWith('•') ? line : '• ' + line}</li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <ul className="text-[#3C318D]/80 text-sm space-y-2">
+                                        <li>• {language === "es" ? "Un corazón abierto y ganas de experimentar" : "Un cuore aperto e la voglia di metterti in gioco"}</li>
+                                        <li>• {language === "es" ? "Agua o infusión" : "Acqua o tisana"}</li>
+                                        <li>• {language === "es" ? "Cuaderno para inspiraciones" : "Un block notes per annotare ispirazioni"}</li>
+                                        <li>• {language === "es" ? "Ropa cómoda" : "Abiti comodi"}</li>
+                                        <li>• {language === "es" ? "Almuerzo ligero y saludable" : "Pranzo semplice e leggero"}</li>
+                                      </ul>
+                                    )}
+                                  </div>
+                                  
+                                  <div className="bg-[#F02A30]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                      <Smartphone className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                      {language === "es" ? "Día sin móvil" : "Una giornata senza cellulare"}
+                                    </h4>
+                                    <p className="text-[#3C318D]/80 text-sm leading-relaxed">
+                                      {phonePolicy || (language === "es" 
+                                        ? "Durante las actividades, los teléfonos permanecerán en silencio. Un pequeño ritual para volver a la presencia y redescubrir el poder de la escucha verdadera."
+                                        : "Durante le attività, i telefoni resteranno in silenzio. Un piccolo rituale per tornare in presenza e riscoprire la potenza dell'ascolto vero.")}
+                                    </p>
+                                  </div>
+                                  
+                                  <div className="bg-[#9852A7]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                      <MapPin className="h-5 w-5 mr-2 text-[#F02A30]" />
+                                      {language === "es" ? "Ubicación" : "Luogo"}
+                                    </h4>
+                                    <p className="text-[#3C318D]/80 text-sm">
+                                      <strong>The Healing Garden</strong><br />
+                                      Guía de Isora, Tenerife<br />
+                                      {language === "es" ? "En un contexto natural e inspirador" : "In un contesto naturale e ispirante"}
+                                    </p>
+                                  </div>
+                                  
+                                  <div className="bg-[#3C318D]/10 p-6 rounded-xl">
+                                    <h4 className="font-semibold text-[#3C318D] mb-4 flex items-center">
+                                      <Users className="h-5 w-5 mr-2 text-[#9852A7]" />
+                                      {language === "es" ? "Facilitadores" : "Con gratitudine, vi accompagneranno"}
+                                    </h4>
+                                    <div className="text-[#3C318D]/80 text-sm space-y-2">
+                                      {facilitators ? (
+                                        <div className="whitespace-pre-line">{facilitators}</div>
+                                      ) : (
+                                        <>
+                                          <p><strong>{workshop?.instructors || 'Jenny Rospo & Marian Giral Vega'}</strong></p>
+                                          <p className="text-xs italic">
+                                            {language === "es" 
+                                              ? "Almas apasionadas, listas para acompañarte con competencia, presencia y corazón."
+                                              : "Anime appassionate, pronte a sostenervi con competenza, presenza e cuore."}
+                                          </p>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                </>
+                              )
+                            })()}
                           </div>
                           
 
