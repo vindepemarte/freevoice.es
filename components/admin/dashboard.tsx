@@ -144,9 +144,21 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
         // Convert array to object for easier access
         const contentObj: any = {}
         contentData.content?.forEach((item: any) => {
-          const key = `${item.section}_${item.content_key}`
-          contentObj[key + '_it'] = item.content_it
-          contentObj[key + '_es'] = item.content_es
+          // Map video section to correct field names
+          if (item.section === 'video') {
+            if (item.content_key === 'intro') {
+              contentObj['intro_video_url_it'] = item.content_it
+              contentObj['intro_video_url_es'] = item.content_es
+            } else if (item.content_key === 'testimonials') {
+              contentObj['testimonials_video_url_it'] = item.content_it
+              contentObj['testimonials_video_url_es'] = item.content_es
+            }
+          } else {
+            // For other sections, use the standard format
+            const key = `${item.section}_${item.content_key}`
+            contentObj[key + '_it'] = item.content_it
+            contentObj[key + '_es'] = item.content_es
+          }
         })
         setSiteContent(contentObj)
         console.log('Loaded content:', Object.keys(contentObj).length, 'items')
