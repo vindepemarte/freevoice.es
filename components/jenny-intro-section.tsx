@@ -19,10 +19,13 @@ export function JennyIntroSection() {
   // Get dynamic video URL with fallback
   const getVideoUrl = () => {
     const videoUrl = getContent('video', 'intro', language as 'it' | 'es')
+    console.log('[JennyIntro] Video URL from DB:', videoUrl, 'Language:', language)
     const fallbackUrl = language === "es" 
       ? "https://www.youtube.com/embed/aTEZkprxE9A"
       : "https://www.youtube.com/embed/wz9EIsW0VRU"
-    return (videoUrl || fallbackUrl) + "?autoplay=1&rel=0&modestbranding=1"
+    const finalUrl = (videoUrl && videoUrl.trim() !== '') ? videoUrl : fallbackUrl
+    console.log('[JennyIntro] Final URL:', finalUrl)
+    return finalUrl + "?autoplay=1&rel=0&modestbranding=1"
   }
 
   return (

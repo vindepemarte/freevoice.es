@@ -104,10 +104,13 @@ export function TestimonialsSection() {
   // Get dynamic video URL with fallback
   const getTestimonialsVideoUrl = () => {
     const videoUrl = getContent('video', 'testimonials', language as 'it' | 'es')
+    console.log('[Testimonials] Video URL from DB:', videoUrl, 'Language:', language)
     const fallbackUrl = language === "es" 
       ? "https://www.youtube.com/embed/5gA6ewP0nQk"
       : "https://www.youtube.com/embed/bnT4iavyXTw"
-    return (videoUrl || fallbackUrl) + "?autoplay=1&rel=0&modestbranding=1"
+    const finalUrl = (videoUrl && videoUrl.trim() !== '') ? videoUrl : fallbackUrl
+    console.log('[Testimonials] Final URL:', finalUrl)
+    return finalUrl + "?autoplay=1&rel=0&modestbranding=1"
   }
 
   // Initialize dynamic ratings for each testimonial

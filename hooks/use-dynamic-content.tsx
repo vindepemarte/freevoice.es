@@ -46,8 +46,13 @@ export function DynamicContentProvider({ children }: { children: React.ReactNode
 
   const getContent = (section: string, key: string, language: 'it' | 'es'): string => {
     const item = content.find(c => c.section === section && c.content_key === key)
-    if (!item) return ''
-    return language === 'it' ? (item.content_it || '') : (item.content_es || '')
+    if (!item) {
+      console.log(`[useDynamicContent] NOT FOUND: section='${section}', key='${key}', language='${language}'`)
+      return ''
+    }
+    const value = language === 'it' ? (item.content_it || '') : (item.content_es || '')
+    console.log(`[useDynamicContent] FOUND: section='${section}', key='${key}', language='${language}', value='${value}'`)
+    return value
   }
 
   return (
