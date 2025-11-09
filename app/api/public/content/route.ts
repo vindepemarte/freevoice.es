@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 import { pool } from '@/lib/database'
 
+// Force dynamic rendering - DO NOT cache this route
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
   console.log('═══════════════════════════════════════')
   console.log('🎯 [PUBLIC CONTENT API] Request received!')
