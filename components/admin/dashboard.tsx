@@ -295,6 +295,10 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
 
       // Video URLs
       if (contentData.intro_video_url_it || contentData.intro_video_url_es) {
+        console.log('[Dashboard] Saving intro video:', {
+          it: contentData.intro_video_url_it,
+          es: contentData.intro_video_url_es
+        })
         contentUpdates.push({
           section: 'video',
           content_key: 'intro',
@@ -304,6 +308,10 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
       }
 
       if (contentData.testimonials_video_url_it || contentData.testimonials_video_url_es) {
+        console.log('[Dashboard] Saving testimonials video:', {
+          it: contentData.testimonials_video_url_it,
+          es: contentData.testimonials_video_url_es
+        })
         contentUpdates.push({
           section: 'video',
           content_key: 'testimonials',
@@ -313,7 +321,9 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
       }
 
       // Save all content updates
+      console.log('[Dashboard] Total content updates to save:', contentUpdates.length)
       for (const update of contentUpdates) {
+        console.log('[Dashboard] Saving:', update)
         const response = await fetch('/api/admin/content', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -321,8 +331,11 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
         })
         
         if (!response.ok) {
+          const errorData = await response.json()
+          console.error('[Dashboard] Failed to save:', update, 'Error:', errorData)
           throw new Error(`Failed to save ${update.section}_${update.content_key}`)
         }
+        console.log('[Dashboard] Successfully saved:', `${update.section}_${update.content_key}`)
       }
       
       setSuccess('Content saved successfully')
