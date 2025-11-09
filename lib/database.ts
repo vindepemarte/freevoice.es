@@ -2,10 +2,17 @@ import { Pool } from 'pg'
 
 // Database configuration
 function getDatabaseConfig() {
-  let connectionString = process.env.DATABASE_URL || 'postgres://freevoice:YA3T2bXVkSHnvClYY0CqTWKJVmrzPHE7KzFzA1scDkT2dRxOg8dCQBS2g0lfGc5p@38.242.151.194:8888/freevoice-es'
+  let connectionString = process.env.DATABASE_URL
   
   console.log('🔗 Database connection setup (SSL disabled):')
   console.log('   NODE_ENV:', process.env.NODE_ENV)
+  console.log('   DATABASE_URL is set:', !!connectionString)
+  
+  if (!connectionString) {
+    console.error('❌ DATABASE_URL is not set!')
+    throw new Error('DATABASE_URL environment variable is required')
+  }
+  
   console.log('   Connection string length:', connectionString.length)
   console.log('   Connection string first 50 chars:', connectionString.substring(0, 50))
   
