@@ -30,9 +30,14 @@ export function DynamicContentProvider({ children }: { children: React.ReactNode
     const fetchContent = async () => {
       try {
         const response = await fetch('/api/public/content')
+        console.log('[useDynamicContent] Fetch response status:', response.status)
         if (response.ok) {
           const data = await response.json()
+          console.log('[useDynamicContent] Fetched data:', data)
+          console.log('[useDynamicContent] Content items:', data.content?.length || 0)
           setContent(data.content || [])
+        } else {
+          console.error('[useDynamicContent] Fetch failed with status:', response.status)
         }
       } catch (error) {
         console.error('Failed to fetch dynamic content:', error)
