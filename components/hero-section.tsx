@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Star, Clock, AlertCircle } from "lucide-react"
 import { BookingForm } from "@/components/booking-form"
+import { InfoModal } from "@/components/info-modal"
 import { useLanguage } from "@/hooks/use-language"
 import { useDynamicContent } from "@/hooks/use-dynamic-content"
 import { useWorkshopDates } from "@/hooks/use-workshop-dates"
@@ -73,6 +74,21 @@ return (
           }`}>
             {heroSubtitle}
           </p>
+
+          {/* Discover More Button - Opens Info Modal */}
+          <div className={`mb-4 xs:mb-6 sm:mb-8 transition-all duration-1200 ease-out delay-900 px-2 xs:px-0 ${
+            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}>
+            <InfoModal>
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-white/10 hover:bg-white/20 text-white border-white/30 hover:border-white/50 px-6 xs:px-8 sm:px-10 py-3 xs:py-3 sm:py-4 text-base xs:text-lg sm:text-xl font-semibold shadow-lg rounded-full transform hover:scale-105 transition-all duration-200 backdrop-blur-sm w-full xs:w-auto"
+              >
+                {language === 'es' ? 'Descubre más' : 'Scopri di più'}
+              </Button>
+            </InfoModal>
+          </div>
 
           {/* Primary CTA - Single Focus */}
           <div className={`mb-4 xs:mb-6 sm:mb-8 transition-all duration-1200 ease-out delay-1000 px-2 xs:px-0 ${

@@ -6,20 +6,22 @@ import { Button } from "@/components/ui/button"
 import { Info } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 
-export function InfoModal() {
+export function InfoModal({ children }: { children?: React.ReactNode }) {
   const { t, language } = useLanguage()
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="icon"
-          className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white transition-all duration-300 border border-white/30"
-        >
-          <Info className="h-5 w-5" />
-        </Button>
+        {children || (
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white transition-all duration-300 border border-white/30"
+          >
+            <Info className="h-5 w-5" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white border-[#3C318D]/20 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-[#F02A30]/5 via-[#9852A7]/5 to-[#3C318D]/5 rounded-lg"></div>

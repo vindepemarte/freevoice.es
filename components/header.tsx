@@ -60,7 +60,6 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3 lg:space-x-6">
-              <InfoModal />
               <Button
                 onClick={() => {
                   const message = encodeURIComponent(t.hero.whatsappMessage || "Hola! Quiero más información sobre el workshop Free Voice.")
@@ -97,7 +96,6 @@ export function Header() {
 
             {/* Mobile Navigation */}
             <div className="md:hidden flex items-center space-x-2 sm:space-x-3">
-              <InfoModal />
               <Button
                 onClick={() => {
                   const message = encodeURIComponent(t.hero.whatsappMessage || "Hola! Quiero más información sobre el workshop Free Voice.")

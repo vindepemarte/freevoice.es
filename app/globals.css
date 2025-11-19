@@ -131,6 +131,7 @@
     background-attachment: fixed;
     color: #FFFFFF;
     min-height: 100vh;
+    font-size: 17px; /* Increased from default 16px to 17px */
   }
 }
 
